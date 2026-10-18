@@ -5,130 +5,292 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>무한 수학 시험</title>
 <style>
-:root {
-  color-scheme: dark;
-  --bg:#0b1020; --panel:#141c31; --panel2:#1a2540;
-  --line:#2c3957; --text:#eef3ff; --muted:#aab7d2;
-  --accent:#8bb5ff; --good:#68ddb0; --bad:#ff8f9a;
-}
-* { box-sizing:border-box; }
-body {
-  margin:0; min-height:100vh;
-  background:radial-gradient(ellipse at top,#1b2c50 0,#0b1020 58%);
-  color:var(--text);
-  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-  padding:22px 14px 36px;
-}
-.wrap { max-width:760px; margin:0 auto; }
-header {
-  display:flex; justify-content:space-between; align-items:center;
-  gap:12px; margin-bottom:18px;
-}
-h1 {
-  margin:5px 0 0; font-size:clamp(27px,6vw,39px);
-  line-height:1.1; letter-spacing:-.04em;
-}
-.pill {
-  border:1px solid var(--line); background:#111a2e;
-  padding:8px 11px; border-radius:999px;
-  color:var(--muted); font-size:12px; white-space:nowrap;
-}
-.panel {
-  background:rgba(20,28,49,.94); border:1px solid var(--line);
-  border-radius:22px; padding:clamp(17px,4vw,26px);
-  box-shadow:0 18px 55px #0003;
-}
-.stats {
-  display:grid; grid-template-columns:repeat(5,minmax(0,1fr));
-  gap:8px; margin-bottom:18px;
-}
-.stat {
-  background:var(--panel2); border:1px solid var(--line);
-  border-radius:15px; padding:11px; min-width:0;
-}
-.stat span {
-  display:block; color:var(--muted); font-size:12px; margin-bottom:6px;
-}
-.stat strong { font-size:clamp(15px,3.5vw,22px); overflow-wrap:anywhere; }
-.rank { color:var(--accent); }
-.lives { color:#ff8f9a; white-space:nowrap; }
-.stage-line {
-  display:flex; justify-content:space-between; gap:10px;
-  align-items:center; margin:2px 0 16px;
-}
-.stage {
-  font-size:13px; color:#c6d7ff; background:#263b63;
-  padding:7px 10px; border-radius:9px;
-}
-.hint { color:var(--muted); font-size:13px; line-height:1.55; }
-.question-box {
-  min-height:190px; display:flex; flex-direction:column;
-  align-items:center; justify-content:center; text-align:center;
-  background:#0e1629; border:1px solid var(--line);
-  border-radius:18px; padding:24px 15px; margin:14px 0;
-}
-.q-label { color:var(--muted); font-size:12px; margin-bottom:14px; }
-.question {
-  font-size:clamp(24px,6vw,38px); font-weight:750;
-  letter-spacing:-.035em; line-height:1.45; overflow-wrap:anywhere;
-}
-.subquestion { color:var(--muted); font-size:13px; margin-top:10px; }
-form { display:flex; gap:9px; }
-input {
-  flex:1; min-width:0; border:1px solid var(--line);
-  border-radius:13px; padding:15px 14px; background:#0c1426;
-  color:var(--text); font-size:18px; outline:none;
-}
-input:focus { border-color:var(--accent); box-shadow:0 0 0 3px #8bb5ff22; }
-button {
-  border:0; border-radius:13px; padding:13px 17px;
-  font-weight:750; font-size:15px; cursor:pointer;
-  transition:transform .08s,opacity .2s;
-}
-button:active { transform:scale(.98); }
-button:disabled { opacity:.4; cursor:not-allowed; }
-.primary { background:var(--accent); color:#0b1428; }
-.secondary { background:#24314d; color:var(--text); border:1px solid var(--line); }
-.message { min-height:26px; margin:12px 2px 0; font-weight:650; }
-.message.good { color:var(--good); }
-.message.bad { color:var(--bad); }
-.next-area { margin-top:12px; }
-.bottom {
-  display:flex; justify-content:space-between; gap:12px;
-  align-items:center; margin-top:18px; flex-wrap:wrap;
-}
-.rules { margin-top:16px; padding-top:15px; border-top:1px solid var(--line); }
-details summary { cursor:pointer; color:#cbd7ee; font-weight:650; }
-.rules ul { color:var(--muted); font-size:13px; line-height:1.8; padding-left:20px; }
-.hidden { display:none !important; }
-.end { text-align:center; padding:20px 0 6px; }
-.end h2 { font-size:30px; margin:8px 0; }
-.end .bigscore { font-size:48px; font-weight:850; color:var(--accent); margin:12px 0; }
-.mini { color:var(--muted); font-size:12px; }
-@media(max-width:520px) {
-  header { align-items:flex-start; flex-direction:column; }
-  .stats { grid-template-columns:repeat(2,minmax(0,1fr)); gap:7px; }
-  .stat { padding:10px; }
-  form { flex-direction:column; }
-  form button { width:100%; }
-  .stage-line { align-items:flex-start; flex-direction:column; }
-}
+  :root {
+    color-scheme: dark;
+    --bg:#0b1020;
+    --panel:#141c31;
+    --panel2:#1a2540;
+    --line:#2c3957;
+    --text:#eef3ff;
+    --muted:#aab7d2;
+    --accent:#8bb5ff;
+    --good:#68ddb0;
+    --bad:#ff8f9a;
+  }
+
+  * { box-sizing:border-box; }
+
+  body {
+    margin:0;
+    min-height:100vh;
+    background:radial-gradient(ellipse at top,#1b2c50 0,#0b1020 58%);
+    color:var(--text);
+    font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    padding:22px 14px 36px;
+  }
+
+  .wrap { max-width:760px; margin:0 auto; }
+
+  header {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:12px;
+    margin-bottom:18px;
+  }
+
+  h1 {
+    margin:5px 0 0;
+    font-size:clamp(27px,6vw,39px);
+    line-height:1.1;
+    letter-spacing:-.04em;
+  }
+
+  .pill {
+    border:1px solid var(--line);
+    background:#111a2e;
+    padding:8px 11px;
+    border-radius:999px;
+    color:var(--muted);
+    font-size:12px;
+    white-space:nowrap;
+  }
+
+  .panel {
+    background:rgba(20,28,49,.94);
+    border:1px solid var(--line);
+    border-radius:22px;
+    padding:clamp(17px,4vw,26px);
+    box-shadow:0 18px 55px #0003;
+  }
+
+  .stats {
+    display:grid;
+    grid-template-columns:repeat(5,minmax(0,1fr));
+    gap:8px;
+    margin-bottom:18px;
+  }
+
+  .stat {
+    background:var(--panel2);
+    border:1px solid var(--line);
+    border-radius:15px;
+    padding:11px;
+    min-width:0;
+  }
+
+  .stat span {
+    display:block;
+    color:var(--muted);
+    font-size:12px;
+    margin-bottom:6px;
+  }
+
+  .stat strong {
+    font-size:clamp(15px,3.5vw,22px);
+    overflow-wrap:anywhere;
+  }
+
+  .rank { color:var(--accent); }
+  .health { color:var(--bad); }
+
+  .stage-line {
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+    align-items:center;
+    margin:2px 0 16px;
+  }
+
+  .stage {
+    font-size:13px;
+    color:#c6d7ff;
+    background:#263b63;
+    padding:7px 10px;
+    border-radius:9px;
+  }
+
+  .hint {
+    color:var(--muted);
+    font-size:13px;
+    line-height:1.55;
+  }
+
+  .question-box {
+    min-height:190px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    background:#0e1629;
+    border:1px solid var(--line);
+    border-radius:18px;
+    padding:24px 15px;
+    margin:14px 0;
+  }
+
+  .q-label {
+    color:var(--muted);
+    font-size:12px;
+    margin-bottom:14px;
+  }
+
+  .question {
+    font-size:clamp(24px,6vw,38px);
+    font-weight:750;
+    letter-spacing:-.035em;
+    line-height:1.45;
+    overflow-wrap:anywhere;
+  }
+
+  .subquestion {
+    color:var(--muted);
+    font-size:13px;
+    margin-top:10px;
+  }
+
+  form { display:flex; gap:9px; }
+
+  input {
+    flex:1;
+    min-width:0;
+    border:1px solid var(--line);
+    border-radius:13px;
+    padding:15px 14px;
+    background:#0c1426;
+    color:var(--text);
+    font-size:18px;
+    outline:none;
+  }
+
+  input:focus {
+    border-color:var(--accent);
+    box-shadow:0 0 0 3px #8bb5ff22;
+  }
+
+  button {
+    border:0;
+    border-radius:13px;
+    padding:13px 17px;
+    font-weight:750;
+    font-size:15px;
+    cursor:pointer;
+    transition:transform .08s,opacity .2s;
+  }
+
+  button:active { transform:scale(.98); }
+  button:disabled { opacity:.4; cursor:not-allowed; }
+
+  .primary { background:var(--accent); color:#0b1428; }
+
+  .secondary {
+    background:#24314d;
+    color:var(--text);
+    border:1px solid var(--line);
+  }
+
+  .message {
+    min-height:26px;
+    margin:12px 2px 0;
+    font-weight:650;
+    line-height:1.6;
+  }
+
+  .message.good { color:var(--good); }
+  .message.bad { color:var(--bad); }
+
+  .bottom {
+    display:flex;
+    justify-content:space-between;
+    gap:12px;
+    align-items:center;
+    margin-top:18px;
+    flex-wrap:wrap;
+  }
+
+  .continue-area {
+    display:flex;
+    justify-content:center;
+    margin-top:12px;
+  }
+
+  .continue-area button { width:100%; }
+
+  .rules {
+    margin-top:16px;
+    padding-top:15px;
+    border-top:1px solid var(--line);
+  }
+
+  details summary {
+    cursor:pointer;
+    color:#cbd7ee;
+    font-weight:650;
+  }
+
+  .rules ul {
+    color:var(--muted);
+    font-size:13px;
+    line-height:1.8;
+    padding-left:20px;
+  }
+
+  .hidden { display:none !important; }
+
+  .end { text-align:center; padding:20px 0 6px; }
+  .end h2 { font-size:30px; margin:8px 0; }
+
+  .end .bigscore {
+    font-size:48px;
+    font-weight:850;
+    color:var(--accent);
+    margin:12px 0;
+  }
+
+  .mini { color:var(--muted); font-size:12px; }
+
+  @media(max-width:600px) {
+    header { align-items:flex-start; }
+    .stats { grid-template-columns:repeat(2,minmax(0,1fr)); gap:7px; }
+    .stat { padding:10px; }
+    form { flex-direction:column; }
+    form button { width:100%; }
+  }
 </style>
 </head>
+
 <body>
 <div class="wrap">
   <header>
-    <h1>무한 수학 시험</h1>
+    <div>
+      <h1>무한 수학 시험</h1>
+    </div>
     <div class="pill">체력 3개 · 오답마다 1 감소</div>
   </header>
 
   <section class="panel" id="game">
     <div class="stats">
-      <div class="stat"><span>맞힌 문제</span><strong id="correct">0</strong></div>
-      <div class="stat"><span>최고 기록</span><strong id="bestScore">0</strong></div>
-      <div class="stat"><span>현재 등급</span><strong class="rank" id="rank">아이언</strong></div>
-      <div class="stat"><span>현재 단계</span><strong id="stageStat">1단계</strong></div>
-      <div class="stat"><span>체력</span><strong class="lives" id="lives">♥ ♥ ♥</strong></div>
+      <div class="stat">
+        <span>맞힌 문제</span>
+        <strong id="correct">0</strong>
+      </div>
+      <div class="stat">
+        <span>최고 기록</span>
+        <strong id="bestScore">0</strong>
+      </div>
+      <div class="stat">
+        <span>현재 등급</span>
+        <strong class="rank" id="rank">아이언</strong>
+      </div>
+      <div class="stat">
+        <span>현재 단계</span>
+        <strong id="stageStat">1단계</strong>
+      </div>
+      <div class="stat">
+        <span>남은 체력</span>
+        <strong class="health" id="health">♥ ♥ ♥</strong>
+      </div>
     </div>
 
     <div class="stage-line">
@@ -139,23 +301,36 @@ details summary { cursor:pointer; color:#cbd7ee; font-weight:650; }
     <div class="question-box">
       <div class="q-label" id="qLabel">QUESTION 1</div>
       <div class="question" id="question">시험 시작 버튼을 눌러!</div>
-      <div class="subquestion" id="subquestion">정답을 맞히면 다음 문제로!</div>
+      <div class="subquestion" id="subquestion">
+        공식 힌트 없음. 정답을 맞히면 다음 문제로!
+      </div>
     </div>
 
     <form id="answerForm">
-      <input id="answer" type="text" autocomplete="off"
-        placeholder="정답 입력" aria-label="정답 입력" disabled>
-      <button class="primary" id="submitBtn" type="submit" disabled>정답 제출</button>
+      <input
+        id="answer"
+        type="text"
+        autocomplete="off"
+        placeholder="정답 입력"
+        aria-label="정답 입력"
+        disabled
+      >
+      <button class="primary" id="submitBtn" type="submit" disabled>
+        정답 제출
+      </button>
     </form>
 
     <div class="message" id="message" aria-live="polite"></div>
-    <div class="next-area">
-      <button class="primary hidden" id="nextBtn" type="button">넘어가기</button>
+
+    <div class="continue-area hidden" id="continueArea">
+      <button class="primary" id="continueBtn" type="button">
+        넘어가기
+      </button>
     </div>
 
     <div class="bottom">
       <button class="primary" id="startBtn" type="button">시험 시작</button>
-      <span class="mini">무한 수학 시험</span>
+      <span class="mini">정답은 즉시 다음 문제 · 오답은 직접 넘어가기</span>
     </div>
 
     <div class="rules">
@@ -167,17 +342,11 @@ details summary { cursor:pointer; color:#cbd7ee; font-weight:650; }
           <li>트랜센던스 301–450 · 울트라 451–600 · 디세터 601–800</li>
           <li>인피니티 801–1000 · 프로드 1001–1400 · 스트롱기스트 1401–2000</li>
           <li>이모털리티 2001–2500 · 임파서빌리티 2501–3000</li>
-          <li>1단계: 덧셈·뺄셈 / 2단계: 사칙연산 혼합 / 3단계: 고급 수학 / 4단계: 고차방정식</li>
+          <li>1단계: 덧셈·뺄셈 / 2단계: 사칙연산 혼합 / 3단계: 고급 수학·이차방정식 / 4단계: 고급 혼합 계산·고차방정식</li>
           <li>임파서빌리티 이후에는 정답 500개마다 내부 표기가 상승해.</li>
         </ul>
       </details>
     </div>
-  </section>
-
-  <section class="panel" id="leaderboardPanel" style="margin-top:16px">
-    <h2 style="margin:0 0 6px;font-size:22px">온라인 랭킹</h2>
-    <p class="hint" id="leaderboardStatus">Supabase 설정을 하면 전체 사용자 랭킹이 여기에 표시돼.</p>
-    <ol id="leaderboardList" style="color:var(--text);line-height:1.9;padding-left:24px;margin-bottom:0"></ol>
   </section>
 
   <section class="panel end hidden" id="result">
@@ -200,132 +369,19 @@ details summary { cursor:pointer; color:#cbd7ee; font-weight:650; }
     correct: 0,
     wrong: 0,
     lives: 3,
-    waiting: false,
     running: false,
+    waitingToContinue: false,
     current: null
   };
 
   const BEST_SCORE_KEY = "infiniteMathExamBestScore";
 
-  // 기존 Supabase 설정값을 입력해 줘.
-  // 공개용 publishable/anon key만 사용하고 secret/service_role 키는 넣지 마.
-  const SUPABASE_URL = "YOUR_SUPABASE_PROJECT_URL";
-  const SUPABASE_ANON_KEY = "YOUR_SUPABASE_PUBLISHABLE_OR_ANON_KEY";
-  const LEADERBOARD_TABLE = "leaderboard";
-  const PLAYER_NAME_KEY = "infiniteMathExamPlayerName";
-
-  const ONLINE_RANKING_ENABLED =
-    SUPABASE_URL.startsWith("https://") &&
-    !SUPABASE_URL.includes("YOUR_") &&
-    !SUPABASE_ANON_KEY.includes("YOUR_") &&
-    SUPABASE_ANON_KEY.length > 10;
-
-  function setLeaderboardStatus(message) {
-    $("leaderboardStatus").textContent = message;
-  }
-
-  async function supabaseRequest(path, options = {}) {
-    const response = await fetch(`${SUPABASE_URL}/rest/v1/${path}`, {
-      ...options,
-      headers: {
-        apikey: SUPABASE_ANON_KEY,
-        Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
-        "Content-Type": "application/json",
-        Prefer: options.method === "POST" ? "return=minimal" : "",
-        ...(options.headers || {})
-      }
-    });
-
-    if (!response.ok) {
-      const detail = await response.text().catch(() => "");
-      throw new Error(`Supabase ${response.status}: ${detail.slice(0, 180)}`);
-    }
-
-    if (response.status === 204) return null;
-    const body = await response.text();
-    return body ? JSON.parse(body) : null;
-  }
-
-  async function loadOnlineLeaderboard() {
-    if (!ONLINE_RANKING_ENABLED) {
-      setLeaderboardStatus("온라인 랭킹은 Supabase 설정 후 이용할 수 있어.");
-      return;
-    }
-
-    setLeaderboardStatus("온라인 랭킹 불러오는 중…");
-
-    try {
-      const rows = await supabaseRequest(
-        `${LEADERBOARD_TABLE}?select=nickname,score,created_at&order=score.desc&limit=10`
-      );
-
-      const list = $("leaderboardList");
-      list.replaceChildren();
-
-      if (!rows || rows.length === 0) {
-        setLeaderboardStatus("아직 등록된 기록이 없어. 첫 기록에 도전해 봐!");
-        return;
-      }
-
-      rows.forEach(row => {
-        const item = document.createElement("li");
-        const name = document.createElement("span");
-        name.textContent = String(row.nickname || "익명");
-
-        const score = document.createElement("strong");
-        score.textContent = ` — ${Number(row.score).toLocaleString("ko-KR")}점`;
-
-        item.append(name, score);
-        list.appendChild(item);
-      });
-
-      setLeaderboardStatus("전체 사용자 최고 기록 TOP 10");
-    } catch (error) {
-      setLeaderboardStatus("랭킹을 불러오지 못했어. Supabase 테이블과 RLS 정책을 확인해 줘.");
-      console.error(error);
-    }
-  }
-
-  async function submitOnlineScore(score) {
-    if (!ONLINE_RANKING_ENABLED || score <= 0) return;
-
-    let nickname = "";
-    try {
-      nickname = localStorage.getItem(PLAYER_NAME_KEY) || "";
-    } catch (_) {}
-
-    if (!nickname) {
-      nickname = prompt("온라인 랭킹에 표시할 별명을 입력해 줘 (최대 20자).") || "익명";
-      nickname = nickname.trim().slice(0, 20) || "익명";
-
-      try {
-        localStorage.setItem(PLAYER_NAME_KEY, nickname);
-      } catch (_) {}
-    }
-
-    try {
-      await supabaseRequest(LEADERBOARD_TABLE, {
-        method: "POST",
-        body: JSON.stringify({
-          nickname,
-          score,
-          rank: rankFor(score)
-        })
-      });
-
-      setLeaderboardStatus("기록을 온라인 랭킹에 등록했어!");
-      await loadOnlineLeaderboard();
-    } catch (error) {
-      setLeaderboardStatus("기록 등록 실패. Supabase 테이블 열과 INSERT 정책을 확인해 줘.");
-      console.error(error);
-    }
-  }
-
-  // 최고 기록 저장 기능: 기존 저장 키를 그대로 사용한다.
   function loadBestScore() {
     try {
       const value = Number(localStorage.getItem(BEST_SCORE_KEY) || 0);
-      return Number.isFinite(value) && value >= 0 ? Math.floor(value) : 0;
+      return Number.isFinite(value) && value >= 0
+        ? Math.floor(value)
+        : 0;
     } catch (_) {
       return 0;
     }
@@ -338,19 +394,45 @@ details summary { cursor:pointer; color:#cbd7ee; font-weight:650; }
   }
 
   function renderBestScore() {
-    $("bestScore").textContent = loadBestScore().toLocaleString("ko-KR");
+    $("bestScore").textContent =
+      loadBestScore().toLocaleString("ko-KR");
   }
 
   const ranks = [
-    [10,"아이언"], [19,"브론즈"], [49,"실버"], [75,"골드"],
-    [100,"다이아몬드"], [150,"마스터"], [200,"그랜드마스터"],
-    [300,"챌린저"], [450,"트랜센던스"], [600,"울트라"],
-    [800,"디세터"], [1000,"인피니티"], [1400,"프로드"],
-    [2000,"스트롱기스트"], [2500,"이모털리티"], [3000,"임파서빌리티"]
+    [10, "아이언"],
+    [19, "브론즈"],
+    [49, "실버"],
+    [75, "골드"],
+    [100, "다이아몬드"],
+    [150, "마스터"],
+    [200, "그랜드마스터"],
+    [300, "챌린저"],
+    [450, "트랜센던스"],
+    [600, "울트라"],
+    [800, "디세터"],
+    [1000, "인피니티"],
+    [1400, "프로드"],
+    [2000, "스트롱기스트"],
+    [2500, "이모털리티"],
+    [3000, "임파서빌리티"]
   ];
 
-  const rand = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+  const rand = (min, max) =>
+    Math.floor(Math.random() * (max - min + 1)) + min;
+
   const pick = arr => arr[rand(0, arr.length - 1)];
+
+  const gcd = (a, b) => b ? gcd(b, a % b) : Math.abs(a);
+
+  const frac = (n, d) => {
+    const g = gcd(n, d) || 1;
+    n /= g;
+    d /= g;
+    return d === 1 ? String(n) : `${n}/${d}`;
+  };
+
+  const fmt = n =>
+    Number.isInteger(n) ? String(n) : String(Number(n.toFixed(4)));
 
   function stageFor(c) {
     if (c <= 100) return 1;
@@ -367,29 +449,30 @@ details summary { cursor:pointer; color:#cbd7ee; font-weight:650; }
     const step = Math.floor((c - 3000) / 500);
     const symbols = ["", "I", "II", "III", "+", "+I", "+II", "+III"];
     const sCount = Math.floor(step / 8);
+
     return "임파서빌리티 " + "S".repeat(sCount) + symbols[step % 8];
   }
 
   function makeQuestion() {
     const stage = stageFor(state.correct);
 
-    // 1단계: 덧셈과 뺄셈
     if (stage === 1) {
       const max = Math.min(99, 10 + Math.floor(state.correct / 3) * 3);
       const a = rand(Math.max(1, Math.floor(max * .35)), max);
       const b = rand(Math.max(1, Math.floor(max * .25)), max);
       const op = Math.random() < .5 ? "+" : "-";
+
       const left = op === "-" && b > a ? b : a;
       const right = op === "-" && b > a ? a : b;
 
       return {
         text: `${left} ${op} ${right} = ?`,
         answers: [op === "+" ? left + right : left - right],
-        note: "덧셈 · 뺄셈"
+        note: "덧셈 · 뺄셈",
+        display: "두 자릿수까지의 계산"
       };
     }
 
-    // 2단계: 사칙연산 혼합
     if (stage === 2) {
       const max = Math.min(999, 100 + state.correct * 2);
       const a = rand(10, max);
@@ -401,7 +484,8 @@ details summary { cursor:pointer; color:#cbd7ee; font-weight:650; }
         return {
           text: `${a} + ${b} × ${c} = ?`,
           answers: [a + b * c],
-          note: "곱셈을 먼저 계산해!"
+          note: "곱셈을 먼저 계산해!",
+          display: "사칙연산 혼합"
         };
       }
 
@@ -415,7 +499,8 @@ details summary { cursor:pointer; color:#cbd7ee; font-weight:650; }
         return {
           text: `(${a2} + ${b2}) ÷ ${x} = ?`,
           answers: [q],
-          note: "괄호와 나눗셈"
+          note: "괄호와 나눗셈",
+          display: "혼합 계산"
         };
       }
 
@@ -423,7 +508,8 @@ details summary { cursor:pointer; color:#cbd7ee; font-weight:650; }
         return {
           text: `${a} - ${b} + ${c} = ?`,
           answers: [a - b + c],
-          note: "왼쪽부터 차례대로"
+          note: "왼쪽부터 차례대로",
+          display: "사칙연산 혼합"
         };
       }
 
@@ -433,20 +519,25 @@ details summary { cursor:pointer; color:#cbd7ee; font-weight:650; }
       return {
         text: `${x} × ${y} + ${a} = ?`,
         answers: [x * y + a],
-        note: "곱셈을 먼저 계산해!"
+        note: "곱셈을 먼저 계산해!",
+        display: "사칙연산 혼합"
       };
     }
 
-    // 3단계: 고급 수학
     if (stage === 3) {
       const type = rand(0, 6);
 
       if (type === 0) {
         const n = rand(3, 8);
-        const answer = Array.from({ length: n }, (_, i) => i + 1)
-          .reduce((a, b) => a * b, 1);
-
-        return { text: `${n}! = ?`, answers: [answer], note: "팩토리얼" };
+        return {
+          text: `${n}! = ?`,
+          answers: [
+            Array.from({ length: n }, (_, i) => i + 1)
+              .reduce((a, b) => a * b, 1)
+          ],
+          note: "팩토리얼",
+          display: "고급 수학"
+        };
       }
 
       if (type === 1) {
@@ -454,7 +545,8 @@ details summary { cursor:pointer; color:#cbd7ee; font-weight:650; }
         return {
           text: `Σ k  (k = 1부터 ${n}까지) = ?`,
           answers: [n * (n + 1) / 2],
-          note: "시그마 합"
+          note: "시그마 합",
+          display: "시그마"
         };
       }
 
@@ -464,7 +556,8 @@ details summary { cursor:pointer; color:#cbd7ee; font-weight:650; }
         return {
           text: `${a}<sup>${b}</sup> = ?`,
           answers: [a ** b],
-          note: "거듭제곱"
+          note: "거듭제곱",
+          display: "지수"
         };
       }
 
@@ -474,7 +567,8 @@ details summary { cursor:pointer; color:#cbd7ee; font-weight:650; }
         return {
           text: `log<sub>${base}</sub>(${base ** exp}) = ?`,
           answers: [exp],
-          note: "로그의 값"
+          note: "로그의 값",
+          display: "로그"
         };
       }
 
@@ -490,7 +584,8 @@ details summary { cursor:pointer; color:#cbd7ee; font-weight:650; }
         return {
           text: `${fn}(${deg}°) × ${val} = ?`,
           answers: [ans],
-          note: "정확한 삼각비를 이용해!"
+          note: "각도는 도(°) 단위. 정확한 삼각비를 이용해!",
+          display: "삼각함수"
         };
       }
 
@@ -501,7 +596,8 @@ details summary { cursor:pointer; color:#cbd7ee; font-weight:650; }
         return {
           text: `x² − ${r + s}x + ${r * s} = 0 에서 가능한 x 하나는?`,
           answers: [r, s],
-          note: "이차방정식의 근 중 하나를 입력해."
+          note: "이차방정식의 근 중 하나를 입력해.",
+          display: "이차방정식"
         };
       }
 
@@ -512,19 +608,26 @@ details summary { cursor:pointer; color:#cbd7ee; font-weight:650; }
       return {
         text: `${a}x + ${b} = ${a * x + b} 에서 x = ?`,
         answers: [x],
-        note: "일차방정식"
+        note: "일차방정식",
+        display: "방정식"
       };
     }
 
-    // 4단계: 고차방정식
+    // 4단계: 고차방정식.
+    // 임파서빌리티 구간에서는 3원 4차 연립방정식 출제.
     const hard = state.correct >= 2501;
 
     if (hard) {
-      // 세 변수의 4차 연립방정식
       for (let attempt = 0; attempt < 500; attempt++) {
         const target = [rand(-2, 2), rand(-2, 2), rand(-2, 2)];
         const [x, y, z] = target;
-        const values = [x ** 4 + y + z, x + y ** 4 + z, x + y + z ** 4];
+
+        const values = [
+          x ** 4 + y + z,
+          x + y ** 4 + z,
+          x + y + z ** 4
+        ];
+
         const solutions = [];
 
         for (let i = -2; i <= 2; i++) {
@@ -543,22 +646,29 @@ details summary { cursor:pointer; color:#cbd7ee; font-weight:650; }
 
         if (solutions.length === 1) {
           return {
-            text: `x⁴ + y + z = ${values[0]}<br>
-              x + y⁴ + z = ${values[1]}<br>
-              x + y + z⁴ = ${values[2]}<br>
-              <span style="font-size:.62em;color:#aab7d2">−2 ≤ x, y, z ≤ 2</span>`,
+            text:
+              `x⁴ + y + z = ${values[0]}<br>` +
+              `x + y⁴ + z = ${values[1]}<br>` +
+              `x + y + z⁴ = ${values[2]}<br>` +
+              `<span style="font-size:.62em;color:#aab7d2">−2 ≤ x, y, z ≤ 2</span>`,
             answers: [],
             tuple: target,
-            note: "(x, y, z)를 입력해. 예: 1, -1, 2"
+            note: "세 식을 모두 만족하는 (x, y, z)를 입력해. 예: 1, -1, 2",
+            display: "임파서빌리티 · 3원 4차 연립방정식"
           };
         }
       }
 
       return {
-        text: `x⁴ + y + z = 3<br>x + y⁴ + z = 3<br>x + y + z⁴ = 3`,
+        text:
+          `x⁴ + y + z = 3<br>` +
+          `x + y⁴ + z = 3<br>` +
+          `x + y + z⁴ = 3<br>` +
+          `<span style="font-size:.62em;color:#aab7d2">−2 ≤ x, y, z ≤ 2</span>`,
         answers: [],
         tuple: [1, 1, 1],
-        note: "(x, y, z)를 입력해. 예: 1, 1, 1"
+        note: "세 식을 모두 만족하는 (x, y, z)를 입력해. 예: 1, 1, 1",
+        display: "임파서빌리티 · 3원 4차 연립방정식"
       };
     }
 
@@ -577,6 +687,7 @@ details summary { cursor:pointer; color:#cbd7ee; font-weight:650; }
 
     const [a, b, c, d, e] = coeffs;
     const parts = [];
+
     const terms = degree === 3
       ? [[a, "x³"], [b, "x²"], [c, "x"], [d, ""]]
       : [[a, "x⁴"], [b, "x³"], [c, "x²"], [d, "x"], [e, ""]];
@@ -585,30 +696,40 @@ details summary { cursor:pointer; color:#cbd7ee; font-weight:650; }
       if (coef === 0) return;
 
       const abs = Math.abs(coef);
-      const body = pow ? (abs === 1 ? pow : `${abs}${pow}`) : String(abs);
+      const body = pow
+        ? (abs === 1 ? pow : `${abs}${pow}`)
+        : String(abs);
 
-      if (parts.length === 0) {
+      if (i === 0) {
         parts.push(coef < 0 ? `−${body}` : body);
       } else {
         parts.push(`${coef < 0 ? "−" : "+"} ${body}`);
       }
     });
 
+    const shownRoots = [...new Set(roots)];
+
     return {
       text: `${parts.join(" ")} = 0 에서 정수해 하나는?`,
-      answers: [...new Set(roots)],
-      note: "고차방정식의 정수해 중 하나를 입력해."
+      answers: shownRoots,
+      note: "고차방정식의 정수해 중 하나를 입력해.",
+      display: "고급 수학 · 고차방정식"
     };
+  }
+
+  function renderHealth() {
+    $("health").textContent =
+      "♥ ".repeat(state.lives) + "♡ ".repeat(3 - state.lives);
   }
 
   function render() {
     const stage = stageFor(state.correct);
 
-    $("correct").textContent = state.correct.toLocaleString("ko-KR");
+    $("correct").textContent =
+      state.correct.toLocaleString("ko-KR");
+
     $("rank").textContent = rankFor(state.correct);
     $("stageStat").textContent = stage + "단계";
-    $("lives").textContent =
-      "♥ ".repeat(state.lives).trim() + " ♡".repeat(3 - state.lives);
 
     $("stageBadge").textContent = [
       "",
@@ -625,6 +746,8 @@ details summary { cursor:pointer; color:#cbd7ee; font-weight:650; }
       "팩토리얼·시그마·삼각함수·로그·방정식",
       "고차방정식 · 임파서빌리티에서 4차 도전"
     ][stage];
+
+    renderHealth();
   }
 
   function showQuestion() {
@@ -635,6 +758,12 @@ details summary { cursor:pointer; color:#cbd7ee; font-weight:650; }
     $("subquestion").textContent = state.current.note;
     $("answer").value = "";
 
+    $("answer").disabled = false;
+    $("submitBtn").disabled = false;
+    $("continueArea").classList.add("hidden");
+
+    state.waitingToContinue = false;
+
     render();
     $("answer").focus();
   }
@@ -643,15 +772,16 @@ details summary { cursor:pointer; color:#cbd7ee; font-weight:650; }
     state.correct = 0;
     state.wrong = 0;
     state.lives = 3;
-    state.waiting = false;
     state.running = true;
+    state.waitingToContinue = false;
 
     $("game").classList.remove("hidden");
     $("result").classList.add("hidden");
+
     $("answer").disabled = false;
     $("submitBtn").disabled = false;
     $("startBtn").classList.add("hidden");
-    $("nextBtn").classList.add("hidden");
+    $("continueArea").classList.add("hidden");
 
     $("message").textContent = "준비됐어. 첫 문제부터 시작!";
     $("message").className = "message";
@@ -660,36 +790,47 @@ details summary { cursor:pointer; color:#cbd7ee; font-weight:650; }
   }
 
   function finish(reason) {
-    if (!state.running) return;
-
     state.running = false;
-    state.waiting = false;
+    state.waitingToContinue = false;
 
     const oldBest = loadBestScore();
+
     if (state.correct > oldBest) {
       saveBestScore(state.correct);
     }
 
     renderBestScore();
-    submitOnlineScore(state.correct);
 
     $("answer").disabled = true;
     $("submitBtn").disabled = true;
-    $("nextBtn").classList.add("hidden");
+    $("continueArea").classList.add("hidden");
 
-    $("finalScore").textContent = state.correct.toLocaleString("ko-KR");
+    $("finalScore").textContent =
+      state.correct.toLocaleString("ko-KR");
+
     $("finalRank").textContent = rankFor(state.correct);
-    $("finalStage").textContent = `도달 단계: ${stageFor(state.correct)}단계`;
+
+    $("finalStage").textContent =
+      `도달 단계: ${stageFor(state.correct)}단계`;
+
     $("finalReason").textContent = reason;
 
     $("game").classList.add("hidden");
     $("result").classList.remove("hidden");
   }
 
+  function getCorrectAnswerText() {
+    if (state.current.tuple) {
+      return state.current.tuple.join(", ");
+    }
+
+    return state.current.answers.join(" 또는 ");
+  }
+
   $("answerForm").addEventListener("submit", e => {
     e.preventDefault();
 
-    if (!state.running || state.waiting) return;
+    if (!state.running || state.waitingToContinue) return;
 
     const raw = $("answer").value.trim();
 
@@ -703,7 +844,10 @@ details summary { cursor:pointer; color:#cbd7ee; font-weight:650; }
     let isCorrect = false;
 
     if (state.current.tuple) {
-      const values = raw.split(/[\s,]+/).filter(Boolean).map(Number);
+      const values = raw
+        .split(/[\s,]+/)
+        .filter(Boolean)
+        .map(Number);
 
       isCorrect =
         values.length === 3 &&
@@ -723,46 +867,46 @@ details summary { cursor:pointer; color:#cbd7ee; font-weight:650; }
 
     if (isCorrect) {
       state.correct++;
+
       $("message").textContent = "정답! 다음 문제!";
       $("message").className = "message good";
+
       showQuestion();
     } else {
       state.wrong++;
       state.lives--;
-      state.waiting = true;
 
-      const correctAnswer = state.current.tuple
-        ? state.current.tuple.join(", ")
-        : state.current.answers.join(" 또는 ");
+      state.waitingToContinue = true;
 
-      $("message").textContent =
-        `오답! 정답은 ${correctAnswer}. 남은 체력: ${state.lives}`;
-      $("message").className = "message bad";
-
-      // 오답을 제출한 뒤에는 버튼을 누르기 전까지 문제를 바꾸지 않는다.
       $("answer").disabled = true;
       $("submitBtn").disabled = true;
-      $("nextBtn").classList.remove("hidden");
+
+      $("message").textContent =
+        `오답! 정답은 ${getCorrectAnswerText()}. ` +
+        `남은 체력: ${state.lives}`;
+
+      $("message").className = "message bad";
+
+      $("continueBtn").textContent =
+        state.lives === 0 ? "시험 종료" : "넘어가기";
+
+      $("continueArea").classList.remove("hidden");
+
+      renderHealth();
     }
   });
 
-  $("nextBtn").addEventListener("click", () => {
-    if (!state.running || !state.waiting) return;
-
-    $("nextBtn").classList.add("hidden");
+  $("continueBtn").addEventListener("click", () => {
+    if (!state.running || !state.waitingToContinue) return;
 
     if (state.lives <= 0) {
-      finish("체력을 모두 사용했어.");
+      finish("체력을 모두 잃어 시험이 종료됐어.");
       return;
     }
 
-    state.waiting = false;
-    $("answer").disabled = false;
-    $("submitBtn").disabled = false;
-    $("message").textContent = "";
-    $("message").className = "message";
-
     showQuestion();
+    $("message").textContent = "다음 문제에 도전해!";
+    $("message").className = "message";
   });
 
   $("startBtn").addEventListener("click", start);
@@ -770,7 +914,6 @@ details summary { cursor:pointer; color:#cbd7ee; font-weight:650; }
 
   render();
   renderBestScore();
-  loadOnlineLeaderboard();
 })();
 </script>
 </body>
