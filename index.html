@@ -457,6 +457,7 @@ details summary { cursor:pointer; color:#cbd7ee; font-weight:650; }
     state.current = makeQuestion();
     state.waiting = false;
     state.ending = false;
+    input.focus({ preventScroll: true });
 
     $("qLabel").textContent = `QUESTION ${state.score+1}`;
     $("question").innerHTML = state.current.text;
