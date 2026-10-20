@@ -208,6 +208,8 @@ button:disabled { opacity:.4; cursor:not-allowed; }
 
 .rules { margin-top:16px; padding-top:15px; border-top:1px solid var(--line); }
 
+.rules details + details { margin-top:14px; }
+
 details summary { cursor:pointer; color:#cbd7ee; font-weight:650; }
 
 .details-content { margin-top:14px; }
@@ -324,43 +326,47 @@ details summary { cursor:pointer; color:#cbd7ee; font-weight:650; }
 
           </div>
 
-          <details>
+        </div>
 
-            <summary>등급표와 단계 규칙</summary>
+      </details>
 
-            <ul>
+      <details>
 
-              <li>아이언 0–10 · 브론즈 11–19 · 실버 20–49</li>
+        <summary>등급 및 단계 규칙</summary>
 
-              <li>골드 50–75 · 다이아몬드 76–100</li>
+        <div class="details-content">
 
-              <li>마스터 101–150 · 그랜드마스터 151–200</li>
+          <ul>
 
-              <li>챌린저 201–300 · 트랜센던스 301–450</li>
+            <li>아이언 0–10 · 브론즈 11–19 · 실버 20–49</li>
 
-              <li>울트라 451–600 · 디세터 601–800</li>
+            <li>골드 50–75 · 다이아몬드 76–100</li>
 
-              <li>인피니티 801–1000 · 프로드 1001–1400</li>
+            <li>마스터 101–150 · 그랜드마스터 151–200</li>
 
-              <li>스트롱기스트 1401–2000</li>
+            <li>챌린저 201–300 · 트랜센던스 301–450</li>
 
-              <li>이모털리티 2001–2500</li>
+            <li>울트라 451–600 · 디세터 601–800</li>
 
-              <li>임파서빌리티 2501–3000</li>
+            <li>인피니티 801–1000 · 프로드 1001–1400</li>
 
-              <li>임파서빌리티 이후에는 점수 500점마다 내부 단계가 상승해.</li>
+            <li>스트롱기스트 1401–2000</li>
 
-              <li>1단계: 덧셈·뺄셈</li>
+            <li>이모털리티 2001–2500</li>
 
-              <li>2단계: 사칙연산 혼합</li>
+            <li>임파서빌리티 2501–3000</li>
 
-              <li>3단계: 고급 수학·방정식</li>
+            <li>임파서빌리티 이후에는 점수 500점마다 내부 단계가 상승해.</li>
 
-              <li>4단계: 고차방정식</li>
+            <li>1단계: 덧셈·뺄셈</li>
 
-            </ul>
+            <li>2단계: 사칙연산 혼합</li>
 
-          </details>
+            <li>3단계: 고급 수학·방정식</li>
+
+            <li>4단계: 고차방정식</li>
+
+          </ul>
 
         </div>
 
@@ -842,8 +848,6 @@ details summary { cursor:pointer; color:#cbd7ee; font-weight:650; }
 
     render();
 
-    // 입력칸을 비활성화하지 않고 포커스를 유지해.
-
     $("answer").focus({preventScroll:true});
 
   }
@@ -1006,15 +1010,11 @@ details summary { cursor:pointer; color:#cbd7ee; font-weight:650; }
 
       render();
 
-      // 즉시 다음 문제! 시간 지연이나 입력칸 비활성화 없음.
-
       advance();
 
       return;
 
     }
-
-    // 오답이면 체력을 줄이고 정답을 보여 준 뒤 엔터를 기다려.
 
     state.health--;
 
@@ -1040,8 +1040,6 @@ details summary { cursor:pointer; color:#cbd7ee; font-weight:650; }
 
     $("message").className = "message bad";
 
-    // disabled와 readOnly를 설정하지 않아 키보드 유지에 유리하게 해.
-
     $("answer").disabled = false;
 
     $("answer").readOnly = false;
@@ -1055,8 +1053,6 @@ details summary { cursor:pointer; color:#cbd7ee; font-weight:650; }
     $("answer").focus({preventScroll:true});
 
   });
-
-  // 오답 뒤 엔터: 다음 문제. 체력이 0이면 결과 화면.
 
   document.addEventListener("keydown",e=>{
 
