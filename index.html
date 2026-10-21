@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -95,7 +93,7 @@ footer { color:var(--muted); font-size:12px; text-align:center; padding:12px; }
       autocomplete="off" placeholder="정답을 입력해 줘">
     <div class="actions">
       <button class="primary" type="submit" id="submitBtn">정답 확인</button>
-      <button type="button" id="nextBtn">다음 문제</button>
+      <button type="button" id="nextBtn" disabled>다음 문제</button>
     </div>
   </form>
   <div class="notice" id="notice" aria-live="polite"></div>
@@ -162,6 +160,7 @@ let current = null;
 let active = false;
 let answered = false;
 let hintUsed = false;
+let questionTimer = null;
 
 function save() {
   try {
@@ -199,13 +198,6 @@ function rankName(n) {
   return "임파서빌리티 E";
 }
 
-/*
-  1단계: 아이언~다이아몬드
-  2단계: 마스터~트랜센던스
-  3단계: 디세터~프로드
-  4단계: 스트롱기스트~임파서빌리티 내부 단계
-  5단계: 임파서빌리티 E
-*/
 function stageNumber() {
   if (score <= 100) return 1;
   if (score <= 450) return 2;
@@ -269,7 +261,7 @@ function arithmeticProblem(ops,min,max,stage,options={}) {
   };
 }
 
-/* 혼합 계산: 괄호 없이 연산 순서가 분명한 두 연산 */
+/* 혼합 계산 */
 function mixedProblem(min,max,ops,stage) {
   const a = randInt(min,max);
   const b = randInt(min,max);
@@ -310,7 +302,6 @@ function mixedProblem(min,max,ops,stage) {
   };
 }
 
-/* 3단계: 일차방정식 */
 function linearEquation() {
   const x = randInt(-20,20);
   const a = randInt(2,12);
@@ -325,7 +316,6 @@ function linearEquation() {
   };
 }
 
-/* 3단계: 이차방정식 */
 function quadraticEquation() {
   const r1 = randInt(-9,9);
   let r2 = randInt(-9,9);
@@ -346,7 +336,6 @@ function quadraticEquation() {
   };
 }
 
-/* 3단계: 고급 계산 - 기호 하나(!) */
 function advancedSymbolProblem() {
   const n = randInt(3,7);
   let answer = 1;
@@ -360,10 +349,10 @@ function advancedSymbolProblem() {
   };
 }
 
-/* 4단계: 연립 이차방정식 */
 function simultaneousQuadratic() {
   const x = randInt(1,8);
-  const y = randInt(1,8);
+  let y = randInt(1,8);
+  while (x === y) y = randInt(1,8);
 
   return {
     text:`x² + y² = ${x*x+y*y}, x + y = ${x+y}. x > y일 때 x는?`,
@@ -373,10 +362,10 @@ function simultaneousQuadratic() {
   };
 }
 
-/* 4단계: 연립 삼차방정식 */
 function simultaneousCubic() {
   const x = randInt(1,5);
-  const y = randInt(1,5);
+  let y = randInt(1,5);
+  while (x === y) y = randInt(1,5);
 
   return {
     text:`x³ + y³ = ${x**3+y**3}, x + y = ${x+y}. x > y일 때 x는?`,
@@ -386,11 +375,6 @@ function simultaneousCubic() {
   };
 }
 
-/*
-  3원 연립방정식 생성기.
-  각 식은 x^d, y^d, z^d의 선형결합이며,
-  d=2, 3, 4에 따라 이차·삼차·사차 유형이 돼.
-*/
 function threeVariableSystem(degree) {
   const x = randInt(1,4);
   const y = randInt(1,4);
@@ -421,7 +405,6 @@ function threeVariableSystem(degree) {
   };
 }
 
-/* 5단계: 극한 */
 function limitProblem() {
   const a = randInt(1,9);
   const b = randInt(1,9);
@@ -435,7 +418,6 @@ function limitProblem() {
   };
 }
 
-/* 5단계: 수열 */
 function sequenceProblem() {
   const first = randInt(1,20);
   const diff = randInt(2,12);
@@ -453,76 +435,43 @@ function sequenceProblem() {
 function makeProblem() {
   const n = score;
 
-  // 1단계: 아이언~실버는 30까지의 덧셈·뺄셈
-  if (n <= 49) {
-    return arithmeticProblem(["+","-"],0,30,1);
-  }
-
-  // 1단계: 골드~다이아몬드는 두 자리 수 덧셈·뺄셈
-  if (n <= 100) {
-    return arithmeticProblem(["+","-"],10,99,1);
-  }
-
-  // 2단계: 마스터
-  if (n <= 150) {
-    return arithmeticProblem(["+","-","×","÷"],1,99,2);
-  }
-
-  // 2단계: 그랜드마스터
-  if (n <= 200) {
-    return mixedProblem(1,99,["+","-","×","÷"],2);
-  }
-
-  // 2단계: 챌린저
-  if (n <= 300) {
-    return arithmeticProblem(["×","÷"],100,999,2);
-  }
-
-  // 2단계: 트랜센던스
-  if (n <= 450) {
-    return mixedProblem(100,999,["+","-","×","÷"],2);
-  }
-
-  // 3단계: 디세터
-  if (n <= 600) return linearEquation();
-
-  // 3단계: 인피니티
+  if (n <= 49) return arithmeticProblem(["+","-"],0,30,1);
+  if (n <= 100) return arithmeticProblem(["+","-"],10,99,1);
+  if (n <= 150) return arithmeticProblem(["+","-","×","÷"],1,99,2);
+  if (n <= 200) return mixedProblem(1,99,["+","-","×","÷"],2);
+  if (n <= 300) return arithmeticProblem(["×","÷"],100,999,2);
+  if (n <= 450) return mixedProblem(100,999,["+","-","×","÷"],2);
+  if (n <= 600) return arithmeticProblem(["+","-","×","÷"],100,999,2);
+  if (n <= 800) return linearEquation();
   if (n <= 1000) return quadraticEquation();
-
-  // 3단계: 프로드 - 기호 하나를 사용하는 고급 계산
   if (n <= 1400) return advancedSymbolProblem();
 
-  // 4단계: 스트롱기스트
   if (n <= 2000) {
     return Math.random() < 0.5
       ? simultaneousQuadratic()
       : advancedSymbolProblem();
   }
 
-  // 4단계: 이모털리티
   if (n <= 2500) return simultaneousCubic();
-
-  // 4단계: 임파서빌리티 ~ 임파서빌리티 SSS
   if (n <= 4500) return threeVariableSystem(2);
-
-  // 4단계: 임파서빌리티 SSSI ~ 임파서빌리티 Z
   if (n <= 8000) return threeVariableSystem(3);
-
-  // 4단계: 임파서빌리티 ZI ~ 임파서빌리티 ZZZXXXSSS+III
   if (!evilUnlocked()) return threeVariableSystem(4);
 
-  // 5단계: 임파서빌리티 E
   return Math.random() < 0.5 ? limitProblem() : sequenceProblem();
 }
 
 function newProblem() {
   if (!active) return;
 
+  clearTimeout(questionTimer);
+  questionTimer = null;
+
   answered = false;
   hintUsed = false;
   $("answer").value = "";
   $("answer").disabled = false;
   $("submitBtn").disabled = false;
+  $("nextBtn").disabled = true;
 
   current = makeProblem();
 
@@ -539,14 +488,18 @@ function newProblem() {
 }
 
 function endRun() {
+  clearTimeout(questionTimer);
+  questionTimer = null;
   active = false;
-  const collected = score;
 
+  const collected = score;
   data.coins += collected;
+
   score = 0;
   combo = 0;
   health = 3;
   current = null;
+  answered = false;
 
   $("question").textContent = "도전 종료!";
   $("stageLabel").textContent = "점수 수거 완료";
@@ -555,6 +508,7 @@ function endRun() {
   $("detail").textContent = "시작 / 다시 시작을 눌러 다시 도전해!";
   $("answer").disabled = true;
   $("submitBtn").disabled = true;
+  $("nextBtn").disabled = true;
 
   save();
   updateUI();
@@ -574,7 +528,9 @@ function submitAnswer(event) {
   $("answer").disabled = true;
   $("submitBtn").disabled = true;
 
-  if (Number(raw) === current.answer) {
+  const correct = Number(raw) === current.answer;
+
+  if (correct) {
     combo++;
     const gained = 1 + Math.min(9,Math.floor(combo/5));
     score += gained;
@@ -595,11 +551,23 @@ function submitAnswer(event) {
 
     data.best = Math.max(data.best,score);
     $("detail").textContent = `정답: ${current.answer}`;
+
+    // 정답이면 1초 후 자동으로 다음 문제
+    $("nextBtn").disabled = true;
+    questionTimer = setTimeout(() => {
+      if (active && answered && correct) {
+        newProblem();
+      }
+    },1000);
+
   } else {
     health--;
     combo = 0;
     $("notice").textContent = `오답! 정답은 ${current.answer} 이야. 체력 -1`;
-    $("detail").textContent = current.hint || "계산 과정을 다시 확인해 봐.";
+    $("detail").textContent = current.hint || "계산 과정을 다시 확인해 봕.";
+
+    // 오답이면 현재 문제를 유지하고 직접 다음 문제를 선택할 수 있게 함
+    $("nextBtn").disabled = false;
 
     if (health <= 0) {
       updateUI();
@@ -628,10 +596,8 @@ function useHint() {
 
   data.hints--;
   hintUsed = true;
-  $("detail").textContent = current.hint ||
-    "식을 차근차근 정리해 봐.";
-  $("notice").textContent =
-    "힌트를 사용했어. 정답을 맞히면 점수를 얻을 수 있어.";
+  $("detail").textContent = current.hint || "식을 차근차근 정리해 봐.";
+  $("notice").textContent = "힌트를 사용했어. 정답을 맞히면 점수를 얻을 수 있어.";
   save();
   updateUI();
 }
@@ -652,6 +618,8 @@ function useSkip() {
   $("detail").textContent = `정답: ${current.answer}`;
   $("answer").disabled = true;
   $("submitBtn").disabled = true;
+  $("nextBtn").disabled = false;
+
   save();
   updateUI();
 }
@@ -675,6 +643,9 @@ function buyItem(type,cost) {
 $("answerForm").addEventListener("submit",submitAnswer);
 
 $("startBtn").addEventListener("click",() => {
+  clearTimeout(questionTimer);
+  questionTimer = null;
+
   score = 0;
   combo = 0;
   health = 3;
@@ -691,6 +662,9 @@ $("nextBtn").addEventListener("click",() => {
     $("notice").textContent = "먼저 정답을 확인하거나 문제를 넘겨 줘.";
     return;
   }
+
+  clearTimeout(questionTimer);
+  questionTimer = null;
   newProblem();
 });
 
@@ -704,6 +678,7 @@ $("exchangeBtn").addEventListener("click",() => {
     $("notice").textContent = "레전드 보너스 코인이 부족해.";
     return;
   }
+
   data.legendCoins--;
   data.coins += 500000;
   $("notice").textContent = "일반 코인 500,000개로 교환했어.";
@@ -714,6 +689,7 @@ $("exchangeBtn").addEventListener("click",() => {
 updateUI();
 $("answer").disabled = true;
 $("submitBtn").disabled = true;
+$("nextBtn").disabled = true;
 </script>
 </body>
 </html>
