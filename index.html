@@ -12,17 +12,21 @@
 body{margin:0;padding:18px;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,sans-serif}
 main{max-width:760px;margin:auto}
 header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
-h1{font-size:27px;margin:0 0 5px}h2{font-size:20px;margin:0 0 14px}
-p{line-height:1.6}.muted{color:var(--muted);font-size:13px}
+h1{font-size:27px;margin:0 0 5px}
+h2{font-size:20px;margin:0 0 14px}
+p{line-height:1.6}
+.muted{color:var(--muted);font-size:13px}
 button,input{font:inherit;border-radius:10px}
 button{background:#30476f;color:white;border:1px solid #526d9e;padding:11px 14px;cursor:pointer}
 button:disabled{opacity:.45;cursor:not-allowed}
-button.primary{background:#3768c8}button.gold{background:#745719;border-color:#b38b32}
+button.primary{background:#3768c8}
+button.gold{background:#745719;border-color:#b38b32}
 input{width:100%;background:#0b1223;color:var(--text);border:1px solid var(--line);padding:12px;margin:8px 0}
 .panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:14px}
 .home-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
 .menu-card{min-height:135px;background:var(--panel);border:1px solid var(--line);border-radius:16px;color:var(--text);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;font-size:17px;font-weight:750}
-.menu-icon{font-size:32px}.currency-panel{margin-top:16px}
+.menu-icon{font-size:32px}
+.currency-panel{margin-top:16px}
 .currency-tabs{display:flex;gap:8px;margin:12px 0}
 .currency-tabs button{flex:1;background:var(--panel2);border-color:var(--line)}
 .currency-tabs button.selected{background:#3768c8;border-color:#79a7ff}
@@ -30,19 +34,22 @@ input{width:100%;background:#0b1223;color:var(--text);border:1px solid var(--lin
 .best-panel{display:flex;align-items:center;justify-content:space-between;gap:10px}
 .stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-bottom:14px}
 .stat{background:var(--panel2);border-radius:12px;padding:12px;min-width:0}
-.stat-label{color:var(--muted);font-size:12px}.stat-value{font-size:20px;font-weight:750;margin-top:5px;overflow-wrap:anywhere}
-.actions{display:flex;flex-wrap:wrap;gap:8px}.actions button{margin:0}
+.stat-label{color:var(--muted);font-size:12px}
+.stat-value{font-size:20px;font-weight:750;margin-top:5px;overflow-wrap:anywhere}
+.actions{display:flex;flex-wrap:wrap;gap:8px}
+.actions button{margin:0}
 .question{font-size:clamp(24px,5vw,36px);font-weight:800;text-align:center;padding:22px 4px;overflow-wrap:anywhere}
 .notice{min-height:28px;color:var(--gold);line-height:1.5;margin-top:10px}
 .health{letter-spacing:4px;color:#ff8585}
 .item{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}
-.item:last-child{border-bottom:0}.item p{margin:4px 0 0;color:var(--muted);font-size:13px}
-.page-title{display:flex;align-items:center;gap:12px;margin-bottom:14px}.back{padding:8px 12px}
+.item:last-child{border-bottom:0}
+.item p{margin:4px 0 0;color:var(--muted);font-size:13px}
+.page-title{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.back{padding:8px 12px}
 footer{color:var(--muted);font-size:12px;text-align:center;padding:12px}
 .hidden{display:none!important}
 @media(min-width:520px){.stats{grid-template-columns:repeat(3,minmax(0,1fr))}}
 
-/* 무한매쓰 */
 .infinity-mascot{font-size:92px;line-height:1.15;font-weight:900;letter-spacing:-9px;background:linear-gradient(120deg,#58c7ff,#4776ff,#a58bff);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 5px 10px #427eff66);text-align:center;position:relative}
 .mascot-face{position:absolute;left:50%;top:49%;transform:translate(-50%,-50%);color:#fff;font-size:23px;letter-spacing:0;white-space:nowrap;-webkit-text-fill-color:#fff;text-shadow:0 1px 3px #102044}
 .tutorial-overlay{position:fixed;inset:0;z-index:1000;background:#050a16ed;display:flex;align-items:center;justify-content:center;padding:18px;overflow-y:auto}
@@ -151,11 +158,16 @@ footer{color:var(--muted);font-size:12px;text-align:center;padding:12px}
   <div class="page-title"><button class="back" data-home>← 홈</button><h2>설정</h2></div>
   <section class="panel"><h2>저장 정보</h2><p>현재 기록은 이 기기의 브라우저에 저장돼.</p>
   <p class="muted">브라우저 데이터 삭제나 다른 브라우저 사용 시 기록이 보이지 않을 수 있어.</p></section>
+  <section class="panel">
+    <h2>튜토리얼</h2>
+    <p>무한매쓰의 사용법을 다시 배워 볼 수 있어.</p>
+    <button class="primary" id="replayTutorialBtn" type="button">튜토리얼 다시듣기</button>
+  </section>
 </section>
+
 <footer>InfinityMath 0.4 · 기존 기기 저장 데이터를 사용해.</footer>
 </main>
 
-<!-- 실제 문제 풀이를 포함한 첫 실행 튜토리얼 -->
 <div id="tutorialOverlay" class="tutorial-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="tutorialTitle">
   <div class="tutorial-card">
     <div class="tutorial-title" id="tutorialTitle">무한매쓰의 안내</div>
@@ -166,7 +178,6 @@ footer{color:var(--muted);font-size:12px;text-align:center;padding:12px}
       <div class="tutorial-message" id="tutorialMessage"></div>
       <div class="tutorial-reward hidden" id="tutorialReward">+30 일반 코인!</div>
     </div>
-
     <div id="tutorialExercise" class="tutorial-exercise hidden">
       <div class="tutorial-exercise-title" id="tutorialExerciseTitle">직접 풀어 보기</div>
       <div class="tutorial-question" id="tutorialQuestion"></div>
@@ -181,7 +192,6 @@ footer{color:var(--muted);font-size:12px;text-align:center;padding:12px}
       </form>
       <div class="tutorial-feedback" id="tutorialFeedback" aria-live="polite"></div>
     </div>
-
     <div class="tutorial-controls">
       <button id="tutorialExit" type="button">나중에</button>
       <button class="primary" id="tutorialNext" type="button">시작하기 →</button>
@@ -190,7 +200,6 @@ footer{color:var(--muted);font-size:12px;text-align:center;padding:12px}
   </div>
 </div>
 
-<!-- 힌트 속 무한매쓰 -->
 <div id="hintOverlay" class="hint-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="hintTitle">
   <div class="hint-card">
     <div class="tutorial-title" id="hintTitle">무한매쓰의 힌트</div>
@@ -210,8 +219,6 @@ try{saved=JSON.parse(localStorage.getItem(SAVE_KEY)||"{}")||{};}catch{}
 const data={...defaults,...saved};
 let score=0,combo=0,health=3,current=null,active=false,answered=false,hintUsed=false,currencyMode="normal";
 
-/* 튜토리얼 단계:
-   0 환영 → 1 직접 풀기 → 2 힌트 사용 → 3 문제 넘기기 → 4 보상 */
 const tutorialSteps=[
 "안녕! 나는 무한매쓰야. ∞\nInfinityMath에 온 걸 환영해!\n직접 문제를 풀면서 사용법을 알려 줄게.",
 "첫 번째 연습 문제야!\n아래에 정답을 입력하고 ‘정답 확인’을 눌러 봐.\n튜토리얼에서는 틀려도 체력이 줄지 않아.",
@@ -223,6 +230,7 @@ let tutorialStep=0;
 let tutorialSolved=false;
 let tutorialHintSeen=false;
 let tutorialSkipped=false;
+let replayTutorialMode=false;
 
 const tutorialExercises=[
   null,
@@ -259,8 +267,10 @@ function updateUI(){
   $("coins").textContent=data.coins.toLocaleString();
   $("combo").textContent=combo;
   $("health").textContent="♥".repeat(health)+"♡".repeat(3-health);
-  $("rank").textContent=rankName(score);$("best").textContent=data.best.toLocaleString();
-  $("hints").textContent=data.hints;$("skips").textContent=data.skips;
+  $("rank").textContent=rankName(score);
+  $("best").textContent=data.best.toLocaleString();
+  $("hints").textContent=data.hints;
+  $("skips").textContent=data.skips;
   $("hintBtn").textContent=`힌트 사용 (${data.hints})`;
   $("skipBtn").textContent=`문제 넘기기 (${data.skips})`;
   $("legendCoins").textContent=data.legendCoins.toLocaleString();
@@ -280,7 +290,9 @@ function updateUI(){
 }
 function showPage(id){
   document.querySelectorAll("main > section").forEach(s=>s.classList.add("hidden"));
-  $(id).classList.remove("hidden");updateUI();window.scrollTo(0,0);
+  $(id).classList.remove("hidden");
+  updateUI();
+  window.scrollTo(0,0);
 }
 document.querySelectorAll("[data-page]").forEach(b=>b.addEventListener("click",()=>showPage(b.dataset.page)));
 document.querySelectorAll("[data-home]").forEach(b=>b.addEventListener("click",()=>showPage("homePage")));
@@ -288,22 +300,27 @@ $("settingsBtn").addEventListener("click",()=>showPage("settingsPage"));
 $("normalTab").addEventListener("click",()=>{currencyMode="normal";updateUI();});
 $("legendTab").addEventListener("click",()=>{currencyMode="legend";updateUI();});
 
-/* 실제로 정답을 입력하고 버튼을 눌러야 진행되는 튜토리얼 */
+/* 튜토리얼 */
 function showTutorial(){
   tutorialStep=0;
   tutorialSolved=false;
   tutorialHintSeen=false;
   tutorialSkipped=false;
+  $("hintOverlay").classList.add("hidden");
   $("tutorialOverlay").classList.remove("hidden");
   renderTutorial();
 }
+$("replayTutorialBtn").addEventListener("click",()=>{
+  replayTutorialMode=true;
+  showTutorial();
+});
 function renderTutorial(){
   $("tutorialMessage").textContent=tutorialSteps[tutorialStep];
   $("tutorialProgress").textContent=`${tutorialStep+1} / ${tutorialSteps.length}`;
   $("tutorialReward").classList.toggle("hidden",tutorialStep!==tutorialSteps.length-1);
   $("tutorialExercise").classList.toggle("hidden",tutorialStep<1||tutorialStep>3);
   $("tutorialExit").classList.toggle("hidden",tutorialStep===tutorialSteps.length-1);
-  $("tutorialNext").textContent=tutorialStep===0?"연습 시작 →":tutorialStep===tutorialSteps.length-1?"보상 받고 완료!":"다음 →";
+  $("tutorialNext").textContent=tutorialStep===0?"연습 시작 →":tutorialStep===tutorialSteps.length-1?"완료!":"다음 →";
 
   const exercise=tutorialExercises[tutorialStep];
   $("tutorialFeedback").textContent="";
@@ -312,6 +329,7 @@ function renderTutorial(){
   $("tutorialSubmit").disabled=false;
   $("tutorialHintBtn").classList.toggle("hidden",tutorialStep!==2);
   $("tutorialSkipBtn").classList.toggle("hidden",tutorialStep!==3);
+  $("tutorialSkipBtn").disabled=false;
 
   if(exercise){
     $("tutorialQuestion").textContent=exercise.question;
@@ -338,12 +356,16 @@ function renderTutorial(){
   if(tutorialStep===4)$("tutorialNext").disabled=false;
 }
 function finishTutorial(){
-  if(!data.tutorialComplete){
+  if(!replayTutorialMode&&!data.tutorialComplete){
     data.coins+=30;
     data.tutorialComplete=true;
     save();
-    updateUI();
+  }else if(replayTutorialMode&&!data.tutorialComplete){
+    data.tutorialComplete=true;
+    save();
   }
+  replayTutorialMode=false;
+  updateUI();
   $("tutorialOverlay").classList.add("hidden");
 }
 $("tutorialNext").addEventListener("click",()=>{
@@ -359,11 +381,18 @@ $("tutorialNext").addEventListener("click",()=>{
 });
 $("tutorialExit").addEventListener("click",()=>{
   $("tutorialOverlay").classList.add("hidden");
+  replayTutorialMode=false;
 });
 $("tutorialAnswerForm").addEventListener("submit",e=>{
   e.preventDefault();
   if(tutorialStep!==1&&tutorialStep!==2)return;
   if(tutorialSolved)return;
+
+  if(tutorialStep===2&&!tutorialHintSeen){
+    $("tutorialFeedback").textContent="먼저 ‘힌트 보기’를 눌러 봐!";
+    return;
+  }
+
   const raw=$("tutorialAnswer").value.trim();
   if(raw===""||!Number.isFinite(Number(raw))){
     $("tutorialFeedback").textContent="숫자로 정답을 입력해 줘.";
@@ -376,16 +405,12 @@ $("tutorialAnswerForm").addEventListener("submit",e=>{
     $("tutorialAnswer").disabled=true;
     $("tutorialSubmit").disabled=true;
     $("tutorialNext").disabled=false;
-    if(tutorialStep===2&&!tutorialHintSeen){
-      $("tutorialFeedback").textContent="정답이야! 힌트 버튼도 눌러 봐야 이 단계가 완료돼.";
-      $("tutorialNext").disabled=true;
-    }
   }else{
     $("tutorialFeedback").textContent="아쉽지만 정답이 아니야. 다시 계산해 봐!";
   }
 });
 $("tutorialHintBtn").addEventListener("click",()=>{
-  if(tutorialStep!==2||tutorialSolved)return;
+  if(tutorialStep!==2||tutorialHintSeen)return;
   tutorialHintSeen=true;
   openHint(tutorialExercises[2].hint);
   $("tutorialFeedback").textContent="힌트를 확인했어. 이제 정답을 입력해 봐.";
@@ -521,7 +546,8 @@ function submitAnswer(event){
   health--;combo=0;$("notice").textContent=`오답! 정답은 ${current.answer} 이야. 체력 -1`;
   $("detail").textContent=current.hint||"계산 과정을 다시 확인해 봐.";
   $("answer").disabled=true;$("submitBtn").disabled=true;$("nextBtn").disabled=false;
-  if(health<=0){updateUI();endRun();return;}save();updateUI();
+  if(health<=0){updateUI();endRun();return;}
+  save();updateUI();
 }
 function useHint(){
   if(!active||!current||answered){$("notice").textContent="먼저 풀고 있는 문제가 있어야 해.";return;}
@@ -561,11 +587,14 @@ $("buySkip").addEventListener("click",()=>buyItem("skip",150));
 $("exchangeBtn").addEventListener("click",()=>{
   if(data.legendCoins<1){$("shopNotice").textContent="레전드 코인이 부족해.";return;}
   data.legendCoins--;data.coins+=500000;
-  $("shopNotice").textContent="일반 코인 500,000개로 교환했어.";save();updateUI();
+  $("shopNotice").textContent="일반 코인 500,000개로 교환했어.";
+  save();updateUI();
 });
 
 updateUI();
-$("answer").disabled=true;$("submitBtn").disabled=true;$("nextBtn").disabled=true;
+$("answer").disabled=true;
+$("submitBtn").disabled=true;
+$("nextBtn").disabled=true;
 
 /* 저장된 완료 여부에 따라 첫 실행 튜토리얼 표시 */
 if(!data.tutorialComplete)showTutorial();
