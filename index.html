@@ -4,706 +4,476 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>InfinityMath 0.3</title>
+<meta name="theme-color" content="#0b1020">
+<title>InfinityMath 0.4</title>
 <style>
 :root {
-  color-scheme: dark;
-  --bg:#0b1020; --panel:#141c31; --panel2:#1c2945;
-  --line:#344363; --text:#eef3ff; --muted:#9eacce;
-  --blue:#79a7ff; --gold:#ffd166; --red:#ff7373;
-  --green:#76e0ae;
+  color-scheme:dark;
+  --bg:#0b1020;--panel:#141c31;--panel2:#1c2945;
+  --line:#344363;--text:#eef3ff;--muted:#9eacce;
+  --blue:#79a7ff;--gold:#ffd166;--red:#ff7373;
 }
-* { box-sizing:border-box; }
-body {
-  margin:0; padding:18px; background:var(--bg);
-  color:var(--text); font-family:system-ui,-apple-system,sans-serif;
-}
-main { max-width:760px; margin:auto; }
-header { margin-bottom:18px; }
-h1 { margin:0 0 5px; font-size:28px; }
-h2 { font-size:19px; margin:0 0 12px; }
-p { line-height:1.6; }
-.muted { color:var(--muted); font-size:13px; }
-.panel {
-  background:var(--panel); border:1px solid var(--line);
-  border-radius:16px; padding:16px; margin-bottom:14px;
-}
-.stats {
-  display:grid; grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:9px; margin-bottom:14px;
-}
-.stat { background:var(--panel2); border-radius:12px; padding:12px; min-width:0; }
-.stat-label { color:var(--muted); font-size:12px; }
-.stat-value { font-size:20px; font-weight:750; margin-top:5px; overflow-wrap:anywhere; }
-button,input { font:inherit; border-radius:10px; }
-button {
-  background:#30476f; color:white; border:1px solid #526d9e;
-  padding:11px 14px; cursor:pointer;
-}
-button:disabled { opacity:.45; cursor:not-allowed; }
-button.primary { background:#3768c8; }
-button.gold { background:#745719; border-color:#b38b32; }
-button + button { margin-left:5px; }
-input {
-  width:100%; background:#0b1223; color:var(--text);
-  border:1px solid var(--line); padding:12px; margin:8px 0;
-}
-.actions { display:flex; flex-wrap:wrap; gap:8px; }
-.actions button { margin:0; }
-.question {
-  font-size:clamp(24px,5vw,36px); font-weight:800;
-  text-align:center; padding:22px 4px; overflow-wrap:anywhere;
-}
-.notice { min-height:28px; color:var(--gold); line-height:1.5; margin-top:10px; }
-.health { letter-spacing:4px; color:#ff8585; }
-.item {
-  display:flex; align-items:center; justify-content:space-between;
-  gap:12px; padding:12px 0; border-bottom:1px solid var(--line);
-}
-.item:last-child { border-bottom:0; }
-.item p { margin:4px 0 0; color:var(--muted); font-size:13px; }
-footer { color:var(--muted); font-size:12px; text-align:center; padding:12px; }
-@media(min-width:520px) {
-  .stats { grid-template-columns:repeat(3,minmax(0,1fr)); }
-}
+*{box-sizing:border-box}
+body{margin:0;padding:18px;background:var(--bg);color:var(--text);
+font-family:system-ui,-apple-system,sans-serif}
+main{max-width:760px;margin:auto}
+header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
+h1{font-size:27px;margin:0 0 5px}
+h2{font-size:20px;margin:0 0 14px}
+p{line-height:1.6}
+.muted{color:var(--muted);font-size:13px}
+button,input{font:inherit;border-radius:10px}
+button{background:#30476f;color:white;border:1px solid #526d9e;
+padding:11px 14px;cursor:pointer}
+button:disabled{opacity:.45;cursor:not-allowed}
+button.primary{background:#3768c8}
+button.gold{background:#745719;border-color:#b38b32}
+input{width:100%;background:#0b1223;color:var(--text);
+border:1px solid var(--line);padding:12px;margin:8px 0}
+.panel{background:var(--panel);border:1px solid var(--line);
+border-radius:16px;padding:16px;margin-bottom:14px}
+.home-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.menu-card{min-height:135px;background:var(--panel);border:1px solid var(--line);
+border-radius:16px;color:var(--text);display:flex;flex-direction:column;
+align-items:center;justify-content:center;gap:12px;font-size:17px;font-weight:750}
+.menu-icon{font-size:32px}
+.currency-panel{margin-top:16px}
+.currency-tabs{display:flex;gap:8px;margin:12px 0}
+.currency-tabs button{flex:1;background:var(--panel2);border-color:var(--line)}
+.currency-tabs button.selected{background:#3768c8;border-color:#79a7ff}
+.big-number{font-size:25px;font-weight:800;overflow-wrap:anywhere}
+.best-panel{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-bottom:14px}
+.stat{background:var(--panel2);border-radius:12px;padding:12px;min-width:0}
+.stat-label{color:var(--muted);font-size:12px}
+.stat-value{font-size:20px;font-weight:750;margin-top:5px;overflow-wrap:anywhere}
+.actions{display:flex;flex-wrap:wrap;gap:8px}
+.actions button{margin:0}
+.question{font-size:clamp(24px,5vw,36px);font-weight:800;text-align:center;
+padding:22px 4px;overflow-wrap:anywhere}
+.notice{min-height:28px;color:var(--gold);line-height:1.5;margin-top:10px}
+.health{letter-spacing:4px;color:#ff8585}
+.item{display:flex;align-items:center;justify-content:space-between;gap:12px;
+padding:12px 0;border-bottom:1px solid var(--line)}
+.item:last-child{border-bottom:0}
+.item p{margin:4px 0 0;color:var(--muted);font-size:13px}
+.page-title{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.back{padding:8px 12px}
+footer{color:var(--muted);font-size:12px;text-align:center;padding:12px}
+.hidden{display:none!important}
+@media(min-width:520px){.stats{grid-template-columns:repeat(3,minmax(0,1fr))}}
 </style>
 </head>
 <body>
 <main>
 <header>
-  <h1>InfinityMath <span class="muted">0.3</span></h1>
-  <div class="muted">수학 실력을 끝없이 확장하라.</div>
+  <div>
+    <h1>InfinityMath <span class="muted">0.4</span></h1>
+    <div class="muted">수학의 한계를 넘어.</div>
+  </div>
+  <button id="settingsBtn" aria-label="설정">⚙️</button>
 </header>
 
-<section class="stats">
-  <div class="stat"><div class="stat-label">현재 점수</div><div class="stat-value" id="score">0</div></div>
-  <div class="stat"><div class="stat-label">일반 코인</div><div class="stat-value" id="coins">0</div></div>
-  <div class="stat"><div class="stat-label">콤보</div><div class="stat-value" id="combo">0</div></div>
-  <div class="stat"><div class="stat-label">체력</div><div class="stat-value health" id="health">♥♥♥</div></div>
-  <div class="stat"><div class="stat-label">현재 등급</div><div class="stat-value" id="rank">아이언</div></div>
-  <div class="stat"><div class="stat-label">최고 기록</div><div class="stat-value" id="best">0</div></div>
-</section>
+<!-- 홈 -->
+<section id="homePage">
+  <div class="home-grid">
+    <button class="menu-card" data-page="problemPage">
+      <span class="menu-icon">🧮</span>문제
+    </button>
+    <button class="menu-card" data-page="shopPage">
+      <span class="menu-icon">🛍️</span>상점
+    </button>
+    <button class="menu-card" data-page="recordPage">
+      <span class="menu-icon">🏆</span>기록
+    </button>
+    <button class="menu-card" data-page="profilePage">
+      <span class="menu-icon">👤</span>내 정보
+    </button>
+  </div>
 
-<section class="panel">
-  <h2>수학 문제</h2>
-  <div class="muted" id="stageLabel">1단계 · 기본 계산</div>
-  <div class="question" id="question">시작을 눌러 줘!</div>
-  <form id="answerForm">
-    <label for="answer">정답</label>
-    <input id="answer" type="text" inputmode="text"
-      lang="ko" autocomplete="off" enterkeyhint="done"
-      placeholder="정답을 입력해 줘">
-    <div class="actions">
-      <button class="primary" type="submit" id="submitBtn">정답 확인</button>
-      <button type="button" id="nextBtn" disabled>다음 문제</button>
+  <section class="panel currency-panel">
+    <div class="muted">화폐</div>
+    <div class="currency-tabs">
+      <button id="normalTab" class="selected">🪙 일반 코인</button>
+      <button id="legendTab">👑 레전드 코인</button>
     </div>
-  </form>
-  <div class="notice" id="notice" aria-live="polite"></div>
-  <div class="muted" id="detail">시작 버튼을 눌러 문제를 풀어 봐!</div>
-  <div class="actions" style="margin-top:12px">
-    <button class="primary" id="startBtn">시작 / 다시 시작</button>
-  </div>
-  <div class="actions" style="margin-top:8px">
-    <button id="hintBtn">힌트 사용 (0)</button>
-    <button id="skipBtn">문제 넘기기 (0)</button>
-  </div>
+    <div class="big-number" id="homeCurrency">0 코인</div>
+  </section>
+
+  <section class="panel best-panel">
+    <div>
+      <div class="muted">최고 기록</div>
+      <div class="big-number" id="homeBest">0점</div>
+    </div>
+    <span style="font-size:30px">🏆</span>
+  </section>
 </section>
 
-<section class="panel">
-  <h2>아이템 상점</h2>
-  <div class="item">
-    <div><strong>힌트권</strong><p>300 일반 코인 · 문제를 푸는 데 도움을 받아.</p></div>
-    <button id="buyHint">300 코인 구매</button>
+<!-- 문제 -->
+<section id="problemPage" class="hidden">
+  <div class="page-title"><button class="back" data-home>← 홈</button><h2>문제 풀기</h2></div>
+  <div class="stats">
+    <div class="stat"><div class="stat-label">현재 점수</div><div class="stat-value" id="score">0</div></div>
+    <div class="stat"><div class="stat-label">콤보</div><div class="stat-value" id="combo">0</div></div>
+    <div class="stat"><div class="stat-label">체력</div><div class="stat-value health" id="health">♥♥♥</div></div>
+    <div class="stat"><div class="stat-label">현재 등급</div><div class="stat-value" id="rank">아이언</div></div>
+    <div class="stat"><div class="stat-label">일반 코인</div><div class="stat-value" id="coins">0</div></div>
+    <div class="stat"><div class="stat-label">최고 기록</div><div class="stat-value" id="best">0</div></div>
   </div>
-  <div class="item">
-    <div><strong>문제 넘기기권</strong><p>150 일반 코인 · 사용해도 점수는 오르지 않아.</p></div>
-    <button id="buySkip">150 코인 구매</button>
-  </div>
-  <p>보유 힌트권: <strong id="hints">0</strong></p>
-  <p>보유 넘기기권: <strong id="skips">0</strong></p>
+
+  <section class="panel">
+    <h2>수학 문제</h2>
+    <div class="muted" id="stageLabel">1단계 · 기본 계산</div>
+    <div class="question" id="question">시작을 눌러 줘!</div>
+    <form id="answerForm">
+      <label for="answer">정답</label>
+      <input id="answer" type="text" inputmode="text" lang="ko"
+        autocomplete="off" enterkeyhint="done" placeholder="정답을 입력해 줘">
+      <div class="actions">
+        <button class="primary" type="submit" id="submitBtn">정답 확인</button>
+        <button type="button" id="nextBtn" disabled>다음 문제</button>
+      </div>
+    </form>
+    <div class="notice" id="notice" aria-live="polite"></div>
+    <div class="muted" id="detail">시작 버튼을 눌러 문제를 풀어 봐!</div>
+    <div class="actions" style="margin-top:12px">
+      <button class="primary" id="startBtn">시작 / 다시 시작</button>
+      <button id="hintBtn">힌트 사용 (0)</button>
+      <button id="skipBtn">문제 넘기기 (0)</button>
+    </div>
+  </section>
 </section>
 
-<section class="panel">
-  <h2>레전드 보너스 코인</h2>
-  <p>악의 단계에서 문제를 300,000개 풀면 1개를 획득해.</p>
-  <p>보유 개수: <strong id="legendCoins">0</strong></p>
-  <p>악의 단계 해결 문제: <strong id="evilSolved">0</strong> / 300,000</p>
-  <p class="muted">레전드 보너스 코인 1개 → 일반 코인 500,000개</p>
-  <button class="gold" id="exchangeBtn">레전드 코인 1개 교환</button>
+<!-- 상점 -->
+<section id="shopPage" class="hidden">
+  <div class="page-title"><button class="back" data-home>← 홈</button><h2>아이템 상점</h2></div>
+  <section class="panel">
+    <p>일반 코인: <strong id="shopCoins">0</strong></p>
+    <div class="item">
+      <div><strong>힌트권</strong><p>300 일반 코인 · 문제 풀이에 도움을 받아.</p></div>
+      <button id="buyHint">300 코인 구매</button>
+    </div>
+    <div class="item">
+      <div><strong>문제 넘기기권</strong><p>150 일반 코인 · 점수 추가 없이 문제를 넘겨.</p></div>
+      <button id="buySkip">150 코인 구매</button>
+    </div>
+    <p>보유 힌트권: <strong id="hints">0</strong></p>
+    <p>보유 넘기기권: <strong id="skips">0</strong></p>
+    <p class="notice" id="shopNotice" aria-live="polite"></p>
+  </section>
+  <section class="panel">
+    <h2>레전드 코인 교환</h2>
+    <p>레전드 코인 1개를 일반 코인 500,000개로 교환할 수 있어.</p>
+    <p>보유 레전드 코인: <strong id="legendCoins">0</strong></p>
+    <button class="gold" id="exchangeBtn">레전드 코인 1개 교환</button>
+  </section>
 </section>
 
-<footer>InfinityMath 0.3 · 기록은 현재 기기에 저장돼.</footer>
+<!-- 기록 -->
+<section id="recordPage" class="hidden">
+  <div class="page-title"><button class="back" data-home>← 홈</button><h2>기록</h2></div>
+  <section class="panel">
+    <div class="stat-label">최고 기록</div><div class="big-number" id="recordBest">0점</div>
+    <hr style="border-color:var(--line);margin:16px 0">
+    <div class="stat-label">현재 등급</div><div class="big-number" id="recordRank">아이언</div>
+    <hr style="border-color:var(--line);margin:16px 0">
+    <div class="stat-label">누적 해결 문제</div><div class="big-number" id="recordSolved">0</div>
+    <hr style="border-color:var(--line);margin:16px 0">
+    <div class="stat-label">악의 단계 해결 문제</div><div class="big-number" id="recordEvil">0 / 300,000</div>
+  </section>
+</section>
+
+<!-- 내 정보 -->
+<section id="profilePage" class="hidden">
+  <div class="page-title"><button class="back" data-home>← 홈</button><h2>내 정보</h2></div>
+  <section class="panel">
+    <h2>내 InfinityMath</h2>
+    <p>현재 버전: 0.4</p>
+    <p>저장 방식: 현재 기기 브라우저에 저장</p>
+    <p class="muted">Supabase 로그인과 기기 간 동기화는 이후 단계에서 연결할 예정이야.</p>
+    <p>일반 코인: <strong id="profileCoins">0</strong></p>
+    <p>레전드 코인: <strong id="profileLegend">0</strong></p>
+    <p>힌트권: <strong id="profileHints">0</strong></p>
+    <p>문제 넘기기권: <strong id="profileSkips">0</strong></p>
+  </section>
+</section>
+
+<!-- 설정 -->
+<section id="settingsPage" class="hidden">
+  <div class="page-title"><button class="back" data-home>← 홈</button><h2>설정</h2></div>
+  <section class="panel">
+    <h2>저장 정보</h2>
+    <p>현재 기록은 이 기기의 브라우저에 저장돼.</p>
+    <p class="muted">브라우저 데이터 삭제나 다른 브라우저 사용 시 기록이 보이지 않을 수 있어. 중요한 데이터는 삭제하지 않도록 주의해 줘.</p>
+  </section>
+</section>
+
+<footer>InfinityMath 0.4 · 기존 기기 저장 데이터를 사용해.</footer>
 </main>
 
 <script>
 "use strict";
+const $=id=>document.getElementById(id);
+const SAVE_KEY="infinityMath03Save";
+const defaults={coins:0,hints:0,skips:0,legendCoins:0,best:0,evilSolved:0,totalSolved:0};
+let saved={};
+try{saved=JSON.parse(localStorage.getItem(SAVE_KEY)||"{}")||{};}catch{}
+const data={...defaults,...saved};
 
-const $ = id => document.getElementById(id);
-const SAVE_KEY = "infinityMath03Save";
+let score=0,combo=0,health=3,current=null,active=false,answered=false,hintUsed=false;
+let currencyMode="normal";
 
-const defaultSave = {
-  coins:0, hints:0, skips:0, legendCoins:0,
-  best:0, evilSolved:0, totalSolved:0
-};
-
-let saved;
-try {
-  saved = JSON.parse(localStorage.getItem(SAVE_KEY) || "{}");
-} catch {
-  saved = {};
+function save(){
+  try{localStorage.setItem(SAVE_KEY,JSON.stringify(data));}
+  catch{$("notice").textContent="저장할 수 없어. 브라우저 저장 공간을 확인해 줘.";}
 }
-
-const data = {...defaultSave, ...saved};
-
-let score = 0;
-let combo = 0;
-let health = 3;
-let current = null;
-let active = false;
-let answered = false;
-let hintUsed = false;
-
-function save() {
-  try {
-    localStorage.setItem(SAVE_KEY, JSON.stringify(data));
-  } catch {
-    $("notice").textContent = "저장할 수 없어. 브라우저 저장 공간을 확인해 줘.";
-  }
+function rankName(n){
+  if(n<=10)return"아이언";
+  if(n<=19)return"브론즈";
+  if(n<=49)return"실버";
+  if(n<=75)return"골드";
+  if(n<=100)return"다이아몬드";
+  if(n<=150)return"마스터";
+  if(n<=200)return"그랜드마스터";
+  if(n<=300)return"챌린저";
+  if(n<=450)return"트랜센던스";
+  if(n<=600)return"디세터";
+  if(n<=800)return"울트라";
+  if(n<=1000)return"인피니티";
+  if(n<=1400)return"프로드";
+  if(n<=2000)return"스트롱기스트";
+  if(n<=2500)return"이모털리티";
+  if(n<=3000)return"임파서빌리티";
+  const step=Math.floor((n-3001)/500);
+  if(step<4)return"임파서빌리티 "+["I","II","III","IIII"][step];
+  if(step<6)return"임파서빌리티 "+"+".repeat(step-3);
+  if(step<10)return"임파서빌리티 "+"S".repeat(step-5);
+  if(step<14)return"임파서빌리티 "+"X".repeat(step-9);
+  if(step<17)return"임파서빌리티 "+"Z".repeat(step-13);
+  return"임파서빌리티 E";
 }
-
-/* 등급 */
-function rankName(n) {
-  if (n <= 10) return "아이언";
-  if (n <= 19) return "브론즈";
-  if (n <= 49) return "실버";
-  if (n <= 75) return "골드";
-  if (n <= 100) return "다이아몬드";
-  if (n <= 150) return "마스터";
-  if (n <= 200) return "그랜드마스터";
-  if (n <= 300) return "챌린저";
-  if (n <= 450) return "트랜센던스";
-  if (n <= 600) return "디세터";
-  if (n <= 800) return "울트라";
-  if (n <= 1000) return "인피니티";
-  if (n <= 1400) return "프로드";
-  if (n <= 2000) return "스트롱기스트";
-  if (n <= 2500) return "이모털리티";
-  if (n <= 3000) return "임파서빌리티";
-
-  const step = Math.floor((n - 3001) / 500);
-  if (step < 4) return "임파서빌리티 " + ["I","II","III","IIII"][step];
-  if (step < 6) return "임파서빌리티 " + "+".repeat(step - 3);
-  if (step < 10) return "임파서빌리티 " + "S".repeat(step - 5);
-  if (step < 14) return "임파서빌리티 " + "X".repeat(step - 9);
-  if (step < 17) return "임파서빌리티 " + "Z".repeat(step - 13);
-  return "임파서빌리티 E";
-}
-
-function stageNumber() {
-  if (score <= 100) return 1;
-  if (score <= 450) return 2;
-  if (score <= 1400) return 3;
-  if (rankName(score) === "임파서빌리티 E") return 5;
+function stageNumber(){
+  if(score<=100)return 1;
+  if(score<=450)return 2;
+  if(score<=1400)return 3;
+  if(rankName(score)==="임파서빌리티 E")return 5;
   return 4;
 }
-
-function evilUnlocked() {
-  return stageNumber() === 5;
+function evilUnlocked(){return stageNumber()===5;}
+function updateUI(){
+  $("score").textContent=score.toLocaleString();
+  $("coins").textContent=data.coins.toLocaleString();
+  $("combo").textContent=combo;
+  $("health").textContent="♥".repeat(health)+"♡".repeat(3-health);
+  $("rank").textContent=rankName(score);
+  $("best").textContent=data.best.toLocaleString();
+  $("hints").textContent=data.hints;
+  $("skips").textContent=data.skips;
+  $("hintBtn").textContent=`힌트 사용 (${data.hints})`;
+  $("skipBtn").textContent=`문제 넘기기 (${data.skips})`;
+  $("legendCoins").textContent=data.legendCoins.toLocaleString();
+  $("evilSolved").textContent=data.evilSolved.toLocaleString();
+  $("shopCoins").textContent=data.coins.toLocaleString();
+  $("recordBest").textContent=data.best.toLocaleString()+"점";
+  $("recordRank").textContent=rankName(data.best);
+  $("recordSolved").textContent=data.totalSolved.toLocaleString();
+  $("recordEvil").textContent=data.evilSolved.toLocaleString()+" / 300,000";
+  $("profileCoins").textContent=data.coins.toLocaleString();
+  $("profileLegend").textContent=data.legendCoins.toLocaleString();
+  $("profileHints").textContent=data.hints.toLocaleString();
+  $("profileSkips").textContent=data.skips.toLocaleString();
+  $("homeBest").textContent=data.best.toLocaleString()+"점";
+  $("homeCurrency").textContent=currencyMode==="normal"
+    ? data.coins.toLocaleString()+" 코인"
+    : data.legendCoins.toLocaleString()+" 레전드 코인";
+  $("normalTab").classList.toggle("selected",currencyMode==="normal");
+  $("legendTab").classList.toggle("selected",currencyMode==="legend");
 }
-
-function updateUI() {
-  $("score").textContent = score.toLocaleString();
-  $("coins").textContent = data.coins.toLocaleString();
-  $("combo").textContent = combo;
-  $("health").textContent = "♥".repeat(health) + "♡".repeat(3-health);
-  $("rank").textContent = rankName(score);
-  $("best").textContent = data.best.toLocaleString();
-  $("hints").textContent = data.hints;
-  $("skips").textContent = data.skips;
-  $("hintBtn").textContent = `힌트 사용 (${data.hints})`;
-  $("skipBtn").textContent = `문제 넘기기 (${data.skips})`;
-  $("legendCoins").textContent = data.legendCoins;
-  $("evilSolved").textContent = data.evilSolved.toLocaleString();
-}
-
-function randInt(min,max) {
-  return Math.floor(Math.random() * (max-min+1)) + min;
-}
-
-function pick(arr) {
-  return arr[randInt(0,arr.length-1)];
-}
-
-/* 사칙연산 */
-function arithmeticProblem(ops,min,max,stage,options={}) {
-  let a = randInt(min,max);
-  let b = randInt(min,max);
-  let op = pick(ops);
-
-  if (op === "-" && options.nonnegative !== false && b > a) {
-    [a,b] = [b,a];
-  }
-
-  if (op === "÷") {
-    b = randInt(Math.max(1,min),Math.max(1,max));
-    const quotient = randInt(1,Math.max(2,Math.floor(max/Math.max(1,b))));
-    a = b * quotient;
-  }
-
-  const answer = op === "+" ? a+b :
-    op === "-" ? a-b :
-    op === "×" ? a*b : a/b;
-
-  return {
-    text:`${a} ${op} ${b}`,
-    answer,
-    stage,
-    hint:`${a} ${op} ${b}를 순서대로 계산해 봐.`
-  };
-}
-
-/* 혼합 계산 */
-function mixedProblem(min,max,ops,stage) {
-  const a = randInt(min,max);
-  const b = randInt(min,max);
-  const c = randInt(min,max);
-  const op1 = pick(ops);
-  const op2 = pick(ops);
-
-  let first = a;
-  let second = b;
-  let third = c;
-
-  if (op1 === "÷") {
-    second = randInt(1,Math.max(2,Math.floor(max/2)));
-    first = second * randInt(1,Math.max(2,Math.floor(max/second)));
-  }
-  if (op2 === "÷") {
-    third = randInt(1,Math.max(2,Math.floor(max/2)));
-    second = third * randInt(1,Math.max(2,Math.floor(max/third)));
-  }
-
-  let left = op1 === "+" ? first+second :
-    op1 === "-" ? first-second :
-    op1 === "×" ? first*second : first/second;
-
-  if (op2 === "÷" && third !== 0 && left % third !== 0) {
-    return mixedProblem(min,max,ops,stage);
-  }
-
-  const answer = op2 === "+" ? left+third :
-    op2 === "-" ? left-third :
-    op2 === "×" ? left*third : left/third;
-
-  return {
-    text:`(${first} ${op1} ${second}) ${op2} ${third}`,
-    answer,
-    stage,
-    hint:"괄호 안을 먼저 계산한 다음, 두 번째 연산을 해 봐."
-  };
-}
-
-/* 일차방정식 */
-function linearEquation() {
-  const x = randInt(-20,20);
-  const a = randInt(2,12);
-  const b = randInt(-30,30);
-  const c = a*x+b;
-
-  return {
-    text:`${a}x ${b < 0 ? "- " + Math.abs(b) : "+ " + b} = ${c}`,
-    answer:x,
-    stage:3,
-    hint:`상수항 ${b}를 반대편으로 옮긴 다음 ${a}로 나눠 봐.`
-  };
-}
-
-/* 이차방정식 */
-function quadraticEquation() {
-  const r1 = randInt(-9,9);
-  let r2 = randInt(-9,9);
-  if (r1 === r2) r2 = r1+randInt(1,4);
-
-  const sum = r1+r2;
-  const product = r1*r2;
-  const bText = sum === 0 ? "" :
-    sum > 0 ? ` - ${sum}x` : ` + ${Math.abs(sum)}x`;
-  const cText = product === 0 ? "" :
-    product > 0 ? ` + ${product}` : ` - ${Math.abs(product)}`;
-
-  return {
-    text:`x²${bText}${cText} = 0. 큰 해 x는?`,
-    answer:Math.max(r1,r2),
-    stage:3,
-    hint:"두 근의 합과 곱을 이용해 봐."
-  };
-}
-
-/* 고급 계산 */
-function advancedSymbolProblem() {
-  const n = randInt(3,7);
-  let answer = 1;
-  for (let i=2;i<=n;i++) answer *= i;
-
-  return {
-    text:`${n}! = ?`,
-    answer,
-    stage:3,
-    hint:`${n}!은 1부터 ${n}까지의 자연수를 모두 곱한 값이야.`
-  };
-}
-
-/* 연립 이차방정식 */
-function simultaneousQuadratic() {
-  const x = randInt(1,8);
-  let y = randInt(1,8);
-  while (x === y) y = randInt(1,8);
-
-  return {
-    text:`x² + y² = ${x*x+y*y}, x + y = ${x+y}. x > y일 때 x는?`,
-    answer:Math.max(x,y),
-    stage:4,
-    hint:"두 식을 함께 이용해 봐."
-  };
-}
-
-/* 연립 삼차방정식 */
-function simultaneousCubic() {
-  const x = randInt(1,5);
-  let y = randInt(1,5);
-  while (x === y) y = randInt(1,5);
-
-  return {
-    text:`x³ + y³ = ${x**3+y**3}, x + y = ${x+y}. x > y일 때 x는?`,
-    answer:Math.max(x,y),
-    stage:4,
-    hint:"x와 y의 합과 세제곱의 합을 이용해 봐."
-  };
-}
-
-/* 3원 연립방정식 */
-function threeVariableSystem(degree) {
-  const x = randInt(1,4);
-  const y = randInt(1,4);
-  const z = randInt(1,4);
-
-  const rows = [
-    [1,1,1],
-    [1,2,3],
-    [2,3,1]
-  ];
-
-  const values = rows.map(row =>
-    row[0]*x**degree + row[1]*y**degree + row[2]*z**degree
-  );
-
-  const pow = degree === 2 ? "²" : degree === 3 ? "³" : "⁴";
-  const equations = rows.map((row,i) =>
-    `${row[0]===1 ? "" : row[0]}x${pow} + ` +
-    `${row[1]===1 ? "" : row[1]}y${pow} + ` +
-    `${row[2]===1 ? "" : row[2]}z${pow} = ${values[i]}`
-  );
-
-  return {
-    text:`${equations.join(" ; ")}. x는?`,
-    answer:x,
-    stage:4,
-    hint:`x${pow}, y${pow}, z${pow}를 각각 하나의 미지수처럼 놓고 풀어 봐.`
-  };
-}
-
-/* 극한 */
-function limitProblem() {
-  const a = randInt(1,9);
-  const b = randInt(1,9);
-  const c = randInt(1,9);
-
-  return {
-    text:`lim (x→${a}) [${b}x + ${c}] = ?`,
-    answer:b*a+c,
-    stage:5,
-    hint:"x가 가까워지는 값을 식에 대입해 봐."
-  };
-}
-
-/* 수열 */
-function sequenceProblem() {
-  const first = randInt(1,20);
-  const diff = randInt(2,12);
-  const n = randInt(5,15);
-  const answer = first+(n-1)*diff;
-
-  return {
-    text:`첫째항이 ${first}, 공차가 ${diff}인 등차수열의 ${n}번째 항은?`,
-    answer,
-    stage:5,
-    hint:"첫째항 + (항 번호 - 1) × 공차를 계산해 봐."
-  };
-}
-
-function makeProblem() {
-  const n = score;
-
-  if (n <= 49) return arithmeticProblem(["+","-"],0,30,1);
-  if (n <= 100) return arithmeticProblem(["+","-"],10,99,1);
-  if (n <= 150) return arithmeticProblem(["+","-","×","÷"],1,99,2);
-  if (n <= 200) return mixedProblem(1,99,["+","-","×","÷"],2);
-  if (n <= 300) return arithmeticProblem(["×","÷"],100,999,2);
-  if (n <= 450) return mixedProblem(100,999,["+","-","×","÷"],2);
-  if (n <= 600) return arithmeticProblem(["+","-","×","÷"],100,999,2);
-  if (n <= 800) return linearEquation();
-  if (n <= 1000) return quadraticEquation();
-  if (n <= 1400) return advancedSymbolProblem();
-
-  if (n <= 2000) {
-    return Math.random() < 0.5
-      ? simultaneousQuadratic()
-      : advancedSymbolProblem();
-  }
-
-  if (n <= 2500) return simultaneousCubic();
-  if (n <= 4500) return threeVariableSystem(2);
-  if (n <= 8000) return threeVariableSystem(3);
-  if (!evilUnlocked()) return threeVariableSystem(4);
-
-  return Math.random() < 0.5 ? limitProblem() : sequenceProblem();
-}
-
-function newProblem() {
-  if (!active) return;
-
-  answered = false;
-  hintUsed = false;
-  $("answer").value = "";
-  $("answer").disabled = false;
-  $("submitBtn").disabled = false;
-  $("nextBtn").disabled = true;
-
-  current = makeProblem();
-
-  $("question").textContent = current.text;
-  $("stageLabel").textContent =
-    `${current.stage}단계 · ${[
-      "", "기본 계산", "사칙연산 확장",
-      "방정식과 고급 계산", "고차 연립방정식", "극한과 수열"
-    ][current.stage]}`;
-
-  $("notice").textContent = "";
-  $("detail").textContent = "정답을 입력하고 엔터를 눌러 줘.";
+function showPage(id){
+  document.querySelectorAll("main > section").forEach(s=>s.classList.add("hidden"));
+  $(id).classList.remove("hidden");
   updateUI();
-
-  // 다음 문제로 넘어오면 바로 입력할 수 있게 입력창에 포커스
-  $("answer").focus();
+  window.scrollTo(0,0);
 }
+document.querySelectorAll("[data-page]").forEach(b=>b.addEventListener("click",()=>showPage(b.dataset.page)));
+document.querySelectorAll("[data-home]").forEach(b=>b.addEventListener("click",()=>showPage("homePage")));
+$("settingsBtn").addEventListener("click",()=>showPage("settingsPage"));
+$("normalTab").addEventListener("click",()=>{currencyMode="normal";updateUI();});
+$("legendTab").addEventListener("click",()=>{currencyMode="legend";updateUI();});
 
-function endRun() {
-  active = false;
-
-  const collected = score;
-  data.coins += collected;
-
-  score = 0;
-  combo = 0;
-  health = 3;
-  current = null;
-  answered = false;
-
-  $("question").textContent = "도전 종료!";
-  $("stageLabel").textContent = "점수 수거 완료";
-  $("notice").textContent =
-    `${collected.toLocaleString()}점을 일반 코인으로 수거했어.`;
-  $("detail").textContent = "시작 / 다시 시작을 눌러 다시 도전해!";
-  $("answer").disabled = true;
-  $("submitBtn").disabled = true;
-  $("nextBtn").disabled = true;
-
-  save();
-  updateUI();
+function randInt(min,max){return Math.floor(Math.random()*(max-min+1))+min;}
+function pick(arr){return arr[randInt(0,arr.length-1)];}
+function arithmeticProblem(ops,min,max,stage,options={}){
+  let a=randInt(min,max),b=randInt(min,max),op=pick(ops);
+  if(op==="-"&&options.nonnegative!==false&&b>a)[a,b]=[b,a];
+  if(op==="÷"){b=randInt(Math.max(1,min),Math.max(1,max));a=b*randInt(1,Math.max(2,Math.floor(max/b)));}
+  const answer=op==="+"?a+b:op==="-"?a-b:op==="×"?a*b:a/b;
+  return{text:`${a} ${op} ${b}`,answer,stage,hint:`${a} ${op} ${b}를 순서대로 계산해 봐.`};
 }
-
-function submitAnswer(event) {
+function mixedProblem(min,max,ops,stage){
+  const a=randInt(min,max),b=randInt(min,max),c=randInt(min,max),op1=pick(ops),op2=pick(ops);
+  let first=a,second=b,third=c;
+  if(op1==="÷"){second=randInt(1,Math.max(2,Math.floor(max/2)));first=second*randInt(1,Math.max(2,Math.floor(max/second)));}
+  if(op2==="÷"){third=randInt(1,Math.max(2,Math.floor(max/2)));second=third*randInt(1,Math.max(2,Math.floor(max/third)));}
+  const left=op1==="+"?first+second:op1==="-"?first-second:op1==="×"?first*second:first/second;
+  if(op2==="÷"&&third!==0&&left%third!==0)return mixedProblem(min,max,ops,stage);
+  const answer=op2==="+"?left+third:op2==="-"?left-third:op2==="×"?left*third:left/third;
+  return{text:`(${first} ${op1} ${second}) ${op2} ${third}`,answer,stage,hint:"괄호 안을 먼저 계산한 다음 두 번째 연산을 해 봐."};
+}
+function linearEquation(){
+  const x=randInt(-20,20),a=randInt(2,12),b=randInt(-30,30),c=a*x+b;
+  return{text:`${a}x ${b<0?"- "+Math.abs(b):"+ "+b} = ${c}`,answer:x,stage:3,hint:`상수항을 옮긴 다음 ${a}로 나눠 봐.`};
+}
+function quadraticEquation(){
+  const r1=randInt(-9,9);let r2=randInt(-9,9);if(r1===r2)r2=r1+randInt(1,4);
+  const sum=r1+r2,product=r1*r2;
+  const bt=sum===0?"":sum>0?` - ${sum}x`:` + ${Math.abs(sum)}x`;
+  const ct=product===0?"":product>0?` + ${product}`:` - ${Math.abs(product)}`;
+  return{text:`x²${bt}${ct} = 0. 큰 해 x는?`,answer:Math.max(r1,r2),stage:3,hint:"두 근의 합과 곱을 이용해 봐."};
+}
+function advancedSymbolProblem(){
+  const n=randInt(3,7);let answer=1;for(let i=2;i<=n;i++)answer*=i;
+  return{text:`${n}! = ?`,answer,stage:3,hint:`1부터 ${n}까지의 자연수를 모두 곱해 봐.`};
+}
+function simultaneousQuadratic(){
+  const x=randInt(1,8);let y=randInt(1,8);while(x===y)y=randInt(1,8);
+  return{text:`x² + y² = ${x*x+y*y}, x + y = ${x+y}. x > y일 때 x는?`,answer:Math.max(x,y),stage:4,hint:"두 식을 함께 이용해 봐."};
+}
+function simultaneousCubic(){
+  const x=randInt(1,5);let y=randInt(1,5);while(x===y)y=randInt(1,5);
+  return{text:`x³ + y³ = ${x**3+y**3}, x + y = ${x+y}. x > y일 때 x는?`,answer:Math.max(x,y),stage:4,hint:"x와 y의 합과 세제곱의 합을 이용해 봐."};
+}
+function threeVariableSystem(degree){
+  const x=randInt(1,4),y=randInt(1,4),z=randInt(1,4);
+  const rows=[[1,1,1],[1,2,3],[2,3,1]];
+  const values=rows.map(r=>r[0]*x**degree+r[1]*y**degree+r[2]*z**degree);
+  const pow=degree===2?"²":degree===3?"³":"⁴";
+  const equations=rows.map((r,i)=>`${r[0]===1?"":r[0]}x${pow} + ${r[1]===1?"":r[1]}y${pow} + ${r[2]===1?"":r[2]}z${pow} = ${values[i]}`);
+  return{text:`${equations.join(" ; ")}. x는?`,answer:x,stage:4,hint:"x, y, z의 거듭제곱을 각각 미지수처럼 놓고 풀어 봐."};
+}
+function limitProblem(){
+  const a=randInt(1,9),b=randInt(1,9),c=randInt(1,9);
+  return{text:`lim (x→${a}) [${b}x + ${c}] = ?`,answer:b*a+c,stage:5,hint:"x가 가까워지는 값을 식에 대입해 봐."};
+}
+function sequenceProblem(){
+  const first=randInt(1,20),diff=randInt(2,12),n=randInt(5,15);
+  return{text:`첫째항 ${first}, 공차 ${diff}인 등차수열의 ${n}번째 항은?`,answer:first+(n-1)*diff,stage:5,hint:"첫째항 + (항 번호 - 1) × 공차를 계산해 봐."};
+}
+function makeProblem(){
+  const n=score;
+  if(n<=49)return arithmeticProblem(["+","-"],0,30,1);
+  if(n<=100)return arithmeticProblem(["+","-"],10,99,1);
+  if(n<=150)return arithmeticProblem(["+","-","×","÷"],1,99,2);
+  if(n<=200)return mixedProblem(1,99,["+","-","×","÷"],2);
+  if(n<=300)return arithmeticProblem(["×","÷"],100,999,2);
+  if(n<=450)return mixedProblem(100,999,["+","-","×","÷"],2);
+  if(n<=600)return arithmeticProblem(["+","-","×","÷"],100,999,2);
+  if(n<=800)return linearEquation();
+  if(n<=1000)return quadraticEquation();
+  if(n<=1400)return advancedSymbolProblem();
+  if(n<=2000)return Math.random()<.5?simultaneousQuadratic():advancedSymbolProblem();
+  if(n<=2500)return simultaneousCubic();
+  if(n<=4500)return threeVariableSystem(2);
+  if(n<=8000)return threeVariableSystem(3);
+  if(!evilUnlocked())return threeVariableSystem(4);
+  return Math.random()<.5?limitProblem():sequenceProblem();
+}
+function newProblem(){
+  if(!active)return;
+  answered=false;hintUsed=false;
+  $("answer").value="";$("answer").disabled=false;
+  $("submitBtn").disabled=false;$("nextBtn").disabled=true;
+  current=makeProblem();
+  $("question").textContent=current.text;
+  $("stageLabel").textContent=`${current.stage}단계 · ${["","기본 계산","사칙연산 확장","방정식과 고급 계산","고차 연립방정식","극한과 수열"][current.stage]}`;
+  $("notice").textContent="";$("detail").textContent="정답을 입력하고 엔터를 눌러 줘.";
+  updateUI();$("answer").focus();
+}
+function endRun(){
+  active=false;
+  const collected=score;data.coins+=collected;
+  score=0;combo=0;health=3;current=null;answered=false;
+  $("question").textContent="도전 종료!";
+  $("stageLabel").textContent="점수 수거 완료";
+  $("notice").textContent=`${collected.toLocaleString()}점을 일반 코인으로 수거했어.`;
+  $("detail").textContent="시작 / 다시 시작을 눌러 다시 도전해!";
+  $("answer").disabled=true;$("submitBtn").disabled=true;$("nextBtn").disabled=true;
+  save();updateUI();
+}
+function submitAnswer(event){
   event.preventDefault();
-
-  if (!active || !current || answered) return;
-
-  const raw = $("answer").value.trim();
-
-  if (raw === "" || !Number.isFinite(Number(raw))) {
-    $("notice").textContent = "숫자로 정답을 입력해 줘.";
-    return;
-  }
-
-  answered = true;
-
-  const correct = Number(raw) === current.answer;
-
-  if (correct) {
-    combo++;
-
-    // 정답 하나당 정확히 1점
-    score += 1;
-    data.totalSolved++;
-
-    if (current.stage === 5) {
+  if(!active||!current||answered)return;
+  const raw=$("answer").value.trim();
+  if(raw===""||!Number.isFinite(Number(raw))){$("notice").textContent="숫자로 정답을 입력해 줘.";return;}
+  answered=true;
+  if(Number(raw)===current.answer){
+    combo++;score++;data.totalSolved++;
+    if(current.stage===5){
       data.evilSolved++;
-
-      if (data.evilSolved >= 300000) {
-        data.evilSolved -= 300000;
-        data.legendCoins++;
-        $("notice").textContent = "정답! +1점 · 레전드 보너스 코인 +1!";
-      } else {
-        $("notice").textContent = `정답! +1점 · 콤보 ${combo}`;
-      }
-    } else {
-      $("notice").textContent = `정답! +1점 · 콤보 ${combo}`;
-    }
-
-    data.best = Math.max(data.best,score);
-    $("detail").textContent = `정답: ${current.answer}`;
-
-    save();
-    updateUI();
-
-    // 정답이면 기다리지 않고 즉시 다음 문제
-    newProblem();
-    return;
+      if(data.evilSolved>=300000){data.evilSolved-=300000;data.legendCoins++;$("notice").textContent="정답! +1점 · 레전드 코인 +1!";}
+      else $("notice").textContent=`정답! +1점 · 콤보 ${combo}`;
+    }else $("notice").textContent=`정답! +1점 · 콤보 ${combo}`;
+    data.best=Math.max(data.best,score);
+    $("detail").textContent=`정답: ${current.answer}`;
+    save();updateUI();newProblem();return;
   }
-
-  // 오답이면 현재 문제를 유지
-  health--;
-  combo = 0;
-
-  $("notice").textContent = `오답! 정답은 ${current.answer} 이야. 체력 -1`;
-  $("detail").textContent = current.hint || "계산 과정을 다시 확인해 봐.";
-
-  $("answer").disabled = true;
-  $("submitBtn").disabled = true;
-  $("nextBtn").disabled = false;
-
-  if (health <= 0) {
-    updateUI();
-    endRun();
-    return;
-  }
-
-  save();
-  updateUI();
+  health--;combo=0;
+  $("notice").textContent=`오답! 정답은 ${current.answer} 이야. 체력 -1`;
+  $("detail").textContent=current.hint||"계산 과정을 다시 확인해 봐.";
+  $("answer").disabled=true;$("submitBtn").disabled=true;$("nextBtn").disabled=false;
+  if(health<=0){updateUI();endRun();return;}
+  save();updateUI();
 }
-
-function useHint() {
-  if (!active || !current || answered) {
-    $("notice").textContent = "먼저 풀고 있는 문제가 있어야 해.";
-    return;
-  }
-
-  if (hintUsed) {
-    $("notice").textContent = "이 문제에서는 이미 힌트를 사용했어.";
-    return;
-  }
-
-  if (data.hints <= 0) {
-    $("notice").textContent = "힌트권이 없어. 상점에서 구매해 줘.";
-    return;
-  }
-
-  data.hints--;
-  hintUsed = true;
-
-  $("detail").textContent = current.hint || "식을 차근차근 정리해 봐.";
-  $("notice").textContent = "힌트를 사용했어. 정답을 맞히면 1점을 얻어.";
-  save();
-  updateUI();
+function useHint(){
+  if(!active||!current||answered){$("notice").textContent="먼저 풀고 있는 문제가 있어야 해.";return;}
+  if(hintUsed){$("notice").textContent="이 문제에서는 이미 힌트를 사용했어.";return;}
+  if(data.hints<=0){$("notice").textContent="힌트권이 없어. 상점에서 구매해 줘.";return;}
+  data.hints--;hintUsed=true;
+  $("detail").textContent=current.hint||"식을 차근차근 정리해 봐.";
+  $("notice").textContent="힌트를 사용했어. 정답을 맞히면 1점을 얻어.";
+  save();updateUI();
 }
-
-function useSkip() {
-  if (!active || !current || answered) {
-    $("notice").textContent = "넘길 문제가 없어.";
-    return;
-  }
-
-  if (data.skips <= 0) {
-    $("notice").textContent = "넘기기권이 없어. 상점에서 구매해 줘.";
-    return;
-  }
-
-  data.skips--;
-  answered = true;
-
-  $("notice").textContent = "문제를 넘겼어. 점수는 추가되지 않아.";
-  $("detail").textContent = `정답: ${current.answer}`;
-  $("answer").disabled = true;
-  $("submitBtn").disabled = true;
-  $("nextBtn").disabled = false;
-
-  save();
-  updateUI();
+function useSkip(){
+  if(!active||!current||answered){$("notice").textContent="넘길 문제가 없어.";return;}
+  if(data.skips<=0){$("notice").textContent="넘기기권이 없어. 상점에서 구매해 줘.";return;}
+  data.skips--;answered=true;
+  $("notice").textContent="문제를 넘겼어. 점수는 추가되지 않아.";
+  $("detail").textContent=`정답: ${current.answer}`;
+  $("answer").disabled=true;$("submitBtn").disabled=true;$("nextBtn").disabled=false;
+  save();updateUI();
 }
-
-function buyItem(type,cost) {
-  if (data.coins < cost) {
-    $("notice").textContent = "일반 코인이 부족해.";
-    return;
-  }
-
-  data.coins -= cost;
-
-  if (type === "hint") data.hints++;
-  else data.skips++;
-
-  $("notice").textContent =
-    type === "hint" ? "힌트권을 구매했어." : "문제 넘기기권을 구매했어.";
-
-  save();
-  updateUI();
+function buyItem(type,cost){
+  if(data.coins<cost){$("shopNotice").textContent="일반 코인이 부족해.";return;}
+  data.coins-=cost;
+  if(type==="hint")data.hints++;else data.skips++;
+  $("shopNotice").textContent=type==="hint"?"힌트권을 구매했어.":"문제 넘기기권을 구매했어.";
+  save();updateUI();
 }
-
 $("answerForm").addEventListener("submit",submitAnswer);
-
-$("startBtn").addEventListener("click",() => {
-  score = 0;
-  combo = 0;
-  health = 3;
-  active = true;
+$("startBtn").addEventListener("click",()=>{
+  score=0;combo=0;health=3;active=true;
+  $("notice").textContent="";
   newProblem();
 });
-
-$("nextBtn").addEventListener("click",() => {
-  if (!active) {
-    $("notice").textContent = "먼저 시작해 줘.";
-    return;
-  }
-
-  if (!answered) {
-    $("notice").textContent = "먼저 정답을 확인하거나 문제를 넘겨 줘.";
-    return;
-  }
-
+$("nextBtn").addEventListener("click",()=>{
+  if(!active){$("notice").textContent="먼저 시작해 줘.";return;}
+  if(!answered){$("notice").textContent="먼저 정답을 확인하거나 문제를 넘겨 줘.";return;}
   newProblem();
 });
-
 $("hintBtn").addEventListener("click",useHint);
 $("skipBtn").addEventListener("click",useSkip);
-$("buyHint").addEventListener("click",() => buyItem("hint",300));
-$("buySkip").addEventListener("click",() => buyItem("skip",150));
-
-$("exchangeBtn").addEventListener("click",() => {
-  if (data.legendCoins < 1) {
-    $("notice").textContent = "레전드 보너스 코인이 부족해.";
-    return;
-  }
-
-  data.legendCoins--;
-  data.coins += 500000;
-
-  $("notice").textContent = "일반 코인 500,000개로 교환했어.";
-  save();
-  updateUI();
+$("buyHint").addEventListener("click",()=>buyItem("hint",300));
+$("buySkip").addEventListener("click",()=>buyItem("skip",150));
+$("exchangeBtn").addEventListener("click",()=>{
+  if(data.legendCoins<1){$("shopNotice").textContent="레전드 코인이 부족해.";return;}
+  data.legendCoins--;data.coins+=500000;
+  $("shopNotice").textContent="일반 코인 500,000개로 교환했어.";
+  save();updateUI();
 });
-
 updateUI();
-$("answer").disabled = true;
-$("submitBtn").disabled = true;
-$("nextBtn").disabled = true;
+$("answer").disabled=true;
+$("submitBtn").disabled=true;
+$("nextBtn").disabled=true;
 </script>
 </body>
 </html>
