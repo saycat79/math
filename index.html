@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -89,8 +90,9 @@ footer { color:var(--muted); font-size:12px; text-align:center; padding:12px; }
   <div class="question" id="question">시작을 눌러 줘!</div>
   <form id="answerForm">
     <label for="answer">정답</label>
-    <input id="answer" type="text" inputmode="decimal"
-      autocomplete="off" placeholder="정답을 입력해 줘">
+    <input id="answer" type="text" inputmode="text"
+      lang="ko" autocomplete="off" enterkeyhint="done"
+      placeholder="정답을 입력해 줘">
     <div class="actions">
       <button class="primary" type="submit" id="submitBtn">정답 확인</button>
       <button type="button" id="nextBtn" disabled>다음 문제</button>
@@ -160,7 +162,6 @@ let current = null;
 let active = false;
 let answered = false;
 let hintUsed = false;
-let questionTimer = null;
 
 function save() {
   try {
@@ -233,7 +234,7 @@ function pick(arr) {
   return arr[randInt(0,arr.length-1)];
 }
 
-/* 두 자리 수 이하의 사칙연산 */
+/* 사칙연산 */
 function arithmeticProblem(ops,min,max,stage,options={}) {
   let a = randInt(min,max);
   let b = randInt(min,max);
@@ -302,6 +303,7 @@ function mixedProblem(min,max,ops,stage) {
   };
 }
 
+/* 일차방정식 */
 function linearEquation() {
   const x = randInt(-20,20);
   const a = randInt(2,12);
@@ -316,6 +318,7 @@ function linearEquation() {
   };
 }
 
+/* 이차방정식 */
 function quadraticEquation() {
   const r1 = randInt(-9,9);
   let r2 = randInt(-9,9);
@@ -332,10 +335,11 @@ function quadraticEquation() {
     text:`x²${bText}${cText} = 0. 큰 해 x는?`,
     answer:Math.max(r1,r2),
     stage:3,
-    hint:"곱해서 상수항이 되고, 더해서 x의 계수와 반대 부호가 되는 두 수를 찾아 봐."
+    hint:"두 근의 합과 곱을 이용해 봐."
   };
 }
 
+/* 고급 계산 */
 function advancedSymbolProblem() {
   const n = randInt(3,7);
   let answer = 1;
@@ -349,6 +353,7 @@ function advancedSymbolProblem() {
   };
 }
 
+/* 연립 이차방정식 */
 function simultaneousQuadratic() {
   const x = randInt(1,8);
   let y = randInt(1,8);
@@ -358,10 +363,11 @@ function simultaneousQuadratic() {
     text:`x² + y² = ${x*x+y*y}, x + y = ${x+y}. x > y일 때 x는?`,
     answer:Math.max(x,y),
     stage:4,
-    hint:"두 번째 식으로 가능한 x와 y를 정리하고, 첫 번째 식에 대입해 봐."
+    hint:"두 식을 함께 이용해 봐."
   };
 }
 
+/* 연립 삼차방정식 */
 function simultaneousCubic() {
   const x = randInt(1,5);
   let y = randInt(1,5);
@@ -371,10 +377,11 @@ function simultaneousCubic() {
     text:`x³ + y³ = ${x**3+y**3}, x + y = ${x+y}. x > y일 때 x는?`,
     answer:Math.max(x,y),
     stage:4,
-    hint:"x와 y의 합을 이용해 가능한 정수 쌍을 찾은 뒤 세제곱의 합을 확인해 봐."
+    hint:"x와 y의 합과 세제곱의 합을 이용해 봐."
   };
 }
 
+/* 3원 연립방정식 */
 function threeVariableSystem(degree) {
   const x = randInt(1,4);
   const y = randInt(1,4);
@@ -401,10 +408,11 @@ function threeVariableSystem(degree) {
     text:`${equations.join(" ; ")}. x는?`,
     answer:x,
     stage:4,
-    hint:`x${pow}, y${pow}, z${pow}를 각각 하나의 미지수처럼 놓고 세 식을 풀어 봐.`
+    hint:`x${pow}, y${pow}, z${pow}를 각각 하나의 미지수처럼 놓고 풀어 봐.`
   };
 }
 
+/* 극한 */
 function limitProblem() {
   const a = randInt(1,9);
   const b = randInt(1,9);
@@ -414,10 +422,11 @@ function limitProblem() {
     text:`lim (x→${a}) [${b}x + ${c}] = ?`,
     answer:b*a+c,
     stage:5,
-    hint:"다항식은 x가 가까워지는 값을 식에 대입하면 돼."
+    hint:"x가 가까워지는 값을 식에 대입해 봐."
   };
 }
 
+/* 수열 */
 function sequenceProblem() {
   const first = randInt(1,20);
   const diff = randInt(2,12);
@@ -428,7 +437,7 @@ function sequenceProblem() {
     text:`첫째항이 ${first}, 공차가 ${diff}인 등차수열의 ${n}번째 항은?`,
     answer,
     stage:5,
-    hint:"등차수열의 n번째 항은 첫째항 + (n-1)×공차야."
+    hint:"첫째항 + (항 번호 - 1) × 공차를 계산해 봐."
   };
 }
 
@@ -463,9 +472,6 @@ function makeProblem() {
 function newProblem() {
   if (!active) return;
 
-  clearTimeout(questionTimer);
-  questionTimer = null;
-
   answered = false;
   hintUsed = false;
   $("answer").value = "";
@@ -483,13 +489,14 @@ function newProblem() {
     ][current.stage]}`;
 
   $("notice").textContent = "";
-  $("detail").textContent = "정답을 입력하고 확인을 눌러 줘.";
+  $("detail").textContent = "정답을 입력하고 엔터를 눌러 줘.";
   updateUI();
+
+  // 다음 문제로 넘어오면 바로 입력할 수 있게 입력창에 포커스
+  $("answer").focus();
 }
 
 function endRun() {
-  clearTimeout(questionTimer);
-  questionTimer = null;
   active = false;
 
   const collected = score;
@@ -516,64 +523,67 @@ function endRun() {
 
 function submitAnswer(event) {
   event.preventDefault();
+
   if (!active || !current || answered) return;
 
   const raw = $("answer").value.trim();
+
   if (raw === "" || !Number.isFinite(Number(raw))) {
     $("notice").textContent = "숫자로 정답을 입력해 줘.";
     return;
   }
 
   answered = true;
-  $("answer").disabled = true;
-  $("submitBtn").disabled = true;
 
   const correct = Number(raw) === current.answer;
 
   if (correct) {
     combo++;
-    const gained = 1 + Math.min(9,Math.floor(combo/5));
-    score += gained;
+
+    // 정답 하나당 정확히 1점
+    score += 1;
     data.totalSolved++;
 
     if (current.stage === 5) {
       data.evilSolved++;
+
       if (data.evilSolved >= 300000) {
         data.evilSolved -= 300000;
         data.legendCoins++;
-        $("notice").textContent = "정답! 레전드 보너스 코인 +1!";
+        $("notice").textContent = "정답! +1점 · 레전드 보너스 코인 +1!";
       } else {
-        $("notice").textContent = `정답! +${gained}점 · 콤보 ${combo}`;
+        $("notice").textContent = `정답! +1점 · 콤보 ${combo}`;
       }
     } else {
-      $("notice").textContent = `정답! +${gained}점 · 콤보 ${combo}`;
+      $("notice").textContent = `정답! +1점 · 콤보 ${combo}`;
     }
 
     data.best = Math.max(data.best,score);
     $("detail").textContent = `정답: ${current.answer}`;
 
-    // 정답이면 1초 후 자동으로 다음 문제
-    $("nextBtn").disabled = true;
-    questionTimer = setTimeout(() => {
-      if (active && answered && correct) {
-        newProblem();
-      }
-    },1000);
+    save();
+    updateUI();
 
-  } else {
-    health--;
-    combo = 0;
-    $("notice").textContent = `오답! 정답은 ${current.answer} 이야. 체력 -1`;
-    $("detail").textContent = current.hint || "계산 과정을 다시 확인해 봕.";
+    // 정답이면 기다리지 않고 즉시 다음 문제
+    newProblem();
+    return;
+  }
 
-    // 오답이면 현재 문제를 유지하고 직접 다음 문제를 선택할 수 있게 함
-    $("nextBtn").disabled = false;
+  // 오답이면 현재 문제를 유지
+  health--;
+  combo = 0;
 
-    if (health <= 0) {
-      updateUI();
-      endRun();
-      return;
-    }
+  $("notice").textContent = `오답! 정답은 ${current.answer} 이야. 체력 -1`;
+  $("detail").textContent = current.hint || "계산 과정을 다시 확인해 봐.";
+
+  $("answer").disabled = true;
+  $("submitBtn").disabled = true;
+  $("nextBtn").disabled = false;
+
+  if (health <= 0) {
+    updateUI();
+    endRun();
+    return;
   }
 
   save();
@@ -585,10 +595,12 @@ function useHint() {
     $("notice").textContent = "먼저 풀고 있는 문제가 있어야 해.";
     return;
   }
+
   if (hintUsed) {
     $("notice").textContent = "이 문제에서는 이미 힌트를 사용했어.";
     return;
   }
+
   if (data.hints <= 0) {
     $("notice").textContent = "힌트권이 없어. 상점에서 구매해 줘.";
     return;
@@ -596,8 +608,9 @@ function useHint() {
 
   data.hints--;
   hintUsed = true;
+
   $("detail").textContent = current.hint || "식을 차근차근 정리해 봐.";
-  $("notice").textContent = "힌트를 사용했어. 정답을 맞히면 점수를 얻을 수 있어.";
+  $("notice").textContent = "힌트를 사용했어. 정답을 맞히면 1점을 얻어.";
   save();
   updateUI();
 }
@@ -607,6 +620,7 @@ function useSkip() {
     $("notice").textContent = "넘길 문제가 없어.";
     return;
   }
+
   if (data.skips <= 0) {
     $("notice").textContent = "넘기기권이 없어. 상점에서 구매해 줘.";
     return;
@@ -614,6 +628,7 @@ function useSkip() {
 
   data.skips--;
   answered = true;
+
   $("notice").textContent = "문제를 넘겼어. 점수는 추가되지 않아.";
   $("detail").textContent = `정답: ${current.answer}`;
   $("answer").disabled = true;
@@ -631,11 +646,13 @@ function buyItem(type,cost) {
   }
 
   data.coins -= cost;
+
   if (type === "hint") data.hints++;
   else data.skips++;
 
   $("notice").textContent =
     type === "hint" ? "힌트권을 구매했어." : "문제 넘기기권을 구매했어.";
+
   save();
   updateUI();
 }
@@ -643,9 +660,6 @@ function buyItem(type,cost) {
 $("answerForm").addEventListener("submit",submitAnswer);
 
 $("startBtn").addEventListener("click",() => {
-  clearTimeout(questionTimer);
-  questionTimer = null;
-
   score = 0;
   combo = 0;
   health = 3;
@@ -658,13 +672,12 @@ $("nextBtn").addEventListener("click",() => {
     $("notice").textContent = "먼저 시작해 줘.";
     return;
   }
+
   if (!answered) {
     $("notice").textContent = "먼저 정답을 확인하거나 문제를 넘겨 줘.";
     return;
   }
 
-  clearTimeout(questionTimer);
-  questionTimer = null;
   newProblem();
 });
 
@@ -681,6 +694,7 @@ $("exchangeBtn").addEventListener("click",() => {
 
   data.legendCoins--;
   data.coins += 500000;
+
   $("notice").textContent = "일반 코인 500,000개로 교환했어.";
   save();
   updateUI();
