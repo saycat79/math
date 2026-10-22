@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#0b1020">
-<title>InfinityMath 0.4</title>
+<title>InfinityMath 0.5</title>
 <style>
 :root{color-scheme:dark;--bg:#0b1020;--panel:#141c31;--panel2:#1c2945;--line:#344363;--text:#eef3ff;--muted:#9eacce;--blue:#79a7ff;--gold:#ffd166;--red:#ff7373}
 *{box-sizing:border-box}
@@ -49,7 +49,6 @@ input{width:100%;background:#0b1223;color:var(--text);border:1px solid var(--lin
 footer{color:var(--muted);font-size:12px;text-align:center;padding:12px}
 .hidden{display:none!important}
 @media(min-width:520px){.stats{grid-template-columns:repeat(3,minmax(0,1fr))}}
-
 .infinity-mascot{font-size:92px;line-height:1.15;font-weight:900;letter-spacing:-9px;background:linear-gradient(120deg,#58c7ff,#4776ff,#a58bff);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 5px 10px #427eff66);text-align:center;position:relative}
 .mascot-face{position:absolute;left:50%;top:49%;transform:translate(-50%,-50%);color:#fff;font-size:23px;letter-spacing:0;white-space:nowrap;-webkit-text-fill-color:#fff;text-shadow:0 1px 3px #102044}
 .tutorial-overlay{position:fixed;inset:0;z-index:1000;background:#050a16ed;display:flex;align-items:center;justify-content:center;padding:18px;overflow-y:auto}
@@ -79,7 +78,7 @@ footer{color:var(--muted);font-size:12px;text-align:center;padding:12px}
 <body>
 <main>
 <header>
-  <div><h1>InfinityMath <span class="muted">0.4</span></h1><div class="muted">수학의 한계를 넘어.</div></div>
+  <div><h1>InfinityMath <span class="muted">0.5</span></h1><div class="muted">수학의 한계를 넘어.</div></div>
   <button id="settingsBtn" aria-label="설정">⚙️</button>
 </header>
 
@@ -129,8 +128,8 @@ footer{color:var(--muted);font-size:12px;text-align:center;padding:12px}
   <div class="page-title"><button class="back" data-home>← 홈</button><h2>아이템 상점</h2></div>
   <section class="panel">
     <p>일반 코인: <strong id="shopCoins">0</strong></p>
-    <div class="item"><div><strong>힌트권</strong><p>300 일반 코인 · 문제 풀이에 도움을 받아.</p></div><button id="buyHint">300 코인 구매</button></div>
-    <div class="item"><div><strong>문제 넘기기권</strong><p>150 일반 코인 · 점수 추가 없이 문제를 넘겨.</p></div><button id="buySkip">150 코인 구매</button></div>
+    <div class="item"><div><strong>힌트권</strong><p>30 일반 코인 · 문제 풀이에 도움을 받아.</p></div><button id="buyHint">30 코인 구매</button></div>
+    <div class="item"><div><strong>문제 넘기기권</strong><p>15 일반 코인 · 점수 추가 없이 문제를 넘겨.</p></div><button id="buySkip">15 코인 구매</button></div>
     <p>보유 힌트권: <strong id="hints">0</strong></p><p>보유 넘기기권: <strong id="skips">0</strong></p>
     <p class="notice" id="shopNotice" aria-live="polite"></p>
   </section>
@@ -148,7 +147,7 @@ footer{color:var(--muted);font-size:12px;text-align:center;padding:12px}
 
 <section id="profilePage" class="hidden">
   <div class="page-title"><button class="back" data-home>← 홈</button><h2>내 정보</h2></div>
-  <section class="panel"><h2>내 InfinityMath</h2><p>현재 버전: 0.4</p><p>저장 방식: 현재 기기 브라우저에 저장</p>
+  <section class="panel"><h2>내 InfinityMath</h2><p>현재 버전: 0.5</p><p>저장 방식: 현재 기기 브라우저에 저장</p>
   <p class="muted">Supabase 로그인과 기기 간 동기화는 이후 단계에서 연결할 예정이야.</p>
   <p>일반 코인: <strong id="profileCoins">0</strong></p><p>레전드 코인: <strong id="profileLegend">0</strong></p>
   <p>힌트권: <strong id="profileHints">0</strong></p><p>문제 넘기기권: <strong id="profileSkips">0</strong></p></section>
@@ -165,7 +164,7 @@ footer{color:var(--muted);font-size:12px;text-align:center;padding:12px}
   </section>
 </section>
 
-<footer>InfinityMath 0.4 · 기존 기기 저장 데이터를 사용해.</footer>
+<footer>InfinityMath 0.5 · 기존 기기 저장 데이터를 사용해.</footer>
 </main>
 
 <div id="tutorialOverlay" class="tutorial-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="tutorialTitle">
@@ -582,8 +581,8 @@ $("nextBtn").addEventListener("click",()=>{
 });
 $("hintBtn").addEventListener("click",useHint);
 $("skipBtn").addEventListener("click",useSkip);
-$("buyHint").addEventListener("click",()=>buyItem("hint",300));
-$("buySkip").addEventListener("click",()=>buyItem("skip",150));
+$("buyHint").addEventListener("click",()=>buyItem("hint",30));
+$("buySkip").addEventListener("click",()=>buyItem("skip",15));
 $("exchangeBtn").addEventListener("click",()=>{
   if(data.legendCoins<1){$("shopNotice").textContent="레전드 코인이 부족해.";return;}
   data.legendCoins--;data.coins+=500000;
