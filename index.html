@@ -262,7 +262,7 @@ footer{color:var(--muted);font-size:12px;text-align:center;padding:12px}
  <p class="muted">30일이 지난 글의 비공개 전환과 열람 권한은 서버에서도 적용되어야 해.</p>
 </section>
 
-<footer>InfinityMath · 수학의 한계를 넘어.</footer>
+<footer>InfinityMath · 무한한 문제, 무한한 가능성.</footer>
 </main>
 
 <div id="tutorialOverlay" class="tutorial-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="tutorialTitle">
@@ -608,7 +608,7 @@ function arithmeticProblem(ops,min,max,stage,options={}){
   text:`${a} ${op} ${b}`,
   answer,
   stage,
-  hint:`${a} ${op} ${b}를 계산해 봐. 먼저 어떤 연산인지 확인하고 차근차근 풀어 보자.`
+  hint:`${a} ${op} ${b}를 계산할 땐 더하기라면 앞에 수에서 뒤에 수가 추가되었다고 생각하면 되고, 빼기는 없어진 걸로 생각하면 돼.`
  };
 }
 
@@ -747,7 +747,7 @@ function makeProblem(){
  const n=score;
  if(n<=49)return arithmeticProblem(["+","-"],0,30,1);
  if(n<=100)return arithmeticProblem(["+","-"],10,99,1);
- if(n<=150)return arithmeticProblem(["+","-","×","÷"],1,99,2);
+ if(n<=150)return arithmeticProblem(["+","-","×","÷"],1,9,2);
  if(n<=200)return mixedProblem(1,99,["+","-","×","÷"],2);
  if(n<=300)return arithmeticProblem(["×","÷"],100,999,2);
  if(n<=450)return mixedProblem(100,999,["+","-","×","÷"],2);
@@ -771,11 +771,16 @@ async function newProblem(){
   revealTimer=null;
  }
 
- answered=false;
- wrongPending=false;
- retryUsed=false;
- hintUsed=false;
- attemptId=null;
+answered=false;
+wrongPending=false;
+retryUsed=false;
+hintUsed=false;
+attemptId=null;
+
+$("retryBtn").classList.add("hidden");
+$("answer").value="";
+$("submitBtn").disabled=true;
+$("nextBtn").disabled=true;
 
  $("retryBtn").classList.add("hidden");
  $("answer").value="";
@@ -1079,7 +1084,7 @@ async function useHint(){
  }
 
  if(firstProblemOfRun&&score===0){
-  openHint("첫 문제부터 힌트라니! 직접 한 번 풀어 볼까?");
+  openHint("첫문젴ㅋㅋ부텈ㅋㅋㅋ 힌트라곸ㅋㅋㅋㅋ? 아. 미안. 근데 뭐라고 할려 했더라?");
   return;
  }
 
