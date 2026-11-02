@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -793,11 +794,18 @@ async function newProblem(){
   }
 
   attemptId=r.attempt_id;
-  current={text:r.question,stage:r.stage,hint:r.hint,answer:r.answer};
 
-  if(current.answer===undefined||current.answer===null){
-   throw Error("math_rp의 new-problem 응답에 answer 값이 필요해.");
-  }
+  /*
+   * 중요:
+   * new-problem 응답에는 정답이 없어야 한다.
+   * 정답은 오답 제출 후 award-rp 응답에서 받는다.
+   */
+  current={
+   text:r.question,
+   stage:r.stage,
+   hint:r.hint,
+   answer:null
+  };
 
   firstProblemOfRun=(score===0);
   $("answer").disabled=false;
@@ -811,7 +819,7 @@ async function newProblem(){
  }catch(e){
   $("question").textContent="문제를 불러오지 못했어.";
   $("notice").textContent=e.message;
-  $("detail").textContent="Supabase 로그인과 math_rp 배포 상태를 확인해 줘.";
+  $("detail").textContent="Supabase 로그인과 math-rp 배포 상태를 확인해 줘.";
   $("startBtn").disabled=false;
  }
 }
@@ -853,6 +861,11 @@ function startAnswerRevealTimer(){
 
 function revealAnswerAndClose(message){
  if(!attemptId||!current)return;
+
+ if(current.answer===null||current.answer===undefined){
+  $("notice").textContent="서버에서 정답을 받지 못했어. math-rp의 award-rp 응답을 확인해 줘.";
+  return;
+ }
 
  if(revealTimer){
   clearTimeout(revealTimer);
@@ -941,6 +954,23 @@ async function submitAnswer(event){
   }
 
   if(r?.error==="WRONG_ANSWER"){
+
+   /*
+    * 오답 응답에는 서버가 정답을 포함해야 한다.
+    * 정답을 받지 못하면 잘못된 상태로 타이머를 시작하지 않는다.
+    */
+   if(r.answer===undefined||r.answer===null){
+    throw Error("award-rp 응답에 answer 값이 없어. math-rp 서버 코드를 확인해 줘.");
+   }
+
+   const correctAnswer=Number(r.answer);
+
+   if(!Number.isSafeInteger(correctAnswer)){
+    throw Error("서버에서 받은 정답이 올바른 정수가 아니야.");
+   }
+
+   current.answer=correctAnswer;
+
    health=Math.max(0,health-1);
    combo=0;
    wrongPending=true;
@@ -954,8 +984,8 @@ async function submitAnswer(event){
    $("detail").textContent=current.hint||"잠깐 생각을 정리해 봐.";
 
    /*
-    * 입력창을 비활성화하지 않아 키보드가 유지되도록 한다.
-    * 제출 버튼만 잠그고 재도전권 버튼을 별도로 제공한다.
+    * 입력창은 유지하고 제출 버튼만 잠근다.
+    * 재도전권을 누르면 같은 문제에 다시 도전할 수 있다.
     */
    $("answer").disabled=false;
    $("submitBtn").disabled=true;
@@ -1179,7 +1209,6 @@ const SUPABASE_PUBLISHABLE_KEY="sb_publishable_Ygdmqv0Nmf9jxBlm38wPqQ_80t3LlWM";
 
 /*
  * Edge function 이름: math-rp
- * 밑줄(_)이 아니라 하이픈(-)을 사용한다
  */
 const EDGE_FUNCTION="math-rp";
 
