@@ -771,16 +771,11 @@ async function newProblem(){
   revealTimer=null;
  }
 
-answered=false;
-wrongPending=false;
-retryUsed=false;
-hintUsed=false;
-attemptId=null;
-
-$("retryBtn").classList.add("hidden");
-$("answer").value="";
-$("submitBtn").disabled=true;
-$("nextBtn").disabled=true;
+ answered=false;
+ wrongPending=false;
+ retryUsed=false;
+ hintUsed=false;
+ attemptId=null;
 
  $("retryBtn").classList.add("hidden");
  $("answer").value="";
@@ -801,7 +796,6 @@ $("nextBtn").disabled=true;
   attemptId=r.attempt_id;
 
   /*
-   * 중요:
    * new-problem 응답에는 정답이 없어야 한다.
    * 정답은 오답 제출 후 award-rp 응답에서 받는다.
    */
@@ -859,6 +853,7 @@ function startAnswerRevealTimer(){
  if(revealTimer){
   clearTimeout(revealTimer);
  }
+
  revealTimer=setTimeout(()=>{
   revealAnswerAndClose("2초가 지나 정답을 공개했어.");
  },2000);
@@ -868,7 +863,7 @@ function revealAnswerAndClose(message){
  if(!attemptId||!current)return;
 
  if(current.answer===null||current.answer===undefined){
-  $("notice").textContent="서버에서 정답을 받지 못했어. math-rp의 award-rp 응답을 확인해 줘.";
+  $("notice").textContent="서버에서 정답을 받지 못했어. 서버 응답을 확인해 줘.";
   return;
  }
 
@@ -961,16 +956,25 @@ async function submitAnswer(event){
   if(r?.error==="WRONG_ANSWER"){
 
    /*
-    * 오답 응답에는 서버가 정답을 포함해야 한다.
-    * 정답을 받지 못하면 잘못된 상태로 타이머를 시작하지 않는다.
+    * 서버 응답에서 정답을 여러 가능한 위치에서 찾는다.
     */
-   if(r.answer===undefined||r.answer===null){
-    throw Error("award-rp 응답에 answer 값이 없어. math-rp 서버 코드를 확인해 줘.");
+   const receivedAnswer =
+    r.answer ??
+    r.correct_answer ??
+    r.data?.answer ??
+    r.data?.correct_answer ??
+    r.result?.answer ??
+    r.result?.correct_answer;
+
+   if(receivedAnswer===undefined||receivedAnswer===null){
+    console.error("WRONG_ANSWER 서버 응답 전체:",r);
+    throw Error("서버 응답에서 정답을 찾지 못했어. 콘솔의 응답 구조를 확인해야 해.");
    }
 
-   const correctAnswer=Number(r.answer);
+   const correctAnswer=Number(receivedAnswer);
 
    if(!Number.isSafeInteger(correctAnswer)){
+    console.error("서버에서 받은 정답:",receivedAnswer);
     throw Error("서버에서 받은 정답이 올바른 정수가 아니야.");
    }
 
@@ -988,15 +992,15 @@ async function submitAnswer(event){
 
    $("detail").textContent=current.hint||"잠깐 생각을 정리해 봐.";
 
-   /*
-    * 입력창은 유지하고 제출 버튼만 잠근다.
-    * 재도전권을 누르면 같은 문제에 다시 도전할 수 있다.
-    */
    $("answer").disabled=false;
    $("submitBtn").disabled=true;
    $("nextBtn").disabled=true;
 
-   if(r.retry_available===true&&!retryUsed&&Number(wallet.retry_tickets)>0){
+   if(
+    r.retry_available===true&&
+    !retryUsed&&
+    Number(wallet.retry_tickets)>0
+   ){
     $("retryBtn").classList.remove("hidden");
    }else{
     $("retryBtn").classList.add("hidden");
@@ -1010,8 +1014,12 @@ async function submitAnswer(event){
   throw Error(r?.message||r?.error||"답안을 처리하지 못했어.");
 
  }catch(e){
+  console.error("답안 제출 처리 오류:",e);
   $("notice").textContent="답안 제출 실패: "+e.message;
-  if(!answered)$("submitBtn").disabled=false;
+
+  if(!answered){
+   $("submitBtn").disabled=false;
+  }
  }finally{
   answerBusy=false;
  }
@@ -1067,9 +1075,6 @@ async function useRetry(){
   $("retryBtn").disabled=false;
   $("notice").textContent=e.message;
 
-  /*
-   * 재도전 요청에 실패하면 정답 공개 타이머를 다시 시작한다.
-   */
   if(wrongPending&&!revealTimer){
    startAnswerRevealTimer();
   }
@@ -1187,10 +1192,6 @@ $("nextBtn").addEventListener("click",async()=>{
   return;
  }
 
- /*
-  * 오답 후 2초가 지나 정답이 공개되기 전에는
-  * 다음 문제로 넘어갈 수 없다.
-  */
  if(wrongPending){
   $("notice").textContent="정답 공개까지 잠시만 기다려 줘.";
   return;
@@ -1212,9 +1213,7 @@ $("exchangeBtn").addEventListener("click",()=>{
 const SUPABASE_URL="https://tupqfwhpuoegocsoymtv.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY="sb_publishable_Ygdmqv0Nmf9jxBlm38wPqQ_80t3LlWM";
 
-/*
- * Edge function 이름: math-rp
- */
+/* Edge Function 이름: math-rp */
 const EDGE_FUNCTION="math-rp";
 
 async function ensureSupabase(){
@@ -1251,6 +1250,10 @@ async function ensureSupabase(){
  }
 }
 
+/*
+ * RP 서버 호출
+ * Supabase 응답의 중첩 구조를 정리한다.
+ */
 async function rpCall(action,extra={}){
  await ensureSupabase();
 
@@ -1259,7 +1262,50 @@ async function rpCall(action,extra={}){
   {body:{action,...extra}}
  );
 
- if(error)throw Error(error.message||"RP 서버 요청 실패");
+ if(error){
+  let errorBody=null;
+
+  try{
+   if(error.context&&typeof error.context.json==="function"){
+    errorBody=await error.context.json();
+   }
+  }catch{}
+
+  if(errorBody?.error==="WRONG_ANSWER"){
+   return errorBody;
+  }
+
+  throw Error(
+   errorBody?.message||
+   error.message||
+   "RP 서버 요청 실패"
+  );
+ }
+
+ if(data===null||data===undefined){
+  throw Error("RP 서버에서 응답 데이터가 비어 있어.");
+ }
+
+ /*
+  * 서버 응답이 data 또는 result 안에 감싸진 경우 처리한다.
+  * 일반적인 Supabase 응답은 첫 번째 return data에서 처리된다.
+  */
+ if(
+  data.data&&
+  typeof data.data==="object"&&
+  !Array.isArray(data.data)
+ ){
+  return data.data;
+ }
+
+ if(
+  data.result&&
+  typeof data.result==="object"&&
+  !Array.isArray(data.result)
+ ){
+  return data.result;
+ }
+
  return data;
 }
 
@@ -1418,9 +1464,6 @@ function renderComplaints(rows){
   const id=post.id;
   if(!id)return;
 
-  /*
-   * 비공개 게시판은 list_my 결과 중 비공개 글만 표시한다.
-   */
   if(complaintVisibility==="private"&&post.is_public===true)return;
 
   const mine=isMyComplaint(post);
@@ -1446,7 +1489,6 @@ function renderComplaints(rows){
   controls.className="actions";
   controls.style.marginTop="12px";
 
-  /* 공개 글에만 공감 표시 */
   if(post.is_public!==false){
    const like=document.createElement("button");
    like.className="small-btn";
@@ -1471,10 +1513,6 @@ function renderComplaints(rows){
   commentsBtn.textContent="댓글 보기/쓰기";
   controls.append(commentsBtn);
 
-  /*
-   * 비공개로 전환:
-   * 공개 게시판에 있는 내 공개 글에만 표시한다.
-   */
   if(
    complaintVisibility==="public"&&
    mine&&
@@ -1505,11 +1543,6 @@ function renderComplaints(rows){
    controls.append(visibilityBtn);
   }
 
-  /*
-   * 다시 올리기:
-   * 비공개 게시판에 있는 내 비공개 글에만 표시한다.
-   * 다시 올리면 공개 게시판에 새 글로 등록한다.
-   */
   if(
    complaintVisibility==="private"&&
    mine&&
@@ -1552,7 +1585,6 @@ function renderComplaints(rows){
 
   card.append(controls);
 
-  /* 댓글 */
   const commentArea=document.createElement("div");
   commentArea.className="comment-list hidden";
 
