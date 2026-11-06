@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -84,14 +83,18 @@ footer{color:var(--muted);font-size:12px;text-align:center;padding:12px}
 .hint-card{width:min(100%,440px);background:#111e38;border:2px solid #538bff;border-radius:24px;padding:18px;box-shadow:0 0 35px #477cff55}
 .hint-card .tutorial-bubble{min-height:unset}
 .hint-card .tutorial-controls{justify-content:flex-end}
-@media(max-width:380px){
- body{padding:12px}
- .tutorial-card{padding:13px}
- .tutorial-bubble{padding:17px}
- .tutorial-message{font-size:16px}
- .tutorial-title{font-size:20px}
- .tutorial-question{font-size:23px}
-}
+
+/* 신규 사용자 시작 화면: 기존 팔레트와 기존 UI 색상 변수 사용 */
+.start-overlay{position:fixed;inset:0;z-index:2000;background:var(--bg);display:flex;align-items:center;justify-content:center;padding:18px;overflow-y:auto}
+.start-card{width:min(100%,440px);background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:22px;text-align:center}
+.start-logo{font-size:112px;line-height:1.1;font-weight:900;color:var(--blue);text-shadow:0 0 28px #477cff66;margin:0 0 8px}
+.start-card h2{margin:0 0 8px}
+.start-card p{color:var(--muted);font-size:13px}
+.start-actions{display:grid;gap:10px;margin-top:18px}
+.start-actions button{width:100%}
+.start-message{min-height:24px;color:var(--gold);font-size:13px;line-height:1.5;margin-top:12px;overflow-wrap:anywhere}
+.start-id-result{font-size:25px;font-weight:850;letter-spacing:2px;padding:12px;background:var(--panel2);border:1px solid var(--line);border-radius:12px;margin:12px 0;overflow-wrap:anywhere}
+@media(max-width:380px){body{padding:12px}.tutorial-card{padding:13px}.tutorial-bubble{padding:17px}.tutorial-message{font-size:16px}.tutorial-title{font-size:20px}.tutorial-question{font-size:23px}.start-card{padding:17px}.start-logo{font-size:94px}}
 </style>
 </head>
 <body>
@@ -162,75 +165,40 @@ footer{color:var(--muted);font-size:12px;text-align:center;padding:12px}
  <div class="page-title"><button class="back" data-home>← 홈</button><h2>아이템 상점</h2></div>
  <section class="panel">
   <p>일반 코인: <strong id="shopCoins">0</strong></p>
-  <div class="item">
-   <div><strong>힌트권</strong><p>30 일반 코인 · 문제 풀이에 도움을 받아.</p></div>
-   <button id="buyHint">30 코인 구매</button>
-  </div>
-  <div class="item">
-   <div><strong>재도전권</strong><p>20 일반 코인 · 첫 오답 후 같은 문제에 한 번 더 도전할 수 있어. 문제당 1회 사용 가능.</p></div>
-   <button id="buyRetry">20 코인 구매</button>
-  </div>
-  <p>보유 힌트권: <strong id="hints">0</strong></p>
-  <p>보유 재도전권: <strong id="retryTickets">0</strong></p>
+  <div class="item"><div><strong>힌트권</strong><p>30 일반 코인 · 문제 풀이에 도움을 받아.</p></div><button id="buyHint">30 코인 구매</button></div>
+  <div class="item"><div><strong>재도전권</strong><p>20 일반 코인 · 첫 오답 후 같은 문제에 한 번 더 도전할 수 있어. 문제당 1회 사용 가능.</p></div><button id="buyRetry">20 코인 구매</button></div>
+  <p>보유 힌트권: <strong id="hints">0</strong></p><p>보유 재도전권: <strong id="retryTickets">0</strong></p>
   <p class="notice" id="shopNotice" aria-live="polite"></p>
  </section>
- <section class="panel">
-  <h2>레전드 코인 교환</h2>
-  <p>레전드 코인 1개를 일반 코인 500,000개로 교환할 수 있어.</p>
-  <p>보유 레전드 코인: <strong id="legendCoins">0</strong></p>
-  <button class="gold" id="exchangeBtn">레전드 코인 1개 교환</button>
- </section>
+ <section class="panel"><h2>레전드 코인 교환</h2><p>레전드 코인 1개를 일반 코인 500,000개로 교환할 수 있어.</p><p>보유 레전드 코인: <strong id="legendCoins">0</strong></p><button class="gold" id="exchangeBtn">레전드 코인 1개 교환</button></section>
 </section>
 
 <section id="recordPage" class="hidden">
  <div class="page-title"><button class="back" data-home>← 홈</button><h2>기록</h2></div>
  <section class="panel">
   <div class="stat-label">최고 기록</div><div class="big-number" id="recordBest">0점</div>
-  <hr style="border-color:var(--line);margin:16px 0">
-  <div class="stat-label">최고 기록 등급</div><div class="big-number" id="recordRank">아이언</div>
-  <hr style="border-color:var(--line);margin:16px 0">
-  <div class="stat-label">누적 해결 문제</div><div class="big-number" id="recordSolved">0</div>
-  <hr style="border-color:var(--line);margin:16px 0">
-  <div class="stat-label">악의 단계 해결 문제</div><div class="big-number" id="recordEvil">0 / 300,000</div>
+  <hr style="border-color:var(--line);margin:16px 0"><div class="stat-label">최고 기록 등급</div><div class="big-number" id="recordRank">아이언</div>
+  <hr style="border-color:var(--line);margin:16px 0"><div class="stat-label">누적 해결 문제</div><div class="big-number" id="recordSolved">0</div>
+  <hr style="border-color:var(--line);margin:16px 0"><div class="stat-label">악의 단계 해결 문제</div><div class="big-number" id="recordEvil">0 / 300,000</div>
  </section>
 </section>
 
 <section id="leaderboardPage" class="hidden">
  <div class="page-title"><button class="back" data-home>← 홈</button><h2>🏅 RP 리더보드</h2></div>
  <section class="panel">
-  <div class="item">
-   <div><strong>내 순위</strong><p id="leaderboardMyRank">불러오는 중…</p></div>
-   <button class="primary" id="loadLeaderboardBtn">새로고침</button>
-  </div>
-  <div id="leaderboard" style="margin-top:12px"></div>
-  <p class="muted" id="leaderboardStatus">RP 순위표를 불러오는 중…</p>
+  <div class="item"><div><strong>내 순위</strong><p id="leaderboardMyRank">불러오는 중…</p></div><button class="primary" id="loadLeaderboardBtn">새로고침</button></div>
+  <div id="leaderboard" style="margin-top:12px"></div><p class="muted" id="leaderboardStatus">RP 순위표를 불러오는 중…</p>
  </section>
 </section>
 
 <section id="settingsPage" class="hidden">
  <div class="page-title"><button class="back" data-home>← 홈</button><h2>설정</h2></div>
  <section class="panel">
-  <h2>내 정보</h2>
-  <p>현재 버전: 1.1</p>
-  <p>닉네임: <strong id="nickname">연결 중…</strong></p>
-  <p>내 RP: <strong id="profileRP">연결 중…</strong></p>
-  <p>내 순위: <strong id="myRank">-</strong></p>
-  <hr style="border-color:var(--line)">
-  <p>일반 코인: <strong id="profileCoins">0</strong></p>
-  <p>레전드 코인: <strong id="profileLegend">0</strong></p>
-  <p>힌트권: <strong id="profileHints">0</strong></p>
-  <p>재도전권: <strong id="profileRetryTickets">0</strong></p>
-  <p class="muted" id="rpStatus">Supabase 연결 중…</p>
+  <h2>내 정보</h2><p>현재 버전: 1.1</p><p>닉네임: <strong id="nickname">연결 중…</strong></p><p>내 RP: <strong id="profileRP">연결 중…</strong></p><p>내 순위: <strong id="myRank">-</strong></p>
+  <hr style="border-color:var(--line)"><p>일반 코인: <strong id="profileCoins">0</strong></p><p>레전드 코인: <strong id="profileLegend">0</strong></p><p>힌트권: <strong id="profileHints">0</strong></p><p>재도전권: <strong id="profileRetryTickets">0</strong></p><p class="muted" id="rpStatus">Supabase 연결 중…</p>
  </section>
- <section class="panel">
-  <h2>저장 정보</h2>
-  <p>점수와 기록은 이 기기의 브라우저에 저장돼.</p>
- </section>
- <section class="panel">
-  <h2>튜토리얼</h2>
-  <p>무한매쓰의 사용법을 다시 배워 볼 수 있어.</p>
-  <button class="primary" id="replayTutorialBtn" type="button">튜토리얼 다시듣기</button>
- </section>
+ <section class="panel"><h2>저장 정보</h2><p>점수와 기록은 이 기기의 브라우저에 저장돼.</p></section>
+ <section class="panel"><h2>튜토리얼</h2><p>무한매쓰의 사용법을 다시 배워 볼 수 있어.</p><button class="primary" id="replayTutorialBtn" type="button">튜토리얼 다시듣기</button></section>
 </section>
 
 <section id="complaintPage" class="hidden">
@@ -238,70 +206,65 @@ footer{color:var(--muted);font-size:12px;text-align:center;padding:12px}
  <section class="panel">
   <h2>민원 작성</h2>
   <form id="complaintForm" class="complaint-form">
-   <label for="complaintTitle">제목</label>
-   <input id="complaintTitle" maxlength="100" required placeholder="제목을 입력해 줘">
-   <label for="complaintBody">내용</label>
-   <textarea id="complaintBody" maxlength="5000" required placeholder="개선 의견이나 불편한 점을 적어 줘."></textarea>
+   <label for="complaintTitle">제목</label><input id="complaintTitle" maxlength="100" required placeholder="제목을 입력해 줘">
+   <label for="complaintBody">내용</label><textarea id="complaintBody" maxlength="5000" required placeholder="개선 의견이나 불편한 점을 적어 줘."></textarea>
    <label for="complaintVisibility">게시 범위</label>
-   <select id="complaintVisibility" style="width:100%;padding:12px;background:#0b1223;color:var(--text);border:1px solid var(--line);border-radius:10px;margin:8px 0">
-    <option value="public">공개게시판</option>
-    <option value="private">비공개게시판 (나만 보기)</option>
-   </select>
+   <select id="complaintVisibility" style="width:100%;padding:12px;background:#0b1223;color:var(--text);border:1px solid var(--line);border-radius:10px;margin:8px 0"><option value="public">공개게시판</option><option value="private">비공개게시판 (나만 보기)</option></select>
    <button class="primary" type="submit">민원 등록</button>
   </form>
   <p id="complaintNotice" class="notice" aria-live="polite"></p>
  </section>
- <section class="panel">
-  <h2>게시판</h2>
-  <div class="board-tabs">
-   <button type="button" id="publicBoardTab" class="selected">공개게시판</button>
-   <button type="button" id="privateBoardTab">비공개게시판</button>
-  </div>
-  <div id="complaintList" class="muted">게시글을 불러오는 중…</div>
- </section>
+ <section class="panel"><h2>게시판</h2><div class="board-tabs"><button type="button" id="publicBoardTab" class="selected">공개게시판</button><button type="button" id="privateBoardTab">비공개게시판</button></div><div id="complaintList" class="muted">게시글을 불러오는 중…</div></section>
  <p class="muted">30일이 지난 글의 비공개 전환과 열람 권한은 서버에서도 적용되어야 해.</p>
 </section>
-
 <footer>InfinityMath · 무한한 문제, 무한한 가능성.</footer>
 </main>
 
+<!-- 신규 사용자 전용 시작 화면. 저장된 기존 세션이 있으면 표시하지 않는다. -->
+<div id="startOverlay" class="start-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="startTitle">
+ <div class="start-card">
+  <div class="start-logo">∞</div>
+  <h2 id="startTitle">InfinityMath</h2>
+  <p>무한한 문제, 무한한 가능성.</p>
+  <div id="startMenu" class="start-actions">
+   <button class="primary" id="newAccountBtn" type="button">새 계정 만들기</button>
+   <button id="existingAccountBtn" type="button">기존 ID로 로그인</button>
+  </div>
+  <div id="registerArea" class="hidden">
+   <p>비밀번호를 설정하면 고유 ID가 발급돼.</p>
+   <label for="registerPassword">비밀번호 (8~128자)</label><input id="registerPassword" type="password" minlength="8" maxlength="128" autocomplete="new-password" placeholder="비밀번호 입력">
+   <label for="registerPasswordConfirm">비밀번호 확인</label><input id="registerPasswordConfirm" type="password" maxlength="128" autocomplete="new-password" placeholder="비밀번호 다시 입력">
+   <div class="start-actions"><button class="primary" id="registerSubmitBtn" type="button">계정 만들기</button><button id="registerBackBtn" type="button">뒤로</button></div>
+  </div>
+  <div id="loginArea" class="hidden">
+   <label for="loginId">고유 ID (영문 대문자·숫자 8자리)</label><input id="loginId" maxlength="8" autocomplete="username" placeholder="예: A1B2C3D4">
+   <label for="loginPassword">비밀번호</label><input id="loginPassword" type="password" maxlength="128" autocomplete="current-password" placeholder="비밀번호 입력">
+   <div class="start-actions"><button class="primary" id="loginSubmitBtn" type="button">로그인</button><button id="loginBackBtn" type="button">뒤로</button></div>
+  </div>
+  <div id="createdIdArea" class="hidden">
+   <p>계정이 만들어졌어! 이 ID를 안전한 곳에 보관해 줘.</p>
+   <div id="createdId" class="start-id-result"></div>
+   <div class="start-actions"><button class="primary" id="enterCreatedAccountBtn" type="button">InfinityMath 시작하기</button></div>
+  </div>
+  <div id="startMessage" class="start-message" aria-live="polite"></div>
+ </div>
+</div>
+
 <div id="tutorialOverlay" class="tutorial-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="tutorialTitle">
  <div class="tutorial-card">
-  <div class="tutorial-title" id="tutorialTitle">무한매쓰의 안내</div>
-  <div class="tutorial-mascot"><div class="infinity-mascot">∞<span class="mascot-face">•ᴗ•</span></div></div>
-  <div class="tutorial-bubble">
-   <div class="tutorial-message" id="tutorialMessage"></div>
-   <div class="tutorial-reward hidden" id="tutorialReward">튜토리얼 완료!</div>
-  </div>
+  <div class="tutorial-title" id="tutorialTitle">무한매쓰의 안내</div><div class="tutorial-mascot"><div class="infinity-mascot">∞<span class="mascot-face">•ᴗ•</span></div></div>
+  <div class="tutorial-bubble"><div class="tutorial-message" id="tutorialMessage"></div><div class="tutorial-reward hidden" id="tutorialReward">튜토리얼 완료!</div></div>
   <div id="tutorialExercise" class="tutorial-exercise hidden">
-   <div class="tutorial-exercise-title" id="tutorialExerciseTitle">직접 풀어 보기</div>
-   <div class="tutorial-question" id="tutorialQuestion"></div>
-   <form id="tutorialAnswerForm">
-    <label for="tutorialAnswer">정답 입력</label>
-    <input id="tutorialAnswer" type="text" inputmode="numeric" autocomplete="off" placeholder="정답을 입력해 줘">
-    <div class="actions">
-     <button class="primary" type="submit" id="tutorialSubmit">정답 확인</button>
-     <button type="button" id="tutorialHintBtn" class="hidden">힌트 보기</button>
-     <button type="button" id="tutorialSkipBtn" class="hidden">튜토리얼 연습 완료</button>
-    </div>
-   </form>
+   <div class="tutorial-exercise-title" id="tutorialExerciseTitle">직접 풀어 보기</div><div class="tutorial-question" id="tutorialQuestion"></div>
+   <form id="tutorialAnswerForm"><label for="tutorialAnswer">정답 입력</label><input id="tutorialAnswer" type="text" inputmode="numeric" autocomplete="off" placeholder="정답을 입력해 줘"><div class="actions"><button class="primary" type="submit" id="tutorialSubmit">정답 확인</button><button type="button" id="tutorialHintBtn" class="hidden">힌트 보기</button><button type="button" id="tutorialSkipBtn" class="hidden">튜토리얼 연습 완료</button></div></form>
    <div class="tutorial-feedback" id="tutorialFeedback" aria-live="polite"></div>
   </div>
-  <div class="tutorial-controls">
-   <button id="tutorialExit" type="button">나중에</button>
-   <button class="primary" id="tutorialNext" type="button">시작하기 →</button>
-  </div>
-  <div class="tutorial-progress" id="tutorialProgress">1 / 5</div>
+  <div class="tutorial-controls"><button id="tutorialExit" type="button">나중에</button><button class="primary" id="tutorialNext" type="button">시작하기 →</button></div><div class="tutorial-progress" id="tutorialProgress">1 / 5</div>
  </div>
 </div>
 
 <div id="hintOverlay" class="hint-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="hintTitle">
- <div class="hint-card">
-  <div class="tutorial-title" id="hintTitle">무한매쓰의 힌트</div>
-  <div class="tutorial-mascot"><div class="infinity-mascot">∞<span class="mascot-face">•ᴗ•</span></div></div>
-  <div class="tutorial-bubble"><div class="tutorial-message" id="hintMessage"></div></div>
-  <div class="tutorial-controls"><button class="primary" id="hintClose" type="button">알겠어!</button></div>
- </div>
+ <div class="hint-card"><div class="tutorial-title" id="hintTitle">무한매쓰의 힌트</div><div class="tutorial-mascot"><div class="infinity-mascot">∞<span class="mascot-face">•ᴗ•</span></div></div><div class="tutorial-bubble"><div class="tutorial-message" id="hintMessage"></div></div><div class="tutorial-controls"><button class="primary" id="hintClose" type="button">알겠어!</button></div></div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -310,8 +273,8 @@ footer{color:var(--muted);font-size:12px;text-align:center;padding:12px}
 
 const $=id=>document.getElementById(id);
 const SAVE_KEY="infinityMath03Save",NICK_KEY="infinityMathNickname";
+const ACCOUNT_ID_KEY="infinityMathAccountId";
 const defaults={hints:0,legendCoins:0,best:0,evilSolved:0,totalSolved:0,tutorialComplete:false};
-
 let saved={};
 try{saved=JSON.parse(localStorage.getItem(SAVE_KEY)||"{}")||{}}catch{}
 const data={...defaults,...saved};
@@ -332,7 +295,6 @@ const tutorialSteps=[
 "이번에는 문제를 다시 도전하는 방법을 알아보자!\n실제 재도전은 상점에서 구매한 재도전권이 필요해.",
 "좋아! 직접 문제를 풀고 버튼도 사용해 봤어.\n이제 InfinityMath를 시작할 준비가 끝났어!"
 ];
-
 const tutorialExercises=[
  null,
  {question:"7 + 5 = ?",answer:12,hint:"7에서 5만큼 더 세어 봐. 8, 9, 10, 11, 12!"},
@@ -340,1428 +302,323 @@ const tutorialExercises=[
  {question:"9 × 7 = ?",answer:63,hint:"9를 7번 더한 값이야."}
 ];
 
-function save(){
- try{localStorage.setItem(SAVE_KEY,JSON.stringify(data))}
- catch{
-  if($("notice"))$("notice").textContent="저장할 수 없어. 브라우저 저장 공간을 확인해 줘.";
- }
-}
-
+function save(){try{localStorage.setItem(SAVE_KEY,JSON.stringify(data))}catch{if($("notice"))$("notice").textContent="저장할 수 없어. 브라우저 저장 공간을 확인해 줘."}}
 function rankName(n){
- if(n<=10)return"아이언";
- if(n<=19)return"브론즈";
- if(n<=49)return"실버";
- if(n<=75)return"골드";
- if(n<=100)return"다이아몬드";
- if(n<=150)return"마스터";
- if(n<=200)return"그랜드마스터";
- if(n<=300)return"챌린저";
- if(n<=450)return"트랜센던스";
- if(n<=600)return"디세터";
- if(n<=800)return"울트라";
- if(n<=1000)return"인피니티";
- if(n<=1400)return"프로드";
- if(n<=2000)return"스트롱기스트";
- if(n<=2500)return"이모털리티";
- if(n<=3000)return"임파서빌리티";
- const step=Math.floor((n-3001)/500);
- if(step<4)return"임파서빌리티 "+["I","II","III","IIII"][step];
- if(step<6)return"임파서빌리티 "+"+".repeat(step-3);
- if(step<10)return"임파서빌리티 "+"S".repeat(step-5);
- if(step<14)return"임파서빌리티 "+"X".repeat(step-9);
- if(step<17)return"임파서빌리티 "+"Z".repeat(step-13);
- return"임파서빌리티 E";
+ if(n<=10)return"아이언";if(n<=19)return"브론즈";if(n<=49)return"실버";if(n<=75)return"골드";if(n<=100)return"다이아몬드";if(n<=150)return"마스터";if(n<=200)return"그랜드마스터";if(n<=300)return"챌린저";if(n<=450)return"트랜센던스";if(n<=600)return"디세터";if(n<=800)return"울트라";if(n<=1000)return"인피니티";if(n<=1400)return"프로드";if(n<=2000)return"스트롱기스트";if(n<=2500)return"이모털리티";if(n<=3000)return"임파서빌리티";
+ const step=Math.floor((n-3001)/500);if(step<4)return"임파서빌리티 "+["I","II","III","IIII"][step];if(step<6)return"임파서빌리티 "+"+".repeat(step-3);if(step<10)return"임파서빌리티 "+"S".repeat(step-5);if(step<14)return"임파서빌리티 "+"X".repeat(step-9);if(step<17)return"임파서빌리티 "+"Z".repeat(step-13);return"임파서빌리티 E";
 }
-
 function updateUI(){
- const coins=Number(wallet.coins||0);
- const hints=Number(wallet.hints??data.hints??0);
- const retryTickets=Number(wallet.retry_tickets||0);
-
+ const coins=Number(wallet.coins||0),hints=Number(wallet.hints??data.hints??0),retryTickets=Number(wallet.retry_tickets||0);
  data.hints=hints;
-
- $("score").textContent=score.toLocaleString();
- $("coins").textContent=coins.toLocaleString();
- $("combo").textContent=combo;
- $("health").textContent="♥".repeat(health)+"♡".repeat(3-health);
- $("rank").textContent=rankName(score);
- $("best").textContent=data.best.toLocaleString();
- $("hintBtn").textContent=`힌트 사용 (${hints})`;
-
- $("legendCoins").textContent=Number(wallet.legend_coins||0).toLocaleString();
- $("shopCoins").textContent=coins.toLocaleString();
- $("hints").textContent=hints.toLocaleString();
- $("retryTickets").textContent=retryTickets.toLocaleString();
-
- $("recordBest").textContent=data.best.toLocaleString()+"점";
- $("recordRank").textContent=rankName(data.best);
- $("recordSolved").textContent=data.totalSolved.toLocaleString();
- $("recordEvil").textContent=data.evilSolved.toLocaleString()+" / 300,000";
-
- $("profileCoins").textContent=coins.toLocaleString();
- $("profileLegend").textContent=Number(wallet.legend_coins||0).toLocaleString();
- $("profileHints").textContent=hints.toLocaleString();
- $("profileRetryTickets").textContent=retryTickets.toLocaleString();
-
+ $("score").textContent=score.toLocaleString();$("coins").textContent=coins.toLocaleString();$("combo").textContent=combo;$("health").textContent="♥".repeat(health)+"♡".repeat(3-health);$("rank").textContent=rankName(score);$("best").textContent=data.best.toLocaleString();$("hintBtn").textContent=`힌트 사용 (${hints})`;
+ $("legendCoins").textContent=Number(wallet.legend_coins||0).toLocaleString();$("shopCoins").textContent=coins.toLocaleString();$("hints").textContent=hints.toLocaleString();$("retryTickets").textContent=retryTickets.toLocaleString();
+ $("recordBest").textContent=data.best.toLocaleString()+"점";$("recordRank").textContent=rankName(data.best);$("recordSolved").textContent=data.totalSolved.toLocaleString();$("recordEvil").textContent=data.evilSolved.toLocaleString()+" / 300,000";
+ $("profileCoins").textContent=coins.toLocaleString();$("profileLegend").textContent=Number(wallet.legend_coins||0).toLocaleString();$("profileHints").textContent=hints.toLocaleString();$("profileRetryTickets").textContent=retryTickets.toLocaleString();
  $("homeBest").textContent=data.best.toLocaleString()+"점";
- $("homeCurrency").textContent=
-  currencyMode==="normal"?coins.toLocaleString()+" 코인":
-  currencyMode==="legend"?Number(wallet.legend_coins||0).toLocaleString()+" 레전드 코인":
-  profile?Number(profile.total_rp||0).toLocaleString()+" RP":"연결 안 됨";
-
- $("normalTab").classList.toggle("selected",currencyMode==="normal");
- $("legendTab").classList.toggle("selected",currencyMode==="legend");
- $("rpTab").classList.toggle("selected",currencyMode==="rp");
-
- $("profileRP").textContent=profile?Number(profile.total_rp||0).toLocaleString()+" RP":"연결 안 됨";
- $("nickname").textContent=profile?.nickname||localStorage.getItem(NICK_KEY)||"등록 전";
-
+ $("homeCurrency").textContent=currencyMode==="normal"?coins.toLocaleString()+" 코인":currencyMode==="legend"?Number(wallet.legend_coins||0).toLocaleString()+" 레전드 코인":profile?Number(profile.total_rp||0).toLocaleString()+" RP":"연결 안 됨";
+ $("normalTab").classList.toggle("selected",currencyMode==="normal");$("legendTab").classList.toggle("selected",currencyMode==="legend");$("rpTab").classList.toggle("selected",currencyMode==="rp");
+ $("profileRP").textContent=profile?Number(profile.total_rp||0).toLocaleString()+" RP":"연결 안 됨";$("nickname").textContent=profile?.nickname||localStorage.getItem(NICK_KEY)||"등록 전";
  $("retryBtn").textContent=`재도전권 사용 (보유 ${retryTickets}장)`;
 }
-
 function showPage(id){
- document.querySelectorAll("main > section").forEach(s=>s.classList.add("hidden"));
- $(id).classList.remove("hidden");
- updateUI();
- window.scrollTo(0,0);
- if(id==="settingsPage")refreshProfile();
- if(id==="leaderboardPage"){refreshProfile();loadLeaderboard()}
- if(id==="complaintPage")loadComplaints();
- if(id==="shopPage")refreshWallet();
+ document.querySelectorAll("main > section").forEach(s=>s.classList.add("hidden"));$(id).classList.remove("hidden");updateUI();window.scrollTo(0,0);
+ if(id==="settingsPage")refreshProfile();if(id==="leaderboardPage"){refreshProfile();loadLeaderboard()}if(id==="complaintPage")loadComplaints();if(id==="shopPage")refreshWallet();
 }
-
 document.querySelectorAll("[data-page]").forEach(b=>b.addEventListener("click",()=>showPage(b.dataset.page)));
 document.querySelectorAll("[data-home]").forEach(b=>b.addEventListener("click",()=>showPage("homePage")));
-$("settingsBtn").addEventListener("click",()=>showPage("settingsPage"));
-$("complaintBtn").addEventListener("click",()=>showPage("complaintPage"));
-
-$("normalTab").addEventListener("click",()=>{currencyMode="normal";updateUI()});
-$("legendTab").addEventListener("click",()=>{currencyMode="legend";updateUI()});
-$("rpTab").addEventListener("click",()=>{
- currencyMode="rp";
- updateUI();
- if(!profile)refreshProfile();
-});
+$("settingsBtn").addEventListener("click",()=>showPage("settingsPage"));$("complaintBtn").addEventListener("click",()=>showPage("complaintPage"));
+$("normalTab").addEventListener("click",()=>{currencyMode="normal";updateUI()});$("legendTab").addEventListener("click",()=>{currencyMode="legend";updateUI()});
+$("rpTab").addEventListener("click",()=>{currencyMode="rp";updateUI();if(!profile)refreshProfile()});
 
 /* 튜토리얼 */
-function showTutorial(){
- tutorialStep=0;
- tutorialSolved=false;
- tutorialHintSeen=false;
- tutorialSkipped=false;
- $("hintOverlay").classList.add("hidden");
- $("tutorialOverlay").classList.remove("hidden");
- renderTutorial();
-}
-
-$("replayTutorialBtn").addEventListener("click",()=>{
- replayTutorialMode=true;
- showTutorial();
-});
-
+function showTutorial(){tutorialStep=0;tutorialSolved=false;tutorialHintSeen=false;tutorialSkipped=false;$("hintOverlay").classList.add("hidden");$("tutorialOverlay").classList.remove("hidden");renderTutorial()}
+$("replayTutorialBtn").addEventListener("click",()=>{replayTutorialMode=true;showTutorial()});
 function renderTutorial(){
- $("tutorialMessage").textContent=tutorialSteps[tutorialStep];
- $("tutorialProgress").textContent=`${tutorialStep+1} / ${tutorialSteps.length}`;
- $("tutorialReward").classList.toggle("hidden",tutorialStep!==tutorialSteps.length-1);
- $("tutorialExercise").classList.toggle("hidden",tutorialStep<1||tutorialStep>3);
- $("tutorialExit").classList.toggle("hidden",tutorialStep===tutorialSteps.length-1);
- $("tutorialNext").textContent=
-  tutorialStep===0?"연습 시작 →":
-  tutorialStep===tutorialSteps.length-1?"완료!":"다음 →";
-
- const ex=tutorialExercises[tutorialStep];
- $("tutorialFeedback").textContent="";
- $("tutorialAnswer").value="";
- $("tutorialAnswer").disabled=false;
- $("tutorialSubmit").disabled=false;
- $("tutorialHintBtn").classList.toggle("hidden",tutorialStep!==2);
- $("tutorialSkipBtn").classList.toggle("hidden",tutorialStep!==3);
- $("tutorialSkipBtn").disabled=false;
-
- if(ex){
-  $("tutorialQuestion").textContent=ex.question;
-  $("tutorialExerciseTitle").textContent=
-   tutorialStep===1?"연습 1 · 정답을 입력해 봐":
-   tutorialStep===2?"연습 2 · 힌트를 사용해 봐":
-   "연습 3 · 재도전 규칙을 확인해 봐";
- }
-
- if(tutorialStep===1){
-  tutorialSolved=false;
-  $("tutorialNext").disabled=true;
- }else if(tutorialStep===2){
-  tutorialSolved=false;
-  tutorialHintSeen=false;
-  $("tutorialNext").disabled=true;
- }else if(tutorialStep===3){
-  tutorialSkipped=false;
-  $("tutorialNext").disabled=true;
-  $("tutorialAnswer").disabled=true;
-  $("tutorialSubmit").disabled=true;
- }else{
-  $("tutorialNext").disabled=false;
- }
+ $("tutorialMessage").textContent=tutorialSteps[tutorialStep];$("tutorialProgress").textContent=`${tutorialStep+1} / ${tutorialSteps.length}`;$("tutorialReward").classList.toggle("hidden",tutorialStep!==tutorialSteps.length-1);$("tutorialExercise").classList.toggle("hidden",tutorialStep<1||tutorialStep>3);$("tutorialExit").classList.toggle("hidden",tutorialStep===tutorialSteps.length-1);
+ $("tutorialNext").textContent=tutorialStep===0?"연습 시작 →":tutorialStep===tutorialSteps.length-1?"완료!":"다음 →";
+ const ex=tutorialExercises[tutorialStep];$("tutorialFeedback").textContent="";$("tutorialAnswer").value="";$("tutorialAnswer").disabled=false;$("tutorialSubmit").disabled=false;$("tutorialHintBtn").classList.toggle("hidden",tutorialStep!==2);$("tutorialSkipBtn").classList.toggle("hidden",tutorialStep!==3);$("tutorialSkipBtn").disabled=false;
+ if(ex){$("tutorialQuestion").textContent=ex.question;$("tutorialExerciseTitle").textContent=tutorialStep===1?"연습 1 · 정답을 입력해 봐":tutorialStep===2?"연습 2 · 힌트를 사용해 봐":"연습 3 · 재도전 규칙을 확인해 봐"}
+ if(tutorialStep===1){tutorialSolved=false;$("tutorialNext").disabled=true}else if(tutorialStep===2){tutorialSolved=false;tutorialHintSeen=false;$("tutorialNext").disabled=true}else if(tutorialStep===3){tutorialSkipped=false;$("tutorialNext").disabled=true;$("tutorialAnswer").disabled=true;$("tutorialSubmit").disabled=true}else{$("tutorialNext").disabled=false}
 }
-
-function finishTutorial(){
- if(!data.tutorialComplete){
-  data.tutorialComplete=true;
-  save();
- }
- replayTutorialMode=false;
- updateUI();
- $("tutorialOverlay").classList.add("hidden");
-}
-
-$("tutorialNext").addEventListener("click",()=>{
- if(tutorialStep===1&&!tutorialSolved)return;
- if(tutorialStep===2&&(!tutorialSolved||!tutorialHintSeen))return;
- if(tutorialStep===3&&!tutorialSkipped)return;
-
- if(tutorialStep<tutorialSteps.length-1){
-  tutorialStep++;
-  renderTutorial();
- }else{
-  finishTutorial();
- }
-});
-
-$("tutorialExit").addEventListener("click",()=>{
- $("tutorialOverlay").classList.add("hidden");
- replayTutorialMode=false;
-});
-
-$("tutorialAnswerForm").addEventListener("submit",e=>{
- e.preventDefault();
- if((tutorialStep!==1&&tutorialStep!==2)||tutorialSolved)return;
-
- if(tutorialStep===2&&!tutorialHintSeen){
-  $("tutorialFeedback").textContent="먼저 ‘힌트 보기’를 눌러 봐!";
-  return;
- }
-
- const raw=$("tutorialAnswer").value.trim();
- if(raw===""||!Number.isFinite(Number(raw))){
-  $("tutorialFeedback").textContent="숫자로 정답을 입력해 줘.";
-  return;
- }
-
- if(Number(raw)===tutorialExercises[tutorialStep].answer){
-  tutorialSolved=true;
-  $("tutorialFeedback").textContent="정답! 잘했어. 이제 다음으로 넘어갈 수 있어.";
-  $("tutorialAnswer").disabled=true;
-  $("tutorialSubmit").disabled=true;
-  $("tutorialNext").disabled=false;
- }else{
-  $("tutorialFeedback").textContent="아쉽지만 정답이 아니야. 다시 계산해 봐!";
- }
-});
-
-$("tutorialHintBtn").addEventListener("click",()=>{
- if(tutorialStep!==2||tutorialHintSeen)return;
- tutorialHintSeen=true;
- openHint(tutorialExercises[2].hint);
- $("tutorialFeedback").textContent="힌트를 확인했어. 이제 정답을 입력해 봐.";
-});
-
-$("tutorialSkipBtn").addEventListener("click",()=>{
- if(tutorialStep!==3||tutorialSkipped)return;
- tutorialSkipped=true;
- $("tutorialFeedback").textContent="연습을 완료했어! 실제 재도전권이나 코인은 사용하지 않았어.";
- $("tutorialQuestion").textContent="재도전 규칙 확인 완료!";
- $("tutorialAnswer").disabled=true;
- $("tutorialSubmit").disabled=true;
- $("tutorialSkipBtn").disabled=true;
- $("tutorialNext").disabled=false;
-});
+function finishTutorial(){if(!data.tutorialComplete){data.tutorialComplete=true;save()}replayTutorialMode=false;updateUI();$("tutorialOverlay").classList.add("hidden")}
+$("tutorialNext").addEventListener("click",()=>{if(tutorialStep===1&&!tutorialSolved)return;if(tutorialStep===2&&(!tutorialSolved||!tutorialHintSeen))return;if(tutorialStep===3&&!tutorialSkipped)return;if(tutorialStep<tutorialSteps.length-1){tutorialStep++;renderTutorial()}else finishTutorial()});
+$("tutorialExit").addEventListener("click",()=>{$("tutorialOverlay").classList.add("hidden");replayTutorialMode=false});
+$("tutorialAnswerForm").addEventListener("submit",e=>{e.preventDefault();if((tutorialStep!==1&&tutorialStep!==2)||tutorialSolved)return;if(tutorialStep===2&&!tutorialHintSeen){$("tutorialFeedback").textContent="먼저 ‘힌트 보기’를 눌러 봐!";return}const raw=$("tutorialAnswer").value.trim();if(raw===""||!Number.isFinite(Number(raw))){$("tutorialFeedback").textContent="숫자로 정답을 입력해 줘.";return}if(Number(raw)===tutorialExercises[tutorialStep].answer){tutorialSolved=true;$("tutorialFeedback").textContent="정답! 잘했어. 이제 다음으로 넘어갈 수 있어.";$("tutorialAnswer").disabled=true;$("tutorialSubmit").disabled=true;$("tutorialNext").disabled=false}else $("tutorialFeedback").textContent="아쉽지만 정답이 아니야. 다시 계산해 봐!"});
+$("tutorialHintBtn").addEventListener("click",()=>{if(tutorialStep!==2||tutorialHintSeen)return;tutorialHintSeen=true;openHint(tutorialExercises[2].hint);$("tutorialFeedback").textContent="힌트를 확인했어. 이제 정답을 입력해 봐."});
+$("tutorialSkipBtn").addEventListener("click",()=>{if(tutorialStep!==3||tutorialSkipped)return;tutorialSkipped=true;$("tutorialFeedback").textContent="연습을 완료했어! 실제 재도전권이나 코인은 사용하지 않았어.";$("tutorialQuestion").textContent="재도전 규칙 확인 완료!";$("tutorialAnswer").disabled=true;$("tutorialSubmit").disabled=true;$("tutorialSkipBtn").disabled=true;$("tutorialNext").disabled=false});
 
 /* 힌트 창 */
-function openHint(text){
- $("hintMessage").textContent=text;
- $("hintOverlay").classList.remove("hidden");
-}
-function closeHint(){
- $("hintOverlay").classList.add("hidden");
-}
-$("hintClose").addEventListener("click",closeHint);
-$("hintOverlay").addEventListener("click",e=>{
- if(e.target===$("hintOverlay"))closeHint();
-});
+function openHint(text){$("hintMessage").textContent=text;$("hintOverlay").classList.remove("hidden")}
+function closeHint(){$("hintOverlay").classList.add("hidden")}
+$("hintClose").addEventListener("click",closeHint);$("hintOverlay").addEventListener("click",e=>{if(e.target===$("hintOverlay"))closeHint()});
 
 /* 문제 생성 */
-function randInt(min,max){
- return Math.floor(Math.random()*(max-min+1))+min;
-}
-function pick(arr){
- return arr[randInt(0,arr.length-1)];
-}
-
-/* 소수점 둘째 자리까지 입력 허용 */
-function normalizeUserAnswer(raw){
- const value=String(raw).trim();
-
- if(!/^-?\d+(?:\.\d{1,2})?$/.test(value)){
-  return null;
- }
-
- const number=Number(value);
-
- if(
-  !Number.isFinite(number)||
-  !Number.isSafeInteger(Math.trunc(number))
- ){
-  return null;
- }
-
- return number;
-}
-
-function arithmeticProblem(ops,min,max,stage,options={}){
- let a=randInt(min,max),b=randInt(min,max),op=pick(ops);
- if(op==="-"&&options.nonnegative!==false&&b>a)[a,b]=[b,a];
- if(op==="÷"){
-  b=randInt(Math.max(1,min),Math.max(1,max));
-  a=b*randInt(1,Math.max(2,Math.floor(max/b)));
- }
- const answer=op==="+"?a+b:op==="-"?a-b:op==="×"?a*b:a/b;
- return{
-  text:`${a} ${op} ${b}`,
-  answer,
-  stage,
-  hint:`${a} ${op} ${b}를 계산할 땐 더하기라면 앞에 수에서 뒤에 수가 추가되었다고 생각하면 되고, 빼기는 없어진 걸로 생각하면 돼.`
- };
-}
-
-function mixedProblem(min,max,ops,stage){
- const a=randInt(min,max),b=randInt(min,max),c=randInt(min,max);
- const op1=pick(ops),op2=pick(ops);
- let first=a,second=b,third=c;
-
- if(op1==="÷"){
-  second=randInt(1,Math.max(2,Math.floor(max/2)));
-  first=second*randInt(1,Math.max(2,Math.floor(max/second)));
- }
- if(op2==="÷"){
-  third=randInt(1,Math.max(2,Math.floor(max/2)));
-  second=third*randInt(1,Math.max(2,Math.floor(max/third)));
- }
-
- const left=op1==="+"?first+second:
-  op1==="-"?first-second:
-  op1==="×"?first*second:first/second;
-
- if(op2==="÷"&&third!==0&&left%third!==0){
-  return mixedProblem(min,max,ops,stage);
- }
-
- const answer=op2==="+"?left+third:
-  op2==="-"?left-third:
-  op2==="×"?left*third:left/third;
-
- return{
-  text:`(${first} ${op1} ${second}) ${op2} ${third}`,
-  answer,
-  stage,
-  hint:"괄호 안을 먼저 계산해 봐. 그 결과를 이용해 바깥쪽 연산을 하면 돼."
- };
-}
-
-function linearEquation(){
- const x=randInt(-20,20),a=randInt(2,12),b=randInt(-30,30),c=a*x+b;
- return{
-  text:`${a}x ${b<0?"- "+Math.abs(b):"+ "+b} = ${c}`,
-  answer:x,
-  stage:3,
-  hint:`먼저 양변에서 상수항을 정리한 다음, 양변을 ${a}로 나눠 봐.`
- };
-}
-
-function quadraticEquation(){
- const r1=randInt(-9,9);
- let r2=randInt(-9,9);
- if(r1===r2)r2=r1+randInt(1,4);
- const sum=r1+r2,product=r1*r2;
- const bt=sum===0?"":sum>0?` - ${sum}x`:` + ${Math.abs(sum)}x`;
- const ct=product===0?"":product>0?` + ${product}`:` - ${Math.abs(product)}`;
- return{
-  text:`x²${bt}${ct} = 0. 큰 해 x는?`,
-  answer:Math.max(r1,r2),
-  stage:3,
-  hint:"이차식을 인수분해해 봐. 두 괄호가 0이 되는 x값을 찾고, 그중 큰 해를 고르면 돼."
- };
-}
-
-function advancedSymbolProblem(){
- const n=randInt(3,7);
- let answer=1;
- for(let i=2;i<=n;i++)answer*=i;
- return{
-  text:`${n}! = ?`,
-  answer,
-  stage:3,
-  hint:`느낌표는 계승이야. 1부터 ${n}까지의 자연수를 모두 곱해 봐.`
- };
-}
-
-function simultaneousQuadratic(){
- const x=randInt(1,8);
- let y=randInt(1,8);
- while(x===y)y=randInt(1,8);
- return{
-  text:`x² + y² = ${x*x+y*y}, x + y = ${x+y}. x > y일 때 x는?`,
-  answer:Math.max(x,y),
-  stage:4,
-  hint:"두 수의 합과 제곱의 합을 함께 사용해 봐. 가능한 두 수를 찾아 조건 x > y를 확인해."
- };
-}
-
-function simultaneousCubic(){
- const x=randInt(1,5);
- let y=randInt(1,5);
- while(x===y)y=randInt(1,5);
- return{
-  text:`x³ + y³ = ${x**3+y**3}, x + y = ${x+y}. x > y일 때 x는?`,
-  answer:Math.max(x,y),
-  stage:4,
-  hint:"x와 y의 합을 알고 있어. 가능한 자연수 쌍을 살펴보고 세제곱의 합과 맞는지 확인해."
- };
-}
-
-function threeVariableSystem(degree){
- const x=randInt(1,4),y=randInt(1,4),z=randInt(1,4);
- const rows=[[1,1,1],[1,2,3],[2,3,1]];
- const values=rows.map(r=>r[0]*x**degree+r[1]*y**degree+r[2]*z**degree);
- const pow=degree===2?"²":degree===3?"³":"⁴";
- const equations=rows.map((r,i)=>
-  `${r[0]===1?"":r[0]}x${pow} + ${r[1]===1?"":r[1]}y${pow} + ${r[2]===1?"":r[2]}z${pow} = ${values[i]}`
- );
- return{
-  text:`${equations.join(" ; ")}. x는?`,
-  answer:x,
-  stage:4,
-  hint:"x, y, z의 거듭제곱을 각각 하나의 미지수처럼 놓아 봐. 식들을 조합해 미지수를 차례로 구할 수 있어."
- };
-}
-
-function limitProblem(){
- const a=randInt(1,9),b=randInt(1,9),c=randInt(1,9);
- return{
-  text:`lim (x→${a}) [${b}x + ${c}] = ?`,
-  answer:b*a+c,
-  stage:5,
-  hint:"이 식은 연속인 일차식이야. x가 가까워지는 값을 x 자리에 대입해 봐."
- };
-}
-
-function sequenceProblem(){
- const first=randInt(1,20),diff=randInt(2,12),n=randInt(5,15);
- return{
-  text:`첫째항 ${first}, 공차 ${diff}인 등차수열의 ${n}번째 항은?`,
-  answer:first+(n-1)*diff,
-  stage:5,
-  hint:"등차수열의 n번째 항은 첫째항에 공차를 (항 번호 - 1)번 더한 값이야."
- };
-}
-
-function makeProblem(){
- const n=score;
- if(n<=49)return arithmeticProblem(["+","-"],0,30,1);
- if(n<=100)return arithmeticProblem(["+","-"],10,99,1);
- if(n<=150)return arithmeticProblem(["+","-","×","÷"],1,9,2);
- if(n<=200)return mixedProblem(1,99,["+","-","×","÷"],2);
- if(n<=300)return arithmeticProblem(["×","÷"],100,999,2);
- if(n<=450)return mixedProblem(100,999,["+","-","×","÷"],2);
- if(n<=600)return arithmeticProblem(["+","-","×","÷"],100,999,2);
- if(n<=800)return linearEquation();
- if(n<=1000)return quadraticEquation();
- if(n<=1400)return advancedSymbolProblem();
- if(n<=2000)return Math.random()<.5?simultaneousQuadratic():advancedSymbolProblem();
- if(n<=2500)return simultaneousCubic();
- if(n<=4500)return threeVariableSystem(2);
- if(n<=8000)return threeVariableSystem(3);
- return Math.random()<.5?limitProblem():sequenceProblem();
-}
+function randInt(min,max){return Math.floor(Math.random()*(max-min+1))+min}
+function pick(arr){return arr[randInt(0,arr.length-1)]}
+function normalizeUserAnswer(raw){const value=String(raw).trim();if(!/^-?\d+(?:\.\d{1,2})?$/.test(value))return null;const number=Number(value);if(!Number.isFinite(number)||!Number.isSafeInteger(Math.trunc(number)))return null;return number}
+function arithmeticProblem(ops,min,max,stage,options={}){let a=randInt(min,max),b=randInt(min,max),op=pick(ops);if(op==="-"&&options.nonnegative!==false&&b>a)[a,b]=[b,a];if(op==="÷"){b=randInt(Math.max(1,min),Math.max(1,max));a=b*randInt(1,Math.max(2,Math.floor(max/b)))}const answer=op==="+"?a+b:op==="-"?a-b:op==="×"?a*b:a/b;return{text:`${a} ${op} ${b}`,answer,stage,hint:`${a} ${op} ${b}를 계산할 땐 더하기라면 앞에 수에서 뒤에 수가 추가되었다고 생각하면 되고, 빼기는 없어진 걸로 생각하면 돼.`}}
+function mixedProblem(min,max,ops,stage){const a=randInt(min,max),b=randInt(min,max),c=randInt(min,max),op1=pick(ops),op2=pick(ops);let first=a,second=b,third=c;if(op1==="÷"){second=randInt(1,Math.max(2,Math.floor(max/2)));first=second*randInt(1,Math.max(2,Math.floor(max/second)))}if(op2==="÷"){third=randInt(1,Math.max(2,Math.floor(max/2)));second=third*randInt(1,Math.max(2,Math.floor(max/third)))}const left=op1==="+"?first+second:op1==="-"?first-second:op1==="×"?first*second:first/second;if(op2==="÷"&&third!==0&&left%third!==0)return mixedProblem(min,max,ops,stage);const answer=op2==="+"?left+third:op2==="-"?left-third:op2==="×"?left*third:left/third;return{text:`(${first} ${op1} ${second}) ${op2} ${third}`,answer,stage,hint:"괄호 안을 먼저 계산해 봐. 그 결과를 이용해 바깥쪽 연산을 하면 돼."}}
+function linearEquation(){const x=randInt(-20,20),a=randInt(2,12),b=randInt(-30,30),c=a*x+b;return{text:`${a}x ${b<0?"- "+Math.abs(b):"+ "+b} = ${c}`,answer:x,stage:3,hint:`먼저 양변에서 상수항을 정리한 다음, 양변을 ${a}로 나눠 봐.`}}
+function quadraticEquation(){const r1=randInt(-9,9);let r2=randInt(-9,9);if(r1===r2)r2=r1+randInt(1,4);const sum=r1+r2,product=r1*r2,bt=sum===0?"":sum>0?` - ${sum}x`:` + ${Math.abs(sum)}x`,ct=product===0?"":product>0?` + ${product}`:` - ${Math.abs(product)}`;return{text:`x²${bt}${ct} = 0. 큰 해 x는?`,answer:Math.max(r1,r2),stage:3,hint:"이차식을 인수분해해 봐. 두 괄호가 0이 되는 x값을 찾고, 그중 큰 해를 고르면 돼."}}
+function advancedSymbolProblem(){const n=randInt(3,7);let answer=1;for(let i=2;i<=n;i++)answer*=i;return{text:`${n}! = ?`,answer,stage:3,hint:`느낌표는 계승이야. 1부터 ${n}까지의 자연수를 모두 곱해 봐.`}}
+function simultaneousQuadratic(){const x=randInt(1,8);let y=randInt(1,8);while(x===y)y=randInt(1,8);return{text:`x² + y² = ${x*x+y*y}, x + y = ${x+y}. x > y일 때 x는?`,answer:Math.max(x,y),stage:4,hint:"두 수의 합과 제곱의 합을 함께 사용해 봐. 가능한 두 수를 찾아 조건 x > y를 확인해."}}
+function simultaneousCubic(){const x=randInt(1,5);let y=randInt(1,5);while(x===y)y=randInt(1,5);return{text:`x³ + y³ = ${x**3+y**3}, x + y = ${x+y}. x > y일 때 x는?`,answer:Math.max(x,y),stage:4,hint:"x와 y의 합을 알고 있어. 가능한 자연수 쌍을 살펴보고 세제곱의 합과 맞는지 확인해."}}
+function threeVariableSystem(degree){const x=randInt(1,4),y=randInt(1,4),z=randInt(1,4),rows=[[1,1,1],[1,2,3],[2,3,1]],values=rows.map(r=>r[0]*x**degree+r[1]*y**degree+r[2]*z**degree),pow=degree===2?"²":degree===3?"³":"⁴",equations=rows.map((r,i)=>`${r[0]===1?"":r[0]}x${pow} + ${r[1]===1?"":r[1]}y${pow} + ${r[2]===1?"":r[2]}z${pow} = ${values[i]}`);return{text:`${equations.join(" ; ")}. x는?`,answer:x,stage:4,hint:"x, y, z의 거듭제곱을 각각 하나의 미지수처럼 놓아 봐. 식들을 조합해 미지수를 차례로 구할 수 있어."}}
+function limitProblem(){const a=randInt(1,9),b=randInt(1,9),c=randInt(1,9);return{text:`lim (x→${a}) [${b}x + ${c}] = ?`,answer:b*a+c,stage:5,hint:"이 식은 연속인 일차식이야. x가 가까워지는 값을 x 자리에 대입해 봐."}}
+function sequenceProblem(){const first=randInt(1,20),diff=randInt(2,12),n=randInt(5,15);return{text:`첫째항 ${first}, 공차 ${diff}인 등차수열의 ${n}번째 항은?`,answer:first+(n-1)*diff,stage:5,hint:"등차수열의 n번째 항은 첫째항에 공차를 (항 번호 - 1)번 더한 값이야."}}
+function makeProblem(){const n=score;if(n<=49)return arithmeticProblem(["+","-"],0,30,1);if(n<=100)return arithmeticProblem(["+","-"],10,99,1);if(n<=150)return arithmeticProblem(["+","-","×","÷"],1,9,2);if(n<=200)return mixedProblem(1,99,["+","-","×","÷"],2);if(n<=300)return arithmeticProblem(["×","÷"],100,999,2);if(n<=450)return mixedProblem(100,999,["+","-","×","÷"],2);if(n<=600)return arithmeticProblem(["+","-","×","÷"],100,999,2);if(n<=800)return linearEquation();if(n<=1000)return quadraticEquation();if(n<=1400)return advancedSymbolProblem();if(n<=2000)return Math.random()<.5?simultaneousQuadratic():advancedSymbolProblem();if(n<=2500)return simultaneousCubic();if(n<=4500)return threeVariableSystem(2);if(n<=8000)return threeVariableSystem(3);return Math.random()<.5?limitProblem():sequenceProblem()}
 
 /* 새 문제 */
 async function newProblem(){
- if(!active)return;
-
- if(revealTimer){
-  clearTimeout(revealTimer);
-  revealTimer=null;
- }
-
- answered=false;
- wrongPending=false;
- retryUsed=false;
- hintUsed=false;
- attemptId=null;
-
- $("retryBtn").classList.add("hidden");
- $("answer").value="";
- $("answer").disabled=true;
- $("submitBtn").disabled=true;
- $("nextBtn").disabled=true;
- $("question").textContent="새 문제를 불러오는 중…";
- $("notice").textContent="";
- $("detail").textContent="서버에서 문제를 준비하고 있어.";
-
- try{
-  const r=await rpCall("new-problem",{score});
-
-  if(!r?.success||!r.attempt_id){
-   throw Error(r?.error||"문제를 불러오지 못했어.");
-  }
-
-  attemptId=r.attempt_id;
-
-  current={
-   text:r.question,
-   stage:r.stage,
-   hint:r.hint,
-   answer:null
-  };
-
-  firstProblemOfRun=(score===0);
-  $("answer").disabled=false;
-  $("submitBtn").disabled=false;
-  $("question").textContent=current.text;
-  $("stageLabel").textContent=`${current.stage}단계 · ${["","기본 계산","사칙연산 확장","방정식과 고급 계산","고차 연립방정식","극한과 수열"][current.stage]}`;
-  $("detail").textContent="정답을 입력하고 엔터를 눌러 줘.";
-  updateUI();
-  $("answer").focus();
-
- }catch(e){
-  $("question").textContent="문제를 불러오지 못했어.";
-  $("notice").textContent=e.message;
-  $("detail").textContent="Supabase 로그인과 math-rp 배포 상태를 확인해 줘.";
-  $("startBtn").disabled=false;
- }
+ if(!active)return;if(revealTimer){clearTimeout(revealTimer);revealTimer=null}
+ answered=false;wrongPending=false;retryUsed=false;hintUsed=false;attemptId=null;$("retryBtn").classList.add("hidden");$("answer").value="";$("answer").disabled=true;$("submitBtn").disabled=true;$("nextBtn").disabled=true;$("question").textContent="새 문제를 불러오는 중…";$("notice").textContent="";$("detail").textContent="서버에서 문제를 준비하고 있어.";
+ try{const r=await rpCall("new-problem",{score});if(!r?.success||!r.attempt_id)throw Error(r?.error||"문제를 불러오지 못했어.");attemptId=r.attempt_id;current={text:r.question,stage:r.stage,hint:r.hint,answer:null};firstProblemOfRun=(score===0);$("answer").disabled=false;$("submitBtn").disabled=false;$("question").textContent=current.text;$("stageLabel").textContent=`${current.stage}단계 · ${["","기본 계산","사칙연산 확장","방정식과 고급 계산","고차 연립방정식","극한과 수열"][current.stage]}`;$("detail").textContent="정답을 입력하고 엔터를 눌러 줘.";updateUI();$("answer").focus()}
+ catch(e){$("question").textContent="문제를 불러오지 못했어.";$("notice").textContent=e.message;$("detail").textContent="Supabase 로그인과 infinity-math 배포 상태를 확인해 줘.";$("startBtn").disabled=false}
 }
-
-function endRun(){
- active=false;
- if(revealTimer){
-  clearTimeout(revealTimer);
-  revealTimer=null;
- }
- score=0;
- combo=0;
- health=3;
- current=null;
- attemptId=null;
- answered=false;
- wrongPending=false;
- firstProblemOfRun=false;
- $("question").textContent="도전 종료!";
- $("stageLabel").textContent="도전 종료";
- $("notice").textContent="이번 도전이 끝났어.";
- $("detail").textContent="시작 / 다시 시작을 눌러 다시 도전해!";
- $("answer").disabled=true;
- $("submitBtn").disabled=true;
- $("nextBtn").disabled=true;
- $("retryBtn").classList.add("hidden");
- updateUI();
-}
-
-/* 오답 공개 타이머 */
-function startAnswerRevealTimer(){
- if(revealTimer){
-  clearTimeout(revealTimer);
- }
-
- revealTimer=setTimeout(()=>{
-  revealAnswerAndClose("2초가 지나 정답을 공개했어.");
- },2000);
-}
-
-function revealAnswerAndClose(message){
- if(!attemptId||!current)return;
-
- if(current.answer===null||current.answer===undefined){
-  $("notice").textContent="서버에서 정답을 받지 못했어. 서버 응답을 확인해 줘.";
-  return;
- }
-
- if(revealTimer){
-  clearTimeout(revealTimer);
-  revealTimer=null;
- }
-
- $("retryBtn").classList.add("hidden");
- $("detail").textContent=`정답: ${current.answer}`;
- $("notice").textContent=message;
-
- answered=true;
- wrongPending=false;
-
- $("nextBtn").disabled=false;
- $("answer").disabled=true;
- $("submitBtn").disabled=true;
-
- if(health<=0){
-  setTimeout(()=>{
-   if(active)endRun();
-  },350);
- }
-}
-
-/* 답안 제출 */
+function endRun(){active=false;if(revealTimer){clearTimeout(revealTimer);revealTimer=null}score=0;combo=0;health=3;current=null;attemptId=null;answered=false;wrongPending=false;firstProblemOfRun=false;$("question").textContent="도전 종료!";$("stageLabel").textContent="도전 종료";$("notice").textContent="이번 도전이 끝났어.";$("detail").textContent="시작 / 다시 시작을 눌러 다시 도전해!";$("answer").disabled=true;$("submitBtn").disabled=true;$("nextBtn").disabled=true;$("retryBtn").classList.add("hidden");updateUI()}
+function startAnswerRevealTimer(){if(revealTimer)clearTimeout(revealTimer);revealTimer=setTimeout(()=>revealAnswerAndClose("2초가 지나 정답을 공개했어."),2000)}
+function revealAnswerAndClose(message){if(!attemptId||!current)return;if(current.answer===null||current.answer===undefined){$("notice").textContent="서버에서 정답을 받지 못했어. 서버 응답을 확인해 줘.";return}if(revealTimer){clearTimeout(revealTimer);revealTimer=null}$("retryBtn").classList.add("hidden");$("detail").textContent=`정답: ${current.answer}`;$("notice").textContent=message;answered=true;wrongPending=false;$("nextBtn").disabled=false;$("answer").disabled=true;$("submitBtn").disabled=true;if(health<=0)setTimeout(()=>{if(active)endRun()},350)}
 async function submitAnswer(event){
- event.preventDefault();
-
- if(!active||!current||answered||answerBusy||!attemptId)return;
-
- const raw=$("answer").value.trim();
- const userAnswer=normalizeUserAnswer(raw);
-
- if(userAnswer===null){
-  $("notice").textContent="정수 또는 소수점 둘째 자리까지 입력해 줘.";
-  return;
- }
-
- answerBusy=true;
- $("submitBtn").disabled=true;
-
+ event.preventDefault();if(!active||!current||answered||answerBusy||!attemptId)return;const raw=$("answer").value.trim(),userAnswer=normalizeUserAnswer(raw);if(userAnswer===null){$("notice").textContent="정수 또는 소수점 둘째 자리까지 입력해 줘.";return}
+ answerBusy=true;$("submitBtn").disabled=true;
  try{
-  const r=await rpCall("award-rp",{
-   attempt_id:attemptId,
-   answer:userAnswer
-  });
-
-  if(r?.success){
-   answered=true;
-   wrongPending=false;
-
-   if(revealTimer){
-    clearTimeout(revealTimer);
-    revealTimer=null;
-   }
-
-   combo++;
-   score++;
-   data.totalSolved++;
-
-   if(current.stage===5){
-    data.evilSolved++;
-    if(data.evilSolved>=300000){
-     data.evilSolved-=300000;
-     data.legendCoins++;
-    }
-   }
-
-   data.best=Math.max(data.best,score);
-   wallet.coins=Number(r.total_coins??wallet.coins);
-
-   if(profile){
-    profile.total_rp=Number(r.total_rp??profile.total_rp);
-    profile.season_rp=Number(r.season_rp??profile.season_rp);
-   }
-
-   $("notice").textContent=`정답! +1점 · +1 코인 · +${r.awarded_rp} RP · 콤보 ${combo}`;
-   $("detail").textContent=`정답: ${raw}`;
-
-   save();
-   updateUI();
-
-   await refreshProfile();
-   await refreshWallet();
-   await newProblem();
-   return;
-  }
-
+  const r=await rpCall("award-rp",{attempt_id:attemptId,answer:userAnswer});
+  if(r?.success){answered=true;wrongPending=false;if(revealTimer){clearTimeout(revealTimer);revealTimer=null}combo++;score++;data.totalSolved++;if(current.stage===5){data.evilSolved++;if(data.evilSolved>=300000){data.evilSolved-=300000;data.legendCoins++}}data.best=Math.max(data.best,score);wallet.coins=Number(r.total_coins??wallet.coins);if(profile){profile.total_rp=Number(r.total_rp??profile.total_rp);profile.season_rp=Number(r.season_rp??profile.season_rp)}$("notice").textContent=`정답! +1점 · +1 코인 · +${r.awarded_rp} RP · 콤보 ${combo}`;$("detail").textContent=`정답: ${raw}`;save();updateUI();await refreshProfile();await refreshWallet();await newProblem();return}
   if(r?.error==="WRONG_ANSWER"){
-   const receivedAnswer =
-    r.answer ??
-    r.correct_answer ??
-    r.data?.answer ??
-    r.data?.correct_answer ??
-    r.result?.answer ??
-    r.result?.correct_answer;
-
-   if(receivedAnswer===undefined||receivedAnswer===null){
-    console.error("WRONG_ANSWER 서버 응답 전체:",r);
-    throw Error("서버 응답에서 정답을 찾지 못했어. 콘솔의 응답 구조를 확인해야 해.");
-   }
-
-   const correctAnswer=Number(receivedAnswer);
-
-   if(
-    !Number.isFinite(correctAnswer)||
-    !Number.isSafeInteger(Math.trunc(correctAnswer))||
-    Math.abs(correctAnswer*100-Math.round(correctAnswer*100))>1e-8
-   ){
-    console.error("서버에서 받은 정답:",receivedAnswer);
-    throw Error("서버에서 받은 정답이 올바른 숫자가 아니야.");
-   }
-
-   current.answer=correctAnswer;
-
-   health=Math.max(0,health-1);
-   combo=0;
-   wrongPending=true;
-   answered=true;
-
-   $("notice").textContent=
-    r.retry_available===true
-     ?"오답이야. 2초 안에 재도전권을 사용하면 같은 문제에 다시 도전할 수 있어."
-     :"재도전 기회가 끝났어. 2초 뒤 정답을 공개할게.";
-
-   $("detail").textContent=current.hint||"잠깐 생각을 정리해 봐.";
-
-   $("answer").disabled=false;
-   $("submitBtn").disabled=true;
-   $("nextBtn").disabled=true;
-
-   if(
-    r.retry_available===true&&
-    !retryUsed&&
-    Number(wallet.retry_tickets)>0
-   ){
-    $("retryBtn").classList.remove("hidden");
-   }else{
-    $("retryBtn").classList.add("hidden");
-   }
-
-   updateUI();
-   startAnswerRevealTimer();
-   return;
+   const receivedAnswer=r.answer??r.correct_answer??r.data?.answer??r.data?.correct_answer??r.result?.answer??r.result?.correct_answer;
+   if(receivedAnswer===undefined||receivedAnswer===null){console.error("WRONG_ANSWER 서버 응답 전체:",r);throw Error("서버 응답에서 정답을 찾지 못했어. 콘솔의 응답 구조를 확인해야 해.")}
+   const correctAnswer=Number(receivedAnswer);if(!Number.isFinite(correctAnswer)||!Number.isSafeInteger(Math.trunc(correctAnswer))||Math.abs(correctAnswer*100-Math.round(correctAnswer*100))>1e-8){console.error("서버에서 받은 정답:",receivedAnswer);throw Error("서버에서 받은 정답이 올바른 숫자가 아니야.")}
+   current.answer=correctAnswer;health=Math.max(0,health-1);combo=0;wrongPending=true;answered=true;$("notice").textContent=r.retry_available===true?"오답이야. 2초 안에 재도전권을 사용하면 같은 문제에 다시 도전할 수 있어.":"재도전 기회가 끝났어. 2초 뒤 정답을 공개할게.";$("detail").textContent=current.hint||"잠깐 생각을 정리해 봐.";$("answer").disabled=false;$("submitBtn").disabled=true;$("nextBtn").disabled=true;
+   if(r.retry_available===true&&!retryUsed&&Number(wallet.retry_tickets)>0)$("retryBtn").classList.remove("hidden");else $("retryBtn").classList.add("hidden");updateUI();startAnswerRevealTimer();return
   }
-
-  throw Error(r?.message||r?.error||"답안을 처리하지 못했어.");
-
- }catch(e){
-  console.error("답안 제출 처리 오류:",e);
-  $("notice").textContent="답안 제출 실패: "+e.message;
-
-  if(!answered){
-   $("submitBtn").disabled=false;
-  }
- }finally{
-  answerBusy=false;
- }
+  throw Error(r?.message||r?.error||"답안을 처리하지 못했어.")
+ }catch(e){console.error("답안 제출 처리 오류:",e);$("notice").textContent="답안 제출 실패: "+e.message;if(!answered)$("submitBtn").disabled=false}
+ finally{answerBusy=false}
 }
-
-/* 재도전권 사용 */
 async function useRetry(){
- if(!active||!current||!attemptId||!wrongPending||retryUsed)return;
- if(Number(wallet.retry_tickets)<=0){
-  $("notice").textContent="재도전권이 없어. 상점에서 구매해 줘.";
-  return;
- }
-
- if(revealTimer){
-  clearTimeout(revealTimer);
-  revealTimer=null;
- }
-
- $("retryBtn").disabled=true;
-
- try{
-  const r=await rpCall("retry-problem",{attempt_id:attemptId});
-
-  if(!r?.success){
-   throw Error(r?.message||r?.error||"재도전권을 사용할 수 없어.");
-  }
-
-  retryUsed=true;
-  wrongPending=false;
-  answered=false;
-
-  if(r.retry_tickets!==undefined){
-   wallet.retry_tickets=Number(r.retry_tickets);
-  }
-
-  $("retryBtn").classList.add("hidden");
-  $("retryBtn").disabled=false;
-
-  $("answer").value="";
-  $("answer").disabled=false;
-  $("submitBtn").disabled=false;
-  $("nextBtn").disabled=true;
-
-  $("notice").textContent="재도전권 1장을 사용했어. 같은 문제에 다시 도전해!";
-  $("detail").textContent=current.hint||"이번에는 다른 방법으로 풀어 봐.";
-
-  updateUI();
-  await refreshWallet();
-
-  $("answer").focus();
-
- }catch(e){
-  $("retryBtn").disabled=false;
-  $("notice").textContent=e.message;
-
-  if(wrongPending&&!revealTimer){
-   startAnswerRevealTimer();
-  }
- }
+ if(!active||!current||!attemptId||!wrongPending||retryUsed)return;if(Number(wallet.retry_tickets)<=0){$("notice").textContent="재도전권이 없어. 상점에서 구매해 줘.";return}
+ if(revealTimer){clearTimeout(revealTimer);revealTimer=null}$("retryBtn").disabled=true;
+ try{const r=await rpCall("retry-problem",{attempt_id:attemptId});if(!r?.success)throw Error(r?.message||r?.error||"재도전권을 사용할 수 없어.");retryUsed=true;wrongPending=false;answered=false;if(r.retry_tickets!==undefined)wallet.retry_tickets=Number(r.retry_tickets);$("retryBtn").classList.add("hidden");$("retryBtn").disabled=false;$("answer").value="";$("answer").disabled=false;$("submitBtn").disabled=false;$("nextBtn").disabled=true;$("notice").textContent="재도전권 1장을 사용했어. 같은 문제에 다시 도전해!";$("detail").textContent=current.hint||"이번에는 다른 방법으로 풀어 봐.";updateUI();await refreshWallet();$("answer").focus()}
+ catch(e){$("retryBtn").disabled=false;$("notice").textContent=e.message;if(wrongPending&&!revealTimer)startAnswerRevealTimer()}
 }
-
-/* 힌트 사용 */
 async function useHint(){
- if(!active||!current||answered){
-  $("notice").textContent="먼저 시작해 줘.";
-  return;
- }
-
- if(firstProblemOfRun&&score===0){
-  openHint("첫문젴ㅋㅋ부텈ㅋㅋㅋ 힌트라곸ㅋㅋㅋㅋ? 아. 미안. 근데 뭐라고 할려 했더라?");
-  return;
- }
-
- if(hintUsed){
-  $("notice").textContent="이 문제에서는 이미 힌트를 사용했어.";
-  return;
- }
-
- if(Number(wallet.hints)<=0){
-  $("notice").textContent="힌트권이 없어. 상점에서 확인해 줘.";
-  return;
- }
-
- try{
-  const r=await rpCall("use-hint");
-
-  if(!r?.success){
-   throw Error(r?.message||"힌트권이 없어.");
-  }
-
-  if(r.hints!==undefined){
-   wallet.hints=Number(r.hints);
-   data.hints=wallet.hints;
-  }
-
-  hintUsed=true;
-
-  const hint=current.hint||"식을 차근차근 정리해 봐.";
-  $("detail").textContent=hint;
-  $("notice").textContent="무한매쓰가 힌트를 알려 줬어!";
-
-  save();
-  updateUI();
-  openHint(hint);
-
- }catch(e){
-  $("notice").textContent="힌트 사용 실패: "+e.message;
- }
+ if(!active||!current||answered){$("notice").textContent="먼저 시작해 줘.";return}
+ if(firstProblemOfRun&&score===0){openHint("첫문젴ㅋㅋ부텈ㅋㅋㅋ 힌트라곸ㅋㅋㅋㅋ? 아. 미안. 근데 뭐라고 할려 했더라?");return}
+ if(hintUsed){$("notice").textContent="이 문제에서는 이미 힌트를 사용했어.";return}
+ if(Number(wallet.hints)<=0){$("notice").textContent="힌트권이 없어. 상점에서 확인해 줘.";return}
+ try{const r=await rpCall("use-hint");if(!r?.success)throw Error(r?.message||"힌트권이 없어.");if(r.hints!==undefined){wallet.hints=Number(r.hints);data.hints=wallet.hints}hintUsed=true;const hint=current.hint||"식을 차근차근 정리해 봐.";$("detail").textContent=hint;$("notice").textContent="무한매쓰가 힌트를 알려 줬어!";save();updateUI();openHint(hint)}
+ catch(e){$("notice").textContent="힌트 사용 실패: "+e.message}
 }
-
-/* 상점 구매 */
 async function buyItem(type){
- const button=type==="hint"?$("buyHint"):$("buyRetry");
- const itemName=type==="hint"?"힌트권":"재도전권";
-
- button.disabled=true;
- $("shopNotice").textContent=`${itemName} 구매 중…`;
-
- try{
-  const r=await rpCall("buy-item",{item:type});
-
-  if(!r?.success){
-   if(r?.error==="INSUFFICIENT_COINS"){
-    throw Error(r.message||"일반 코인이 부족해.");
-   }
-   throw Error(r?.message||r?.error||"구매에 실패했어.");
-  }
-
-  if(r.coins!==undefined)wallet.coins=Number(r.coins);
-  if(r.hints!==undefined){
-   wallet.hints=Number(r.hints);
-   data.hints=wallet.hints;
-  }
-  if(r.retry_tickets!==undefined){
-   wallet.retry_tickets=Number(r.retry_tickets);
-  }
-
-  $("shopNotice").textContent=`${itemName} 구매 완료!`;
-  updateUI();
-  await refreshWallet();
-
- }catch(e){
-  $("shopNotice").textContent=`${itemName} 구매 실패: ${e.message}`;
- }finally{
-  button.disabled=false;
- }
+ const button=type==="hint"?$("buyHint"):$("buyRetry"),itemName=type==="hint"?"힌트권":"재도전권";button.disabled=true;$("shopNotice").textContent=`${itemName} 구매 중…`;
+ try{const r=await rpCall("buy-item",{item:type});if(!r?.success){if(r?.error==="INSUFFICIENT_COINS")throw Error(r.message||"일반 코인이 부족해.");throw Error(r?.message||r?.error||"구매에 실패했어.")}if(r.coins!==undefined)wallet.coins=Number(r.coins);if(r.hints!==undefined){wallet.hints=Number(r.hints);data.hints=wallet.hints}if(r.retry_tickets!==undefined)wallet.retry_tickets=Number(r.retry_tickets);$("shopNotice").textContent=`${itemName} 구매 완료!`;updateUI();await refreshWallet()}
+ catch(e){$("shopNotice").textContent=`${itemName} 구매 실패: ${e.message}`}
+ finally{button.disabled=false}
 }
-
-/* 버튼 이벤트 */
 $("answerForm").addEventListener("submit",submitAnswer);
+$("startBtn").addEventListener("click",()=>{score=0;combo=0;health=3;active=true;firstProblemOfRun=true;$("notice").textContent="";newProblem()});
+$("nextBtn").addEventListener("click",async()=>{if(!active){$("notice").textContent="먼저 시작해 줘.";return}if(!answered){$("notice").textContent="먼저 정답을 확인해 줘.";return}if(wrongPending){$("notice").textContent="정답 공개까지 잠시만 기다려 줘.";return}await newProblem()});
+$("hintBtn").addEventListener("click",useHint);$("retryBtn").addEventListener("click",useRetry);$("buyHint").addEventListener("click",()=>buyItem("hint"));$("buyRetry").addEventListener("click",()=>buyItem("retry"));
+$("exchangeBtn").addEventListener("click",()=>{$("shopNotice").textContent="레전드 코인 교환은 서버 지갑 기능을 추가한 뒤 사용할 수 있어."});
 
-$("startBtn").addEventListener("click",()=>{
- score=0;
- combo=0;
- health=3;
- active=true;
- firstProblemOfRun=true;
- $("notice").textContent="";
- newProblem();
-});
-
-$("nextBtn").addEventListener("click",async()=>{
- if(!active){
-  $("notice").textContent="먼저 시작해 줘.";
-  return;
- }
-
- if(!answered){
-  $("notice").textContent="먼저 정답을 확인해 줘.";
-  return;
- }
-
- if(wrongPending){
-  $("notice").textContent="정답 공개까지 잠시만 기다려 줘.";
-  return;
- }
-
- await newProblem();
-});
-
-$("hintBtn").addEventListener("click",useHint);
-$("retryBtn").addEventListener("click",useRetry);
-$("buyHint").addEventListener("click",()=>buyItem("hint"));
-$("buyRetry").addEventListener("click",()=>buyItem("retry"));
-
-$("exchangeBtn").addEventListener("click",()=>{
- $("shopNotice").textContent="레전드 코인 교환은 서버 지갑 기능을 추가한 뒤 사용할 수 있어.";
-});
-
-/* Supabase RP / 순위표 */
+/* Supabase 및 Edge Functions */
 const SUPABASE_URL="https://tupqfwhpuoegocsoymtv.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY="sb_publishable_Ygdmqv0Nmf9jxBlm38wPqQ_80t3LlWM";
+const EDGE_FUNCTION="infinity-math";
+const UNIQUE_ID_FUNCTION="unique-ID";
 
-/* Edge Function 이름: math-rp */
-const EDGE_FUNCTION="math-rp";
-
-async function ensureSupabase(){
- if(!window.supabase){
-  throw Error("Supabase 라이브러리를 불러오지 못했어.");
- }
-
+async function createSupabaseClient(){
+ if(!window.supabase)throw Error("Supabase 라이브러리를 불러오지 못했어.");
  if(!supabaseClient){
-  supabaseClient=window.supabase.createClient(
-   SUPABASE_URL,
-   SUPABASE_PUBLISHABLE_KEY,
-   {
-    auth:{
-     persistSession:true,
-     autoRefreshToken:true
-    }
-   }
-  );
+  supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:false}});
  }
-
- const got=await supabaseClient.auth.getSession();
- if(got.error)throw got.error;
-
- session=got.data.session;
-
- if(!session){
-  const auth=await supabaseClient.auth.signInAnonymously();
-  if(auth.error)throw auth.error;
-  session=auth.data.session;
- }
-
- if(!session){
-  throw Error("익명 로그인 세션을 만들지 못했어.");
- }
+ const got=await supabaseClient.auth.getSession();if(got.error)throw got.error;session=got.data.session;
+ return session;
 }
-
+async function ensureSupabase(){
+ const existing=await createSupabaseClient();
+ if(existing)return;
+ const auth=await supabaseClient.auth.signInAnonymously();if(auth.error)throw auth.error;session=auth.data.session;
+ if(!session)throw Error("Supabase 로그인 세션을 만들지 못했어.");
+}
 async function rpCall(action,extra={}){
  await ensureSupabase();
-
- const {data,error}=await supabaseClient.functions.invoke(
-  EDGE_FUNCTION,
-  {body:{action,...extra}}
- );
-
+ const {data,error}=await supabaseClient.functions.invoke(EDGE_FUNCTION,{body:{action,...extra}});
  if(error){
-  let errorBody=null;
-
-  try{
-   if(error.context&&typeof error.context.json==="function"){
-    errorBody=await error.context.json();
-   }
-  }catch{}
-
-  if(errorBody?.error==="WRONG_ANSWER"){
-   return errorBody;
-  }
-
-  throw Error(
-   errorBody?.message||
-   error.message||
-   "RP 서버 요청 실패"
-  );
+  let errorBody=null;try{if(error.context&&typeof error.context.json==="function")errorBody=await error.context.json()}catch{}
+  if(errorBody?.error==="WRONG_ANSWER")return errorBody;
+  throw Error(errorBody?.message||error.message||"RP 서버 요청 실패");
  }
-
- if(data===null||data===undefined){
-  throw Error("RP 서버에서 응답 데이터가 비어 있어.");
- }
-
- if(
-  data.data&&
-  typeof data.data==="object"&&
-  !Array.isArray(data.data)
- ){
-  return data.data;
- }
-
- if(
-  data.result&&
-  typeof data.result==="object"&&
-  !Array.isArray(data.result)
- ){
-  return data.result;
- }
-
+ if(data===null||data===undefined)throw Error("RP 서버에서 응답 데이터가 비어 있어.");
+ if(data.data&&typeof data.data==="object"&&!Array.isArray(data.data))return data.data;
+ if(data.result&&typeof data.result==="object"&&!Array.isArray(data.result))return data.result;
  return data;
 }
+async function uniqueIdCall(action,extra={}){
+ const {data,error}=await supabaseClient.functions.invoke(UNIQUE_ID_FUNCTION,{body:{action,...extra}});
+ if(error){
+  let body=null;try{if(error.context&&typeof error.context.json==="function")body=await error.context.json()}catch{}
+  throw Error(body?.message||body?.error||error.message||"계정 서버 요청에 실패했어.");
+ }
+ if(!data)throw Error("계정 서버에서 응답이 비어 있어.");
+ if(data.data&&typeof data.data==="object")return data.data;
+ if(data.result&&typeof data.result==="object")return data.result;
+ return data;
+}
+function showStartArea(area){
+ ["startMenu","registerArea","loginArea","createdIdArea"].forEach(id=>$(id).classList.toggle("hidden",id!==area));
+ $("startMessage").textContent="";
+}
+function showStartMessage(message){$("startMessage").textContent=message}
+function showStartScreen(){ $("startOverlay").classList.remove("hidden");showStartArea("startMenu") }
+async function applyAccountSession(result,enterNow=true){
+ const authSession=result.session;
+ if(!authSession?.access_token||!authSession?.refresh_token)throw Error("계정 세션 정보가 올바르지 않아. 다시 로그인해 줘.");
+ const {data,error}=await supabaseClient.auth.setSession({access_token:authSession.access_token,refresh_token:authSession.refresh_token});
+ if(error)throw error;session=data.session;
+ if(result.id)localStorage.setItem(ACCOUNT_ID_KEY,result.id);
+ if(enterNow)await enterApplication();
+}
+async function enterApplication(){
+ $("startOverlay").classList.add("hidden");
+ updateUI();
+ await registerRP();
+ await refreshWallet();
+ if(!data.tutorialComplete)showTutorial();
+}
+async function bootApplication(){
+ try{
+  const existing=await createSupabaseClient();
+  if(existing){await enterApplication();return}
+  // 이전 버전의 저장 데이터가 남아 있으면 새 계정 화면으로 보내지 않고 기존 흐름을 유지한다.
+  const legacyData=localStorage.getItem(SAVE_KEY)!==null||!!localStorage.getItem(NICK_KEY);
+  if(legacyData){
+   const auth=await supabaseClient.auth.signInAnonymously();
+   if(auth.error)throw auth.error;
+   session=auth.data.session;
+   await enterApplication();
+   return;
+  }
+  showStartScreen();
+ }catch(e){
+  showStartScreen();
+  showStartMessage("초기 연결 실패: "+e.message);
+ }
+}
+$("newAccountBtn").addEventListener("click",()=>showStartArea("registerArea"));
+$("existingAccountBtn").addEventListener("click",()=>showStartArea("loginArea"));
+$("registerBackBtn").addEventListener("click",()=>showStartArea("startMenu"));
+$("loginBackBtn").addEventListener("click",()=>showStartArea("startMenu"));
+$("registerSubmitBtn").addEventListener("click",async()=>{
+ const password=$("registerPassword").value,confirmPassword=$("registerPasswordConfirm").value;
+ if(password.length<8||password.length>128){showStartMessage("비밀번호는 8~128자로 입력해 줘.");return}
+ if(password!==confirmPassword){showStartMessage("비밀번호가 서로 달라.");return}
+ $("registerSubmitBtn").disabled=true;showStartMessage("계정을 만들고 있어…");
+ try{
+  const r=await uniqueIdCall("register",{password});
+  if(!r.success)throw Error(r.message||r.error||"계정을 만들지 못했어.");
+  if(r.loginRequired){showStartArea("loginArea");$("loginId").value=r.id||"";showStartMessage(r.message||"계정이 만들어졌어. 로그인해 줘.");return}
+  if(!r.id||!r.session)throw Error("계정 ID 또는 세션을 받지 못했어.");
+  await applyAccountSession(r,false);
+  $("createdId").textContent=r.id;
+  showStartArea("createdIdArea");
+ }catch(e){showStartMessage("계정 생성 실패: "+e.message)}
+ finally{$("registerSubmitBtn").disabled=false}
+});
+$("enterCreatedAccountBtn").addEventListener("click",async()=>{
+ $("enterCreatedAccountBtn").disabled=true;
+ try{await enterApplication()}catch(e){showStartMessage("시작 실패: "+e.message)}
+ finally{$("enterCreatedAccountBtn").disabled=false}
+});
+$("loginSubmitBtn").addEventListener("click",async()=>{
+ const id=$("loginId").value.trim().toUpperCase(),password=$("loginPassword").value;
+ if(!/^[A-Z0-9]{8}$/.test(id)){showStartMessage("ID는 영문 대문자와 숫자로 된 8자리야.");return}
+ if(!password){showStartMessage("비밀번호를 입력해 줘.");return}
+ $("loginSubmitBtn").disabled=true;showStartMessage("로그인 중…");
+ try{
+  const r=await uniqueIdCall("login",{id,password});
+  if(!r.success||!r.session)throw Error(r.message||r.error||"로그인에 실패했어.");
+  await applyAccountSession({...r,id},true);
+ }catch(e){showStartMessage("로그인 실패: "+e.message)}
+ finally{$("loginSubmitBtn").disabled=false}
+});
 
 /* 서버 지갑 동기화 */
 async function refreshWallet(){
- try{
-  const r=await rpCall("my-coins");
-
-  if(r?.success&&r.wallet){
-   wallet.coins=Number(r.wallet.coins||0);
-   wallet.legend_coins=Number(r.wallet.legend_coins||0);
-   wallet.hints=Number(r.wallet.hints||0);
-   wallet.retry_tickets=Number(r.wallet.retry_tickets||0);
-
-   data.hints=wallet.hints;
-   updateUI();
-   save();
-  }
- }catch(e){
-  $("rpStatus").textContent="코인 지갑 연결 실패: "+e.message;
- }
+ try{const r=await rpCall("my-coins");if(r?.success&&r.wallet){wallet.coins=Number(r.wallet.coins||0);wallet.legend_coins=Number(r.wallet.legend_coins||0);wallet.hints=Number(r.wallet.hints||0);wallet.retry_tickets=Number(r.wallet.retry_tickets||0);data.hints=wallet.hints;updateUI();save()}}
+ catch(e){$("rpStatus").textContent="코인 지갑 연결 실패: "+e.message}
 }
-
 async function registerRP(){
  try{
-  await ensureSupabase();
-
-  let nick=localStorage.getItem(NICK_KEY);
-
-  if(!nick){
-   nick=prompt("RP 순위표에 표시할 닉네임을 입력해 줘 (1~20자).")||
-    ("수학탐험가"+Math.floor(1000+Math.random()*9000));
-
-   nick=nick.trim().slice(0,20)||"수학탐험가";
-   localStorage.setItem(NICK_KEY,nick);
-  }
-
-  const r=await rpCall("register",{nickname:nick});
-  profile=r.player||r.profile||r.data||r;
-
-  await refreshProfile();
-  await refreshWallet();
-
- }catch(e){
-  $("rpStatus").textContent="RP 연결 실패: "+e.message;
- }
+  await ensureSupabase();let nick=localStorage.getItem(NICK_KEY);
+  if(!nick){nick=prompt("RP 순위표에 표시할 닉네임을 입력해 줘 (1~20자).")||("수학탐험가"+Math.floor(1000+Math.random()*9000));nick=nick.trim().slice(0,20)||"수학탐험가";localStorage.setItem(NICK_KEY,nick)}
+  const r=await rpCall("register",{nickname:nick});profile=r.player||r.profile||r.data||r;await refreshProfile();await refreshWallet()
+ }catch(e){$("rpStatus").textContent="RP 연결 실패: "+e.message}
 }
-
 async function refreshProfile(){
- try{
-  const r=await rpCall("my-rp");
-  profile=r.player||r.profile||r.data||r;
-
-  if(Array.isArray(profile))profile=profile[0]||null;
-
-  if(!profile?.nickname){
-   await registerRP();
-   return;
-  }
-
-  updateUI();
-  $("rpStatus").textContent="Supabase RP 연결 완료";
-
- }catch(e){
-  $("rpStatus").textContent="RP 연결 실패: "+e.message;
-  updateUI();
- }
+ try{const r=await rpCall("my-rp");profile=r.player||r.profile||r.data||r;if(Array.isArray(profile))profile=profile[0]||null;if(!profile?.nickname){await registerRP();return}updateUI();$("rpStatus").textContent="Supabase RP 연결 완료"}
+ catch(e){$("rpStatus").textContent="RP 연결 실패: "+e.message;updateUI()}
 }
-
 async function loadLeaderboard(){
- const box=$("leaderboard");
- box.textContent="순위표 불러오는 중…";
-
+ const box=$("leaderboard");box.textContent="순위표 불러오는 중…";
  try{
-  const r=await rpCall("leaderboard");
-  const rows=r.leaderboard||r.players||r.data||[];
-
-  if(!Array.isArray(rows)||!rows.length){
-   box.textContent="아직 순위 데이터가 없어.";
-   return;
-  }
-
-  box.replaceChildren();
-
-  let myRank="-";
-  const myId=session?.user?.id;
-  const idx=rows.findIndex(p=>p.player_id===myId);
-
-  if(idx>=0)myRank=(idx+1)+"위";
-
-  $("myRank").textContent=myRank;
-  $("leaderboardMyRank").textContent=myRank;
-  $("leaderboardStatus").textContent="RP 순위표 업데이트 완료";
-
-  rows.forEach((p,i)=>{
-   const row=document.createElement("div");
-   row.className="item";
-
-   const left=document.createElement("span");
-   left.textContent=`${p.rank||i+1}위 · ${p.nickname||"이름 없음"}`;
-
-   const right=document.createElement("strong");
-   right.textContent=Number(p.total_rp||0).toLocaleString()+" RP";
-
-   row.append(left,right);
-   box.append(row);
-  });
-
- }catch(e){
-  box.textContent="순위표를 불러오지 못했어: "+e.message;
- }
+  const r=await rpCall("leaderboard"),rows=r.leaderboard||r.players||r.data||[];
+  if(!Array.isArray(rows)||!rows.length){box.textContent="아직 순위 데이터가 없어.";return}
+  box.replaceChildren();let myRank="-";const myId=session?.user?.id,idx=rows.findIndex(p=>p.player_id===myId);if(idx>=0)myRank=(idx+1)+"위";
+  $("myRank").textContent=myRank;$("leaderboardMyRank").textContent=myRank;$("leaderboardStatus").textContent="RP 순위표 업데이트 완료";
+  rows.forEach((p,i)=>{const row=document.createElement("div");row.className="item";const left=document.createElement("span");left.textContent=`${p.rank||i+1}위 · ${p.nickname||"이름 없음"}`;const right=document.createElement("strong");right.textContent=Number(p.total_rp||0).toLocaleString()+" RP";row.append(left,right);box.append(row)})
+ }catch(e){box.textContent="순위표를 불러오지 못했어: "+e.message}
 }
-
 $("loadLeaderboardBtn").addEventListener("click",loadLeaderboard);
 
 /* 민원함 */
 let complaintVisibility="public";
-
 async function complaintCall(action,extra={}){
- await ensureSupabase();
-
- const {data,error}=await supabaseClient.functions.invoke(
-  "complaints",
-  {body:{action,...extra}}
- );
-
- if(error)throw Error(error.message||"민원 서버 요청 실패");
- if(data?.error)throw Error(data.error);
-
- return data||{};
+ await ensureSupabase();const {data,error}=await supabaseClient.functions.invoke("complaints",{body:{action,...extra}});
+ if(error)throw Error(error.message||"민원 서버 요청 실패");if(data?.error)throw Error(data.error);return data||{}
 }
-
-function makeText(tag,text,className){
- const el=document.createElement(tag);
- if(className)el.className=className;
- el.textContent=text??"";
- return el;
-}
-
-function isMyComplaint(post){
- return post.user_id===session?.user?.id;
-}
-
+function makeText(tag,text,className){const el=document.createElement(tag);if(className)el.className=className;el.textContent=text??"";return el}
+function isMyComplaint(post){return post.user_id===session?.user?.id}
 function renderComplaints(rows){
- const box=$("complaintList");
- box.replaceChildren();
-
- if(!Array.isArray(rows)||!rows.length){
-  box.textContent=complaintVisibility==="public"
-   ?"공개된 민원이 아직 없어."
-   :"내 비공개 민원이 아직 없어.";
-  return;
- }
-
+ const box=$("complaintList");box.replaceChildren();
+ if(!Array.isArray(rows)||!rows.length){box.textContent=complaintVisibility==="public"?"공개된 민원이 아직 없어.":"내 비공개 민원이 아직 없어.";return}
  rows.forEach(post=>{
-  const id=post.id;
-  if(!id)return;
-
-  if(complaintVisibility==="private"&&post.is_public===true)return;
-
-  const mine=isMyComplaint(post);
-
-  const card=document.createElement("article");
-  card.className="complaint-card";
-
-  card.append(makeText("strong",post.title||"제목 없음"));
-
-  const created=post.created_at
-   ?new Date(post.created_at).toLocaleString("ko-KR")
-   :"날짜 정보 없음";
-
-  card.append(makeText(
-   "div",
-   `${mine?"내 민원":"익명 사용자"} · ${created}${post.is_public===false?" · 비공개":""}`,
-   "complaint-meta"
-  ));
-
-  card.append(makeText("div",post.body||"","complaint-content"));
-
-  const controls=document.createElement("div");
-  controls.className="actions";
-  controls.style.marginTop="12px";
-
-  if(post.is_public!==false){
-   const like=document.createElement("button");
-   like.className="small-btn";
-   like.textContent=`공감 ${Number(post.likes_count||0)}${post.liked?" · 취소":""}`;
-
-   like.addEventListener("click",async()=>{
-    like.disabled=true;
-    try{
-     await complaintCall(post.liked?"unlike":"like",{complaint_id:id});
-     await loadComplaints();
-    }catch(e){
-     $("complaintNotice").textContent="공감 처리 실패: "+e.message;
-     like.disabled=false;
-    }
-   });
-
-   controls.append(like);
-  }
-
-  const commentsBtn=document.createElement("button");
-  commentsBtn.className="small-btn";
-  commentsBtn.textContent="댓글 보기/쓰기";
-  controls.append(commentsBtn);
-
-  if(
-   complaintVisibility==="public"&&
-   mine&&
-   post.is_public===true
-  ){
-   const visibilityBtn=document.createElement("button");
-   visibilityBtn.className="small-btn";
-   visibilityBtn.textContent="비공개로 전환";
-
-   visibilityBtn.addEventListener("click",async()=>{
-    visibilityBtn.disabled=true;
-
-    try{
-     await complaintCall("set_visibility",{
-      complaint_id:id,
-      is_public:false
-     });
-
-     $("complaintNotice").textContent="게시글을 비공개로 전환했어.";
-     await loadComplaints();
-
-    }catch(e){
-     $("complaintNotice").textContent="비공개 전환 실패: "+e.message;
-     visibilityBtn.disabled=false;
-    }
-   });
-
-   controls.append(visibilityBtn);
-  }
-
-  if(
-   complaintVisibility==="private"&&
-   mine&&
-   post.is_public===false
-  ){
-   const repost=document.createElement("button");
-   repost.className="small-btn";
-   repost.textContent="다시 올리기";
-
-   repost.addEventListener("click",async()=>{
-    const confirmed=confirm("이 민원을 공개게시판에 새 글로 다시 올릴까?");
-    if(!confirmed)return;
-
-    repost.disabled=true;
-
-    try{
-     await complaintCall("create",{
-      title:post.title,
-      body:post.body,
-      category:post.category||"기타",
-      is_public:true
-     });
-
-     $("complaintNotice").textContent="공개게시판에 새 글로 다시 올렸어.";
-
-     complaintVisibility="public";
-     $("publicBoardTab").classList.add("selected");
-     $("privateBoardTab").classList.remove("selected");
-
-     await loadComplaints();
-
-    }catch(e){
-     $("complaintNotice").textContent="다시 올리기 실패: "+e.message;
-     repost.disabled=false;
-    }
-   });
-
-   controls.append(repost);
-  }
-
-  card.append(controls);
-
-  const commentArea=document.createElement("div");
-  commentArea.className="comment-list hidden";
-
-  const commentList=document.createElement("div");
-  commentArea.append(commentList);
-
-  const form=document.createElement("form");
-  form.className="complaint-form";
-
-  const input=document.createElement("input");
-  input.maxLength=1000;
-  input.required=true;
-  input.placeholder="댓글을 입력해 줘";
-  input.setAttribute("aria-label","댓글 내용");
-
-  const send=document.createElement("button");
-  send.type="submit";
-  send.className="small-btn primary";
-  send.textContent="댓글 등록";
-
-  form.append(input,send);
-  commentArea.append(form);
-  card.append(commentArea);
-
-  async function loadComments(){
-   commentList.textContent="댓글을 불러오는 중…";
-
-   try{
-    const r=await complaintCall("list_comments",{complaint_id:id});
-    const comments=r.comments||[];
-
-    commentList.replaceChildren();
-
-    if(!comments.length){
-     commentList.textContent="아직 댓글이 없어.";
-    }
-
-    comments.forEach(c=>{
-     commentList.append(makeText(
-      "div",
-      `${c.user_id===session?.user?.id?"나":"사용자"}: ${c.body||""}`,
-      "comment"
-     ));
-    });
-
-   }catch(e){
-    commentList.textContent="댓글을 불러오지 못했어: "+e.message;
-   }
-  }
-
-  commentsBtn.addEventListener("click",()=>{
-   const opening=commentArea.classList.contains("hidden");
-   commentArea.classList.toggle("hidden");
-   if(opening)loadComments();
-  });
-
-  form.addEventListener("submit",async e=>{
-   e.preventDefault();
-
-   const body=input.value.trim();
-   if(!body)return;
-
-   send.disabled=true;
-
-   try{
-    await complaintCall("add_comment",{complaint_id:id,body});
-    input.value="";
-    await loadComments();
-
-   }catch(err){
-    $("complaintNotice").textContent="댓글 등록 실패: "+err.message;
-   }finally{
-    send.disabled=false;
-   }
-  });
-
-  box.append(card);
+  const id=post.id;if(!id)return;if(complaintVisibility==="private"&&post.is_public===true)return;const mine=isMyComplaint(post),card=document.createElement("article");card.className="complaint-card";card.append(makeText("strong",post.title||"제목 없음"));
+  const created=post.created_at?new Date(post.created_at).toLocaleString("ko-KR"):"날짜 정보 없음";
+  card.append(makeText("div",`${mine?"내 민원":"익명 사용자"} · ${created}${post.is_public===false?" · 비공개":""}`,"complaint-meta"));card.append(makeText("div",post.body||"","complaint-content"));
+  const controls=document.createElement("div");controls.className="actions";controls.style.marginTop="12px";
+  if(post.is_public!==false){const like=document.createElement("button");like.className="small-btn";like.textContent=`공감 ${Number(post.likes_count||0)}${post.liked?" · 취소":""}`;like.addEventListener("click",async()=>{like.disabled=true;try{await complaintCall(post.liked?"unlike":"like",{complaint_id:id});await loadComplaints()}catch(e){$("complaintNotice").textContent="공감 처리 실패: "+e.message;like.disabled=false}});controls.append(like)}
+  const commentsBtn=document.createElement("button");commentsBtn.className="small-btn";commentsBtn.textContent="댓글 보기/쓰기";controls.append(commentsBtn);
+  if(complaintVisibility==="public"&&mine&&post.is_public===true){const visibilityBtn=document.createElement("button");visibilityBtn.className="small-btn";visibilityBtn.textContent="비공개로 전환";visibilityBtn.addEventListener("click",async()=>{visibilityBtn.disabled=true;try{await complaintCall("set_visibility",{complaint_id:id,is_public:false});$("complaintNotice").textContent="게시글을 비공개로 전환했어.";await loadComplaints()}catch(e){$("complaintNotice").textContent="비공개 전환 실패: "+e.message;visibilityBtn.disabled=false}});controls.append(visibilityBtn)}
+  if(complaintVisibility==="private"&&mine&&post.is_public===false){const repost=document.createElement("button");repost.className="small-btn";repost.textContent="다시 올리기";repost.addEventListener("click",async()=>{if(!confirm("이 민원을 공개게시판에 새 글로 다시 올릴까?"))return;repost.disabled=true;try{await complaintCall("create",{title:post.title,body:post.body,category:post.category||"기타",is_public:true});$("complaintNotice").textContent="공개게시판에 새 글로 다시 올렸어.";complaintVisibility="public";$("publicBoardTab").classList.add("selected");$("privateBoardTab").classList.remove("selected");await loadComplaints()}catch(e){$("complaintNotice").textContent="다시 올리기 실패: "+e.message;repost.disabled=false}});controls.append(repost)}
+  card.append(controls);const commentArea=document.createElement("div");commentArea.className="comment-list hidden";const commentList=document.createElement("div");commentArea.append(commentList);
+  const form=document.createElement("form");form.className="complaint-form";const input=document.createElement("input");input.maxLength=1000;input.required=true;input.placeholder="댓글을 입력해 줘";input.setAttribute("aria-label","댓글 내용");const send=document.createElement("button");send.type="submit";send.className="small-btn primary";send.textContent="댓글 등록";form.append(input,send);commentArea.append(form);card.append(commentArea);
+  async function loadComments(){commentList.textContent="댓글을 불러오는 중…";try{const r=await complaintCall("list_comments",{complaint_id:id}),comments=r.comments||[];commentList.replaceChildren();if(!comments.length)commentList.textContent="아직 댓글이 없어.";comments.forEach(c=>commentList.append(makeText("div",`${c.user_id===session?.user?.id?"나":"사용자"}: ${c.body||""}`,"comment")))}catch(e){commentList.textContent="댓글을 불러오지 못했어: "+e.message}}
+  commentsBtn.addEventListener("click",()=>{const opening=commentArea.classList.contains("hidden");commentArea.classList.toggle("hidden");if(opening)loadComments()});
+  form.addEventListener("submit",async e=>{e.preventDefault();const body=input.value.trim();if(!body)return;send.disabled=true;try{await complaintCall("add_comment",{complaint_id:id,body});input.value="";await loadComments()}catch(err){$("complaintNotice").textContent="댓글 등록 실패: "+err.message}finally{send.disabled=false}});
+  box.append(card)
  });
-
- if(!box.children.length){
-  box.textContent=complaintVisibility==="private"
-   ?"내 비공개 민원이 아직 없어."
-   :"공개된 민원이 아직 없어.";
- }
+ if(!box.children.length)box.textContent=complaintVisibility==="private"?"내 비공개 민원이 아직 없어.":"공개된 민원이 아직 없어."
 }
-
 async function loadComplaints(){
- const box=$("complaintList");
- box.textContent="게시글을 불러오는 중…";
-
- try{
-  const action=complaintVisibility==="public"?"list_public":"list_my";
-  const r=await complaintCall(action);
-
-  renderComplaints(r.complaints||[]);
-  $("complaintNotice").textContent="";
-
- }catch(e){
-  box.textContent="게시글을 불러오지 못했어: "+e.message;
-  $("complaintNotice").textContent="민원 서버 연결을 확인해 줘.";
- }
+ const box=$("complaintList");box.textContent="게시글을 불러오는 중…";
+ try{const action=complaintVisibility==="public"?"list_public":"list_my",r=await complaintCall(action);renderComplaints(r.complaints||[]);$("complaintNotice").textContent=""}
+ catch(e){box.textContent="게시글을 불러오지 못했어: "+e.message;$("complaintNotice").textContent="민원 서버 연결을 확인해 줘."}
 }
-
-$("publicBoardTab").addEventListener("click",()=>{
- complaintVisibility="public";
- $("publicBoardTab").classList.add("selected");
- $("privateBoardTab").classList.remove("selected");
- loadComplaints();
-});
-
-$("privateBoardTab").addEventListener("click",()=>{
- complaintVisibility="private";
- $("privateBoardTab").classList.add("selected");
- $("publicBoardTab").classList.remove("selected");
- loadComplaints();
-});
-
+$("publicBoardTab").addEventListener("click",()=>{complaintVisibility="public";$("publicBoardTab").classList.add("selected");$("privateBoardTab").classList.remove("selected");loadComplaints()});
+$("privateBoardTab").addEventListener("click",()=>{complaintVisibility="private";$("privateBoardTab").classList.add("selected");$("publicBoardTab").classList.remove("selected");loadComplaints()});
 $("complaintForm").addEventListener("submit",async e=>{
- e.preventDefault();
-
- const title=$("complaintTitle").value.trim();
- const body=$("complaintBody").value.trim();
- const is_public=$("complaintVisibility").value==="public";
-
- if(!title||!body)return;
-
- const btn=$("complaintForm").querySelector('button[type="submit"]');
- btn.disabled=true;
- $("complaintNotice").textContent="민원을 등록하는 중…";
-
- try{
-  await complaintCall("create",{
-   title,
-   body,
-   category:"기타",
-   is_public
-  });
-
-  $("complaintForm").reset();
-
-  complaintVisibility=is_public?"public":"private";
-  $("publicBoardTab").classList.toggle("selected",is_public);
-  $("privateBoardTab").classList.toggle("selected",!is_public);
-
-  $("complaintNotice").textContent="민원을 등록했어.";
-  await loadComplaints();
-
- }catch(err){
-  $("complaintNotice").textContent="민원 등록 실패: "+err.message;
- }finally{
-  btn.disabled=false;
- }
+ e.preventDefault();const title=$("complaintTitle").value.trim(),body=$("complaintBody").value.trim(),is_public=$("complaintVisibility").value==="public";if(!title||!body)return;
+ const btn=$("complaintForm").querySelector('button[type="submit"]');btn.disabled=true;$("complaintNotice").textContent="민원을 등록하는 중…";
+ try{await complaintCall("create",{title,body,category:"기타",is_public});$("complaintForm").reset();complaintVisibility=is_public?"public":"private";$("publicBoardTab").classList.toggle("selected",is_public);$("privateBoardTab").classList.toggle("selected",!is_public);$("complaintNotice").textContent="민원을 등록했어.";await loadComplaints()}
+ catch(err){$("complaintNotice").textContent="민원 등록 실패: "+err.message}
+ finally{btn.disabled=false}
 });
 
-/* 초기 실행 */
+/* 초기 실행: 기존 세션은 바로 홈으로, 신규 사용자는 계정 시작 화면으로 */
 updateUI();
-
-$("answer").disabled=true;
-$("submitBtn").disabled=true;
-$("nextBtn").disabled=true;
-$("retryBtn").classList.add("hidden");
-
-registerRP();
-refreshWallet();
-
-if(!data.tutorialComplete){
- showTutorial();
-}
+$("answer").disabled=true;$("submitBtn").disabled=true;$("nextBtn").disabled=true;$("retryBtn").classList.add("hidden");
+bootApplication();
 </script>
 </body>
 </html>
