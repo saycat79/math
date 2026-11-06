@@ -560,14 +560,56 @@ async function refreshProfile(){
  catch(e){$("rpStatus").textContent="RP 연결 실패: "+e.message;updateUI()}
 }
 async function loadLeaderboard(){
- const box=$("leaderboard");box.textContent="순위표 불러오는 중…";
+ const box=$("leaderboard"),status=$("leaderboardStatus");
+ box.textContent="순위표 불러오는 중…";
+ status.textContent="서버에서 RP 순위를 가져오고 있어.";
+ $("leaderboardMyRank").textContent="확인 중…";
  try{
-  const r=await rpCall("leaderboard"),rows=r.leaderboard||r.players||r.data||[];
-  if(!Array.isArray(rows)||!rows.length){box.textContent="아직 순위 데이터가 없어.";return}
-  box.replaceChildren();let myRank="-";const myId=session?.user?.id,idx=rows.findIndex(p=>p.player_id===myId);if(idx>=0)myRank=(idx+1)+"위";
-  $("myRank").textContent=myRank;$("leaderboardMyRank").textContent=myRank;$("leaderboardStatus").textContent="RP 순위표 업데이트 완료";
-  rows.forEach((p,i)=>{const row=document.createElement("div");row.className="item";const left=document.createElement("span");left.textContent=`${p.rank||i+1}위 · ${p.nickname||"이름 없음"}`;const right=document.createElement("strong");right.textContent=Number(p.total_rp||0).toLocaleString()+" RP";row.append(left,right);box.append(row)})
- }catch(e){box.textContent="순위표를 불러오지 못했어: "+e.message}
+  const response=await rpCall("leaderboard");
+  if(response?.success===false)throw Error(response.message||response.error||"리더보드 요청이 거부됐어.");
+
+  // 서버 응답이 배열 자체이거나 leaderboard / players / data 안에
+  // 들어오는 경우를 모두 처리해.
+  let rows=Array.isArray(response)?response:
+   response?.leaderboard??response?.players??
+   (Array.isArray(response?.data)?response.data:
+    response?.data?.leaderboard??response?.result?.leaderboard??[]);
+
+  if(!Array.isArray(rows))throw Error("서버의 순위표 데이터 형식이 올바르지 않아.");
+
+  box.replaceChildren();
+  if(!rows.length){
+   box.textContent="아직 등록된 RP 순위 데이터가 없어.";
+   status.textContent="순위 데이터 0명 · RP를 등록한 뒤 새로고침해 줘.";
+   $("myRank").textContent="-";
+   $("leaderboardMyRank").textContent="-";
+   return;
+  }
+
+  const myId=session?.user?.id;
+  const myIndex=rows.findIndex(p=>(p.player_id||p.user_id)===myId);
+  const myRank=myIndex>=0?`${Number(rows[myIndex].rank)||myIndex+1}위`:"순위 밖";
+  $("myRank").textContent=myRank;
+  $("leaderboardMyRank").textContent=myRank;
+
+  rows.forEach((p,i)=>{
+   const row=document.createElement("div");
+   row.className="item";
+   const left=document.createElement("span");
+   const rank=Number(p.rank)||i+1;
+   left.textContent=`${rank}위 · ${p.nickname||"이름 없음"}`;
+   const right=document.createElement("strong");
+   right.textContent=Number(p.total_rp??p.rp??0).toLocaleString()+" RP";
+   row.append(left,right);
+   box.append(row);
+  });
+  status.textContent=`RP 순위표 업데이트 완료 · ${rows.length}명 표시`;
+ }catch(e){
+  box.textContent="순위표를 불러오지 못했어: "+e.message;
+  status.textContent="리더보드 오류가 발생했어. 위 오류 내용을 확인해 줘.";
+  $("leaderboardMyRank").textContent="불러오기 실패";
+  console.error("InfinityMath leaderboard error:",e);
+ }
 }
 $("loadLeaderboardBtn").addEventListener("click",loadLeaderboard);
 
